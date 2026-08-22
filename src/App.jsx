@@ -1,8 +1,15 @@
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { AdminLayout } from './layouts/AdminLayout';
+import { AdminDashboardPage } from './pages/admin/AdminDashboardPage';
+
 export default function App() {
   return (
-    <main style={{ fontFamily: 'system-ui, sans-serif', textAlign: 'center', marginTop: '4rem' }}>
-      <h1>Exam Hub</h1>
-      <p>Squelette frontend — à implémenter.</p>
-    </main>
+    <BrowserRouter>
+      <Routes>
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<AdminDashboardPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
