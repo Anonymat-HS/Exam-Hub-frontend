@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
+import { Textarea } from '../common/Textarea';
 
 function makeDefaultChoices() {
   return [
@@ -84,20 +85,15 @@ export function QuestionForm({ question, onSubmit, onCancel, loading }) {
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
-      <div>
-        <label htmlFor="q-text" className="mb-1.5 block text-sm font-medium text-gray-700">Énoncé</label>
-        <textarea
-          id="q-text"
-          rows={3}
-          placeholder="Quel langage est principalement exécuté sur la JVM ?"
-          value={state.text}
-          onChange={(e) => { setState((prev) => ({ ...prev, text: e.target.value })); if (errors.text) setErrors((prev) => ({ ...prev, text: undefined })); }}
-          className={`w-full rounded-lg border bg-white px-3 py-2 text-sm text-gray-900 transition-colors placeholder:text-gray-400 focus:outline-none focus:ring-2 ${
-            errors.text ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : 'border-gray-200 focus:border-indigo-400 focus:ring-indigo-100'
-          }`}
-        />
-        {errors.text && <p className="mt-1 text-xs text-red-500">{errors.text}</p>}
-      </div>
+      <Textarea
+        id="q-text"
+        label="Énoncé"
+        rows={3}
+        placeholder="Quel langage est principalement exécuté sur la JVM ?"
+        value={state.text}
+        onChange={(e) => { setState((prev) => ({ ...prev, text: e.target.value })); if (errors.text) setErrors((prev) => ({ ...prev, text: undefined })); }}
+        error={errors.text}
+      />
 
       <Input
         id="q-points"
@@ -117,7 +113,7 @@ export function QuestionForm({ question, onSubmit, onCancel, loading }) {
             <div key={i} className="flex items-center gap-2">
               <input
                 type="radio"
-                name="correct-choice"
+                name={`correct-choice-${question?.id || 'new'}`}
                 checked={choice.isCorrect}
                 onChange={() => setCorrect(i)}
                 className="h-4 w-4 shrink-0 text-indigo-600 focus:ring-indigo-500"
