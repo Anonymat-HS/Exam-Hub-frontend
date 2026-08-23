@@ -57,6 +57,7 @@ export function ExamsPage() {
   const [search, setSearch] = useState('');
   const [courseFilter, setCourseFilter] = useState('');
   const [actionError, setActionError] = useState('');
+  const [isUsingMockData, setIsUsingMockData] = useState(false);
 
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isCreating, setIsCreating] = useState(false);
@@ -72,16 +73,20 @@ export function ExamsPage() {
       examService.getExams(courseFilter || undefined),
       courseService.getCourses(),
     ]).then(([examsRes, coursesRes]) => {
+      let usingMock = false;
       if (examsRes.status === 'fulfilled' && Array.isArray(examsRes.value)) {
         setExams(examsRes.value);
       } else {
         setExams(MOCK_EXAMS);
+        usingMock = true;
       }
       if (coursesRes.status === 'fulfilled' && Array.isArray(coursesRes.value)) {
         setCourses(coursesRes.value);
       } else {
         setCourses(MOCK_COURSES);
+        usingMock = true;
       }
+      setIsUsingMockData(usingMock);
     }).finally(() => setIsLoading(false));
   }, [courseFilter]);
 
@@ -141,8 +146,9 @@ export function ExamsPage() {
     } catch (err) {
       if (err instanceof ApiError) {
         setActionError(err.message);
+      } else {
+        setActionError('Erreur lors de la suppression.');
       }
-      setExams((prev) => prev.filter((e) => e.id !== deleteTarget.id));
       setDeleteTarget(null);
     } finally {
       setIsDeleting(false);
@@ -165,6 +171,12 @@ export function ExamsPage() {
           <Plus size={16} /> Nouvel examen
         </Button>
       </div>
+
+      {isUsingMockData && (
+        <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+          Données de démonstration affichées — le serveur backend est indisponible.
+        </div>
+      )}
 
       <div className="mt-6 overflow-hidden rounded-2xl bg-white shadow-sm">
         <div className="flex flex-wrap items-center gap-3 border-b border-gray-100 p-6 pb-4">
@@ -201,7 +213,7 @@ export function ExamsPage() {
           </div>
 
           <span className="ml-auto rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
-            {filtered.length} examen(s)
+            {filtered.length === 0 ? '0 examen' : filtered.length === 1 ? '1 examen' : `${filtered.length} examens`}
           </span>
         </div>
 
