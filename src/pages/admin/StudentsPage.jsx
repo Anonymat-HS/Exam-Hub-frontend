@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Plus, Search, Users, UserX, UserCheck, UserPlus, X } from 'lucide-react';
+import { Plus, Search, Users, UserX, UserCheck, UserPlus, X, Pencil } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
 import { Modal } from '../../components/common/Modal';
@@ -8,30 +8,14 @@ import { EmptyState } from '../../components/common/EmptyState';
 import { studentService } from '../../services/studentService';
 import { ApiError } from '../../services/api';
 
-const DEMO_STUDENTS = [
-  { id: 's1', ref: 'STD00001', firstName: 'Alice', lastName: 'Martin', email: 'alice@examhub.com', active: true },
-  { id: 's2', ref: 'STD00002', firstName: 'Thomas', lastName: 'Dupont', email: 'thomas@examhub.com', active: true },
-  { id: 's3', ref: 'STD00003', firstName: 'Sarah', lastName: 'Bernard', email: 'sarah@examhub.com', active: false },
+const MOCK_STUDENTS = [
+  { id: 's1', firstName: 'Alice', lastName: 'Martin', email: 'alice@examhub.com', active: true },
+  { id: 's2', firstName: 'Thomas', lastName: 'Dupont', email: 'thomas@examhub.com', active: true },
+  { id: 's3', firstName: 'Sarah', lastName: 'Bernard', email: 'sarah@examhub.com', active: false },
 ];
 
-const EMPTY_FORM = { fullName: '', email: '', password: '' };
-
-const REF_PATTERN = /^STD(\d+)$/;
-const makeRef = (n) => `STD${String(n).padStart(5, '0')}`;
-
-function extractRefNumber(ref) {
-  const match = REF_PATTERN.exec(ref || '');
-  return match ? Number.parseInt(match[1], 10) : 0;
-}
-
-function nextRefNumber(list) {
-  return Math.max(0, ...list.map((s) => extractRefNumber(s.ref))) + 1;
-}
-
-function withRefs(list) {
-  let max = Math.max(0, ...list.map((s) => extractRefNumber(s.ref)));
-  return list.map((s) => (s.ref ? s : { ...s, ref: makeRef(++max) }));
-}
+const EMPTY_CREATE_FORM = { fullName: '', email: '', password: '' };
+const EMPTY_EDIT_FORM = { firstName: '', lastName: '', email: '', password: '' };
 
 const AVATAR_COLORS = [
   'bg-indigo-100 text-indigo-600',
@@ -75,14 +59,21 @@ function SkeletonRows() {
 }
 
 export function StudentsPage() {
-  const [students, setStudents] = useState(DEMO_STUDENTS);
+  const [students, setStudents] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [search, setSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
+
   const [isAddOpen, setIsAddOpen] = useState(false);
-  const [form, setForm] = useState(EMPTY_FORM);
-  const [errors, setErrors] = useState({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [createForm, setCreateForm] = useState(EMPTY_CREATE_FORM);
+  const [createErrors, setCreateErrors] = useState({});
+  const [isCreating, setIsCreating] = useState(false);
+
+  const [editTarget, setEditTarget] = useState(null);
+  const [editForm, setEditForm] = useState(EMPTY_EDIT_FORM);
+  const [editErrors, setEditErrors] = useState({});
+  const [isEditing, setIsEditing] = useState(false);
+
   const [confirmTarget, setConfirmTarget] = useState(null);
   const [isToggling, setIsToggling] = useState(false);
   const [actionError, setActionError] = useState('');
@@ -92,9 +83,11 @@ export function StudentsPage() {
     studentService
       .getStudents()
       .then((data) => {
-        if (Array.isArray(data)) setStudents(withRefs(data));
+        if (Array.isArray(data)) setStudents(data);
       })
-      .catch(() => {})
+      .catch(() => {
+        setStudents(MOCK_STUDENTS);
+      })
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -108,83 +101,138 @@ export function StudentsPage() {
   });
 
   function openAddModal() {
-    setForm(EMPTY_FORM);
-    setErrors({});
-    setIsSubmitting(false);
+    setCreateForm(EMPTY_CREATE_FORM);
+    setCreateErrors({});
+    setIsCreating(false);
     setIsAddOpen(true);
   }
 
-  async function runMutation(action) {
-    try {
-      await action();
-      return true;
-    } catch (err) {
-      if (err instanceof ApiError) {
-        setActionError(err.message);
-        return false;
-      }
-      return true;
-    }
+  function openEditModal(student) {
+    setEditForm({
+      firstName: student.firstName,
+      lastName: student.lastName,
+      email: student.email,
+      password: '',
+    });
+    setEditErrors({});
+    setIsEditing(false);
+    setEditTarget(student);
   }
 
-  async function handleDeactivateConfirmed() {
-    if (!confirmTarget) return;
-    setIsToggling(true);
-    const ok = await runMutation(() => studentService.deactivateStudent(confirmTarget.id));
-    setIsToggling(false);
-    if (!ok) {
-      setConfirmTarget(null);
-      return;
-    }
-    setStudents((prev) => prev.map((s) => (s.id === confirmTarget.id ? { ...s, active: false } : s)));
-    setConfirmTarget(null);
-  }
-
-  async function handleActivate(student) {
-    setActionError('');
-    const ok = await runMutation(() => studentService.activateStudent(student.id));
-    if (!ok) return;
-    setStudents((prev) => prev.map((s) => (s.id === student.id ? { ...s, active: true } : s)));
-  }
-
-  function validateForm() {
+  function validateCreateForm() {
     const next = {};
-    const words = form.fullName.trim().split(/\s+/).filter(Boolean);
+    const words = createForm.fullName.trim().split(/\s+/).filter(Boolean);
     if (words.length < 2) next.fullName = 'Entrez le prénom et le nom.';
-    if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) {
+    if (!/^\S+@\S+\.\S+$/.test(createForm.email.trim())) {
       next.email = 'Adresse email invalide.';
-    } else if (students.some((s) => s.email.toLowerCase() === form.email.trim().toLowerCase())) {
-      next.email = 'Cet email est déjà utilisé.';
     }
-    if (form.password.length < 6) next.password = 'Mot de passe : 6 caractères minimum.';
-    setErrors(next);
+    if (createForm.password.length < 6) next.password = 'Mot de passe : 6 caractères minimum.';
+    setCreateErrors(next);
+    return Object.keys(next).length === 0;
+  }
+
+  function validateEditForm() {
+    const next = {};
+    if (!editForm.firstName.trim()) next.firstName = 'Prénom requis.';
+    if (!editForm.lastName.trim()) next.lastName = 'Nom requis.';
+    if (!/^\S+@\S+\.\S+$/.test(editForm.email.trim())) {
+      next.email = 'Adresse email invalide.';
+    }
+    if (editForm.password && editForm.password.length < 6) {
+      next.password = '6 caractères minimum.';
+    }
+    setEditErrors(next);
     return Object.keys(next).length === 0;
   }
 
   async function handleCreate(e) {
     e.preventDefault();
     setActionError('');
-    if (!validateForm()) return;
-    setIsSubmitting(true);
-    const [firstName, ...rest] = form.fullName.trim().split(/\s+/);
-    const payload = { firstName, lastName: rest.join(' '), email: form.email.trim(), password: form.password };
+    if (!validateCreateForm()) return;
+    setIsCreating(true);
+    const [firstName, ...rest] = createForm.fullName.trim().split(/\s+/);
+    const payload = { firstName, lastName: rest.join(' '), email: createForm.email.trim(), password: createForm.password };
     try {
       const created = await studentService.createStudent(payload);
-      setStudents((prev) => [{ ...created, ref: created.ref ?? makeRef(nextRefNumber(prev)), active: created.active ?? true }, ...prev]);
+      setStudents((prev) => [created, ...prev]);
       setLastAddedId(created?.id ?? null);
+      setIsAddOpen(false);
+      setCreateForm(EMPTY_CREATE_FORM);
     } catch (err) {
       if (err instanceof ApiError) {
-        setErrors({ email: err.status === 409 ? 'Cet email est déjà utilisé.' : err.message });
-        setIsSubmitting(false);
+        if (err.status === 409) {
+          setCreateErrors({ email: 'Cet email est déjà utilisé.' });
+        } else if (err.status === 400) {
+          setCreateErrors({ fullName: err.message });
+        } else {
+          setActionError(err.message);
+        }
+        setIsCreating(false);
         return;
       }
-      const demoId = `${Date.now()}`;
-      setStudents((prev) => [{ id: demoId, ref: makeRef(nextRefNumber(prev)), ...payload, active: true }, ...prev]);
-      setLastAddedId(demoId);
+      setActionError('Erreur inattendue.');
+      setIsCreating(false);
     }
-    setIsSubmitting(false);
-    setIsAddOpen(false);
-    setForm(EMPTY_FORM);
+  }
+
+  async function handleEdit(e) {
+    e.preventDefault();
+    setActionError('');
+    if (!validateEditForm()) return;
+    setIsEditing(true);
+    const payload = {
+      firstName: editForm.firstName.trim(),
+      lastName: editForm.lastName.trim(),
+      email: editForm.email.trim(),
+    };
+    if (editForm.password) payload.password = editForm.password;
+    try {
+      const updated = await studentService.updateStudent(editTarget.id, payload);
+      setStudents((prev) => prev.map((s) => (s.id === editTarget.id ? updated : s)));
+      setEditTarget(null);
+    } catch (err) {
+      if (err instanceof ApiError) {
+        if (err.status === 409) {
+          setEditErrors({ email: 'Cet email est déjà utilisé.' });
+        } else if (err.status === 400) {
+          setEditErrors({ firstName: err.message });
+        } else {
+          setActionError(err.message);
+        }
+        setIsEditing(false);
+        return;
+      }
+      setActionError('Erreur inattendue.');
+      setIsEditing(false);
+    }
+  }
+
+  async function handleDeactivateConfirmed() {
+    if (!confirmTarget) return;
+    setIsToggling(true);
+    setActionError('');
+    try {
+      await studentService.deactivateStudent(confirmTarget.id);
+      setStudents((prev) => prev.map((s) => (s.id === confirmTarget.id ? { ...s, active: false } : s)));
+      setConfirmTarget(null);
+    } catch (err) {
+      const msg = err instanceof ApiError ? err.message : 'Erreur lors de la désactivation.';
+      setActionError(msg);
+      setConfirmTarget(null);
+    } finally {
+      setIsToggling(false);
+    }
+  }
+
+  async function handleActivate(student) {
+    setActionError('');
+    try {
+      await studentService.activateStudent(student.id);
+      setStudents((prev) => prev.map((s) => (s.id === student.id ? { ...s, active: true } : s)));
+    } catch (err) {
+      const msg = err instanceof ApiError ? err.message : 'Erreur lors de la réactivation.';
+      setActionError(msg);
+    }
   }
 
   return (
@@ -244,7 +292,7 @@ export function StudentsPage() {
           </span>
         </div>
 
-        {!isLoading && <ErrorMessage message={actionError} onRetry={() => setActionError('')} />}
+        {!isLoading && actionError && <ErrorMessage message={actionError} onRetry={() => setActionError('')} />}
 
         {isLoading ? (
           <SkeletonRows />
@@ -268,11 +316,10 @@ export function StudentsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50/60 text-left text-xs uppercase tracking-wider text-gray-400">
-                  <th scope="col" className="px-6 py-3 font-medium">ID</th>
                   <th scope="col" className="px-6 py-3 font-medium">Étudiant</th>
                   <th scope="col" className="px-6 py-3 font-medium">Email</th>
                   <th scope="col" className="px-6 py-3 font-medium">Statut</th>
-                  <th scope="col" className="px-6 py-3 text-right font-medium">Action</th>
+                  <th scope="col" className="px-6 py-3 text-right font-medium">Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -281,9 +328,6 @@ export function StudentsPage() {
                     key={student.id}
                     className={`border-t border-gray-50 transition-colors hover:bg-gray-50/70 ${student.id === lastAddedId ? 'row-highlight' : ''}`}
                   >
-                    <td className="px-6 py-4">
-                      <span className="rounded-md bg-gray-50 px-2 py-1 font-mono text-xs text-gray-400">{student.ref ?? '—'}</span>
-                    </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <Avatar student={student} list={students} />
@@ -309,21 +353,29 @@ export function StudentsPage() {
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
-                      {student.active ? (
+                      <div className="flex items-center justify-end gap-2">
                         <button
-                          onClick={() => setConfirmTarget(student)}
-                          className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1.5 text-xs font-medium text-red-500 transition-colors hover:border-red-200 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-200"
+                          onClick={() => openEditModal(student)}
+                          className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200"
                         >
-                          <UserX size={14} /> Désactiver
+                          <Pencil size={14} /> Modifier
                         </button>
-                      ) : (
-                        <button
-                          onClick={() => handleActivate(student)}
-                          className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1.5 text-xs font-medium text-green-600 transition-colors hover:border-green-200 hover:bg-green-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200"
-                        >
-                          <UserCheck size={14} /> Réactiver
-                        </button>
-                      )}
+                        {student.active ? (
+                          <button
+                            onClick={() => setConfirmTarget(student)}
+                            className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1.5 text-xs font-medium text-red-500 transition-colors hover:border-red-200 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-200"
+                          >
+                            <UserX size={14} /> Désactiver
+                          </button>
+                        ) : (
+                          <button
+                            onClick={() => handleActivate(student)}
+                            className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1.5 text-xs font-medium text-green-600 transition-colors hover:border-green-200 hover:bg-green-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-green-200"
+                          >
+                            <UserCheck size={14} /> Réactiver
+                          </button>
+                        )}
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -336,36 +388,83 @@ export function StudentsPage() {
       <Modal open={isAddOpen} onClose={() => setIsAddOpen(false)} title="Ajouter un étudiant" icon={UserPlus} tone="violet">
         <form onSubmit={handleCreate} className="flex flex-col gap-4" noValidate>
           <Input
-            id="fullName"
+            id="create-fullName"
             label="Nom complet"
             placeholder="Jean Dupont"
-            value={form.fullName}
-            onChange={(e) => setForm({ ...form, fullName: e.target.value })}
-            error={errors.fullName}
+            value={createForm.fullName}
+            onChange={(e) => setCreateForm({ ...createForm, fullName: e.target.value })}
+            error={createErrors.fullName}
             autoFocus
           />
           <Input
-            id="email"
+            id="create-email"
             type="email"
             label="Email"
             placeholder="jean@example.com"
-            value={form.email}
-            onChange={(e) => setForm({ ...form, email: e.target.value })}
-            error={errors.email}
+            value={createForm.email}
+            onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })}
+            error={createErrors.email}
           />
           <Input
-            id="password"
+            id="create-password"
             type="password"
             label="Mot de passe"
             placeholder="••••••••"
-            value={form.password}
-            onChange={(e) => setForm({ ...form, password: e.target.value })}
-            error={errors.password}
+            value={createForm.password}
+            onChange={(e) => setCreateForm({ ...createForm, password: e.target.value })}
+            error={createErrors.password}
           />
-          <Button type="submit" variant="violet" loading={isSubmitting} className="mt-1 w-full bg-gradient-to-r from-violet-600 to-indigo-600">
+          <Button type="submit" variant="violet" loading={isCreating} className="mt-1 w-full bg-gradient-to-r from-violet-600 to-indigo-600">
             Créer le compte
           </Button>
         </form>
+      </Modal>
+
+      <Modal open={Boolean(editTarget)} onClose={() => setEditTarget(null)} title="Modifier l'étudiant" icon={Pencil} tone="violet">
+        {editTarget && (
+          <form onSubmit={handleEdit} className="flex flex-col gap-4" noValidate>
+            <Input
+              id="edit-firstName"
+              label="Prénom"
+              value={editForm.firstName}
+              onChange={(e) => setEditForm({ ...editForm, firstName: e.target.value })}
+              error={editErrors.firstName}
+              autoFocus
+            />
+            <Input
+              id="edit-lastName"
+              label="Nom"
+              value={editForm.lastName}
+              onChange={(e) => setEditForm({ ...editForm, lastName: e.target.value })}
+              error={editErrors.lastName}
+            />
+            <Input
+              id="edit-email"
+              type="email"
+              label="Email"
+              value={editForm.email}
+              onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
+              error={editErrors.email}
+            />
+            <Input
+              id="edit-password"
+              type="password"
+              label="Nouveau mot de passe (optionnel)"
+              placeholder="Laisser vide pour conserver"
+              value={editForm.password}
+              onChange={(e) => setEditForm({ ...editForm, password: e.target.value })}
+              error={editErrors.password}
+            />
+            <div className="flex justify-end gap-3 mt-1">
+              <Button variant="ghost" onClick={() => setEditTarget(null)}>
+                Annuler
+              </Button>
+              <Button type="submit" variant="violet" loading={isEditing} className="bg-gradient-to-r from-violet-600 to-indigo-600">
+                Enregistrer
+              </Button>
+            </div>
+          </form>
+        )}
       </Modal>
 
       <Modal open={Boolean(confirmTarget)} onClose={() => setConfirmTarget(null)} title="Désactiver cet étudiant ?" icon={UserX} tone="danger">
@@ -373,7 +472,6 @@ export function StudentsPage() {
           <div className="mb-4 flex items-center gap-3 rounded-xl bg-gray-50 px-4 py-3">
             <Avatar student={confirmTarget} list={students} />
             <div>
-              <p className="font-mono text-xs text-gray-400">{confirmTarget.ref}</p>
               <p className="text-sm font-semibold text-gray-900">{`${confirmTarget.firstName} ${confirmTarget.lastName}`}</p>
               <p className="text-xs text-gray-400">{confirmTarget.email}</p>
             </div>
