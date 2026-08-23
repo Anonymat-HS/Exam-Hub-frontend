@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BookOpen, Plus } from 'lucide-react';
+import { BookOpen, FileText, Plus } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
 import { Textarea } from '../../components/common/Textarea';
@@ -137,7 +137,11 @@ export function CoursesPage() {
         </Button>
       </div>
 
-      {!isLoading && loadError && <ErrorMessage message={loadError} onRetry={handleRetry} />}
+      {!isLoading && loadError && (
+        <div className="mt-6">
+          <ErrorMessage message={loadError} onRetry={handleRetry} />
+        </div>
+      )}
 
       {isLoading ? (
         <SkeletonCards />
@@ -154,24 +158,27 @@ export function CoursesPage() {
         </EmptyState>
       ) : (
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-          {courses.map((course) => (
-            <article
-              key={course.id}
-              className={`flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100/60 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-violet-200 ${
-                course.id === lastAddedId ? 'row-highlight' : ''
-              }`}
-            >
-              <div className="mb-5 flex h-10 w-10 items-center justify-center rounded-xl bg-violet-50 text-violet-600">
-                <BookOpen size={18} />
-              </div>
-              <p className="text-xs font-bold uppercase tracking-wide text-violet-600">{course.code}</p>
-              <h3 className="mt-1 text-lg font-bold text-gray-900">{course.name}</h3>
-              <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-gray-500">{course.description}</p>
-              <div className="mt-6 flex items-center justify-between border-t border-gray-100 pt-4">
-                <span className="text-xs font-medium uppercase tracking-wider text-gray-400">Examens</span>
-                <span className="text-sm font-bold tabular-nums text-gray-900">{course.examCount ?? 0}</span>
-              </div>
-            </article>
+          {courses.map((course, index) => (
+            <div key={course.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 40}ms` }}>
+              <article
+                className={`flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100/60 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-violet-200 ${
+                  course.id === lastAddedId ? 'row-highlight' : ''
+                }`}
+              >
+                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-violet-50 text-violet-600 shadow-sm ring-1 ring-violet-100">
+                  <BookOpen size={18} />
+                </div>
+                <p className="text-xs font-bold uppercase tracking-wide text-violet-600">{course.code}</p>
+                <h3 className="mt-1 text-lg font-bold text-gray-900">{course.name}</h3>
+                <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-gray-500">{course.description}</p>
+                <div className="mt-6 flex items-center justify-between border-t border-gray-100 pt-4">
+                  <span className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-gray-400">
+                    <FileText size={13} /> Examens
+                  </span>
+                  <span className="text-sm font-bold tabular-nums text-gray-900">{course.examCount ?? 0}</span>
+                </div>
+              </article>
+            </div>
           ))}
         </div>
       )}
