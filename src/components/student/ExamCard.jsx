@@ -15,7 +15,6 @@ export function ExamCard({ exam, onStart }) {
           </span>
         </div>
 
-        {/* Ajout de la catégorie (ex: WEB2) comme sur la maquette */}
         {category && (
           <span className="mt-6 block text-xs font-bold uppercase tracking-wider text-indigo-600">
             {category}
