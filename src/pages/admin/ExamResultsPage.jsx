@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, BarChart2, Users, TrendingUp } from 'lucide-react';
+import { StatCard } from '../../components/common/StatCard';
 import { EmptyState } from '../../components/common/EmptyState';
 import { examService } from '../../services/examService';
 import { resultService } from '../../services/resultService';
@@ -51,25 +52,13 @@ function SkeletonPage() {
   );
 }
 
-function StatCard({ icon: Icon, iconBg, iconColor, label, value, sublabel }) {
-  return (
-    <div className="rounded-2xl bg-white p-6 shadow-sm">
-      <div className={`mb-4 flex h-11 w-11 items-center justify-center rounded-xl ${iconBg} ${iconColor}`}>
-        <Icon size={20} />
-      </div>
-      <p className="text-xs font-medium uppercase tracking-wider text-gray-400">{label}</p>
-      <p className="mt-1 text-3xl font-bold tabular-nums tracking-tight text-gray-900">{value}</p>
-      {sublabel && <p className="mt-1 text-xs text-gray-400">{sublabel}</p>}
-    </div>
-  );
-}
-
 export function ExamResultsPage() {
   const { examId } = useParams();
   const [exam, setExam] = useState(null);
   const [resultsData, setResultsData] = useState(null);
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isUsingMockData, setIsUsingMockData] = useState(false);
 
   useEffect(() => {
     Promise.allSettled([
@@ -77,21 +66,26 @@ export function ExamResultsPage() {
       resultService.getExamResults(examId),
       courseService.getCourses(),
     ]).then(([examRes, resultsRes, coursesRes]) => {
+      let usingMock = false;
       if (examRes.status === 'fulfilled') {
         setExam(examRes.value);
       } else {
         setExam({ ...MOCK_EXAM, id: examId });
+        usingMock = true;
       }
       if (resultsRes.status === 'fulfilled') {
         setResultsData(resultsRes.value);
       } else {
         setResultsData(MOCK_RESULTS);
+        usingMock = true;
       }
       if (coursesRes.status === 'fulfilled' && Array.isArray(coursesRes.value)) {
         setCourses(coursesRes.value);
       } else {
         setCourses(MOCK_COURSES);
+        usingMock = true;
       }
+      setIsUsingMockData(usingMock);
     }).finally(() => setIsLoading(false));
   }, [examId]);
 
@@ -106,7 +100,16 @@ export function ExamResultsPage() {
   }
 
   if (isLoading) return <SkeletonPage />;
-  if (!exam) return null;
+  if (!exam) {
+    return (
+      <div>
+        <Link to="/admin/exams" className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-indigo-600">
+          <ArrowLeft size={16} /> Retour aux examens
+        </Link>
+        <EmptyState icon={BarChart2} title="Examen introuvable" description="Cet examen n'existe pas ou a été supprimé." />
+      </div>
+    );
+  }
 
   const maxScore = getMaxScore();
   const results = resultsData?.results ?? [];
@@ -121,6 +124,12 @@ export function ExamResultsPage() {
       >
         <ArrowLeft size={16} /> Retour aux examens
       </Link>
+
+      {isUsingMockData && (
+        <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+          Données de démonstration affichées — le serveur backend est indisponible.
+        </div>
+      )}
 
       <div className="mb-6">
         <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-indigo-600">Résultats</p>
@@ -137,7 +146,7 @@ export function ExamResultsPage() {
           iconBg="bg-green-50"
           iconColor="text-green-600"
           label="Moyenne"
-          value={maxScore ? `${average.toFixed(1)} / ${maxScore}` : average.toFixed(1)}
+          value={totalAttempts > 0 && maxScore ? `${average.toFixed(1)} / ${maxScore}` : totalAttempts > 0 ? average.toFixed(1) : '—'}
         />
         <StatCard
           icon={Users}
