@@ -9,12 +9,29 @@ import { studentService } from '../../services/studentService';
 import { ApiError } from '../../services/api';
 
 const DEMO_STUDENTS = [
-  { id: 's1', firstName: 'Alice', lastName: 'Martin', email: 'alice@examhub.com', active: true },
-  { id: 's2', firstName: 'Thomas', lastName: 'Dupont', email: 'thomas@examhub.com', active: true },
-  { id: 's3', firstName: 'Sarah', lastName: 'Bernard', email: 'sarah@examhub.com', active: false },
+  { id: 's1', ref: 'STD00001', firstName: 'Alice', lastName: 'Martin', email: 'alice@examhub.com', active: true },
+  { id: 's2', ref: 'STD00002', firstName: 'Thomas', lastName: 'Dupont', email: 'thomas@examhub.com', active: true },
+  { id: 's3', ref: 'STD00003', firstName: 'Sarah', lastName: 'Bernard', email: 'sarah@examhub.com', active: false },
 ];
 
 const EMPTY_FORM = { fullName: '', email: '', password: '' };
+
+const REF_PATTERN = /^STD(\d+)$/;
+const makeRef = (n) => `STD${String(n).padStart(5, '0')}`;
+
+function extractRefNumber(ref) {
+  const match = REF_PATTERN.exec(ref || '');
+  return match ? Number.parseInt(match[1], 10) : 0;
+}
+
+function nextRefNumber(list) {
+  return Math.max(0, ...list.map((s) => extractRefNumber(s.ref))) + 1;
+}
+
+function withRefs(list) {
+  let max = Math.max(0, ...list.map((s) => extractRefNumber(s.ref)));
+  return list.map((s) => (s.ref ? s : { ...s, ref: makeRef(++max) }));
+}
 
 const AVATAR_COLORS = [
   'bg-indigo-100 text-indigo-600',
@@ -75,7 +92,7 @@ export function StudentsPage() {
     studentService
       .getStudents()
       .then((data) => {
-        if (Array.isArray(data)) setStudents(data);
+        if (Array.isArray(data)) setStudents(withRefs(data));
       })
       .catch(() => {})
       .finally(() => setIsLoading(false));
@@ -153,7 +170,7 @@ export function StudentsPage() {
     const payload = { firstName, lastName: rest.join(' '), email: form.email.trim(), password: form.password };
     try {
       const created = await studentService.createStudent(payload);
-      setStudents((prev) => [{ ...created, active: created.active ?? true }, ...prev]);
+      setStudents((prev) => [{ ...created, ref: created.ref ?? makeRef(nextRefNumber(prev)), active: created.active ?? true }, ...prev]);
       setLastAddedId(created?.id ?? null);
     } catch (err) {
       if (err instanceof ApiError) {
@@ -162,7 +179,7 @@ export function StudentsPage() {
         return;
       }
       const demoId = `${Date.now()}`;
-      setStudents((prev) => [{ id: demoId, ...payload, active: true }, ...prev]);
+      setStudents((prev) => [{ id: demoId, ref: makeRef(nextRefNumber(prev)), ...payload, active: true }, ...prev]);
       setLastAddedId(demoId);
     }
     setIsSubmitting(false);
@@ -251,6 +268,7 @@ export function StudentsPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="bg-gray-50/60 text-left text-xs uppercase tracking-wider text-gray-400">
+                  <th scope="col" className="px-6 py-3 font-medium">ID</th>
                   <th scope="col" className="px-6 py-3 font-medium">Étudiant</th>
                   <th scope="col" className="px-6 py-3 font-medium">Email</th>
                   <th scope="col" className="px-6 py-3 font-medium">Statut</th>
@@ -263,6 +281,9 @@ export function StudentsPage() {
                     key={student.id}
                     className={`border-t border-gray-50 transition-colors hover:bg-gray-50/70 ${student.id === lastAddedId ? 'row-highlight' : ''}`}
                   >
+                    <td className="px-6 py-4">
+                      <span className="rounded-md bg-gray-50 px-2 py-1 font-mono text-xs text-gray-400">{student.ref ?? '—'}</span>
+                    </td>
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <Avatar student={student} list={students} />
@@ -352,6 +373,7 @@ export function StudentsPage() {
           <div className="mb-4 flex items-center gap-3 rounded-xl bg-gray-50 px-4 py-3">
             <Avatar student={confirmTarget} list={students} />
             <div>
+              <p className="font-mono text-xs text-gray-400">{confirmTarget.ref}</p>
               <p className="text-sm font-semibold text-gray-900">{`${confirmTarget.firstName} ${confirmTarget.lastName}`}</p>
               <p className="text-xs text-gray-400">{confirmTarget.email}</p>
             </div>
