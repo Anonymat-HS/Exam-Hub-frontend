@@ -1,10 +1,10 @@
 import { ArrowRight, FileText, Calendar } from 'lucide-react';
 
 export function ExamCard({ exam, onStart }) {
-  const { title, description, questionsCount, dueDate, status } = exam;
+  const { title, description, questionsCount, dueDate, status, category } = exam;
   
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm flex flex-col justify-between">
+    <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
       <div>
         <div className="flex items-center justify-between">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
@@ -15,11 +15,14 @@ export function ExamCard({ exam, onStart }) {
           </span>
         </div>
 
-        <span className="mt-6 block text-xs font-bold uppercase tracking-wider text-indigo-600">
-          Évaluation
-        </span>
+        {/* Ajout de la catégorie (ex: WEB2) comme sur la maquette */}
+        {category && (
+          <span className="mt-6 block text-xs font-bold uppercase tracking-wider text-indigo-600">
+            {category}
+          </span>
+        )}
         
-        <h3 className="mt-1 text-lg font-bold text-gray-900">
+        <h3 className={`font-bold text-gray-900 ${category ? 'mt-1 text-xl' : 'mt-6 text-lg'}`}>
           {title}
         </h3>
         

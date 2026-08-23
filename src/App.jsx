@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { StudentLayout } from './layouts/StudentLayout.jsx';
 import { StudentDashboardPage } from './pages/student/StudentDashboardPage';
+import { ExamStudentPage } from './pages/student/ExamStudentPage.jsx';
 
 export default function App() {
   return (
@@ -10,7 +11,7 @@ export default function App() {
           
           <Route index element={<StudentDashboardPage />} />
           
-          <Route path="exams" element={<div>Page des examens bientôt disponible</div>} />
+          <Route path="exams" element={<ExamStudentPage />} />
           <Route path="results" element={<div>Page des résultats bientôt disponible</div>} />
           
         </Route> 
