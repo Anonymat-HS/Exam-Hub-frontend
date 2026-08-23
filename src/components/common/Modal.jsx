@@ -24,7 +24,7 @@ export function Modal({ open, onClose, title, icon: Icon, tone = 'violet', child
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
-      <div className="animate-fade-in absolute inset-0 bg-gray-900/50" onClick={onClose} />
+      <div className="animate-fade-in absolute inset-0 bg-gray-900/50 backdrop-blur-sm" onClick={onClose} />
       <div className="animate-scale-in relative w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
         <button
           onClick={onClose}
