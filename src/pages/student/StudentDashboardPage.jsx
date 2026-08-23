@@ -1,3 +1,4 @@
+import { useNavigate } from 'react-router-dom'; // 1. Importation du hook de navigation
 import { ArrowRight, FileText, CheckCircle, Trophy } from 'lucide-react';
 import { ExamCard } from '../../components/student/ExamCard';
 
@@ -25,6 +26,7 @@ const MOCK_EXAMS = [
 ];
 
 export function StudentDashboardPage() {
+  const navigate = useNavigate(); // 2. Initialisation de la fonction de navigation
   let user;
 
   try {
@@ -35,6 +37,11 @@ export function StudentDashboardPage() {
   }
 
   const studentName = user?.name ? user.name.split(' ') : 'Alice';
+
+  // 3. Fonction pour rediriger l'étudiant vers la page des examens
+  const handleNavigateToExams = () => {
+    navigate('/student/exams');
+  };
 
   return (
     <div className="max-w-5xl mx-auto w-full animate-fade-in-up">
@@ -50,7 +57,6 @@ export function StudentDashboardPage() {
         Retrouvez vos examens et vos résultats.
       </p>
 
-      {/* BANNIÈRE AVEC LE LÉGER DÉGRADÉ VIOLET-INDIGO HARMONISÉ */}
       <div className="mt-8 rounded-3xl bg-gradient-to-r from-violet-600 to-indigo-600 p-6 sm:p-8 text-white shadow-sm">
         <span className="text-xs font-semibold uppercase tracking-wider text-indigo-200">
           Votre prochaine étape
@@ -59,8 +65,9 @@ export function StudentDashboardPage() {
         <p className="mt-2 text-sm text-indigo-100">
           Consultez vos examens disponibles et commencez lorsque vous êtes prêt.
         </p>
+        {/* Branchement du clic sur le bouton de la bannière */}
         <button 
-          onClick={() => console.log('Aller aux examens')}
+          onClick={handleNavigateToExams}
           className="mt-6 flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-indigo-600 shadow-sm transition-transform active:scale-95 cursor-pointer"
         >
           Commencer maintenant <ArrowRight size={16} />
@@ -101,8 +108,9 @@ export function StudentDashboardPage() {
           <h2 className="text-xl font-bold text-gray-900">Examens disponibles</h2>
           <p className="text-sm text-gray-500 mt-0.5">Commencez quand vous êtes prêt.</p>
         </div>
+        {/* Branchement du clic sur le lien "Tout voir" */}
         <button 
-          onClick={() => console.log('Tout voir')}
+          onClick={handleNavigateToExams}
           className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors cursor-pointer"
         >
           Tout voir
