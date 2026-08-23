@@ -11,7 +11,7 @@ const NAV_ITEMS = [
 ];
 
 export function AdminLayout() {
-  const { logout } = useAuth();
+  const { user, logout } = useAuth();
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50">
       <aside className="flex w-64 flex-col justify-between border-r border-gray-100 bg-white px-4 py-6">
@@ -24,7 +24,7 @@ export function AdminLayout() {
             <div className="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-100 text-indigo-600"><Users size={18} /></div>
             <div>
               <p className="text-sm font-semibold text-gray-900">Administrateur</p>
-              <p className="text-xs text-gray-400">Administrateur</p>
+              <p className="text-xs text-gray-400 truncate max-w-[140px]">{user?.email ?? 'admin'}</p>
             </div>
           </div>
           <p className="mb-2 px-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Navigation</p>
