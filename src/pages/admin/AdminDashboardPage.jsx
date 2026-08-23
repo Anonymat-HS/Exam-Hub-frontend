@@ -1,15 +1,15 @@
+import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Users, BookOpen, FileText, ClipboardCheck, UserPlus, BookPlus, FilePlus, BarChart2, Sparkles, CalendarDays, ArrowRight } from 'lucide-react';
+import { Users, BookOpen, FileText, UserPlus, BookPlus, FilePlus, BarChart2, Sparkles, CalendarDays, ArrowRight } from 'lucide-react';
 import { StatCard } from '../../components/common/StatCard';
+import { Loader } from '../../components/common/Loader';
+import { studentService } from '../../services/studentService';
+import { courseService } from '../../services/courseService';
+import { examService } from '../../services/examService';
 
-const stats = { studentsTotal: 3, studentsActive: 2, coursesTotal: 3, examsTotal: 3, attemptsTotal: 1 }; // TODO: brancher l'API
-
-const STAT_CARDS = [
-  { icon: Users, iconBg: 'bg-indigo-50', iconColor: 'text-indigo-600', label: 'Étudiants', value: stats.studentsTotal, sublabel: `${stats.studentsActive} actifs` },
-  { icon: BookOpen, iconBg: 'bg-blue-50', iconColor: 'text-blue-600', label: 'Cours', value: stats.coursesTotal, sublabel: 'cours disponibles' },
-  { icon: FileText, iconBg: 'bg-purple-50', iconColor: 'text-purple-600', label: 'Examens', value: stats.examsTotal, sublabel: 'examens créés' },
-  { icon: ClipboardCheck, iconBg: 'bg-green-50', iconColor: 'text-green-600', label: 'Tentatives', value: stats.attemptsTotal, sublabel: 'soumissions' },
-];
+const MOCK_STUDENTS = [{ active: true }, { active: false }, { active: true }];
+const MOCK_COURSES = [1, 2, 3];
+const MOCK_EXAMS = [1, 2, 3];
 
 const QUICK_ACTIONS = [
   { to: '/admin/students', icon: UserPlus, iconBg: 'bg-indigo-50', iconColor: 'text-indigo-600', title: 'Ajouter un étudiant', desc: 'Créer un nouveau compte' },
@@ -19,7 +19,39 @@ const QUICK_ACTIONS = [
 ];
 
 export function AdminDashboardPage() {
+  const [stats, setStats] = useState({ studentsTotal: 0, studentsActive: 0, coursesTotal: 0, examsTotal: 0 });
+  const [isLoading, setIsLoading] = useState(true);
   const today = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
+
+  useEffect(() => {
+    Promise.allSettled([
+      studentService.getStudents(),
+      courseService.getCourses(),
+      examService.getExams(),
+    ]).then(([studentsResult, coursesResult, examsResult]) => {
+      const students = studentsResult.status === 'fulfilled' && Array.isArray(studentsResult.value)
+        ? studentsResult.value : MOCK_STUDENTS;
+      const courses = coursesResult.status === 'fulfilled' && Array.isArray(coursesResult.value)
+        ? coursesResult.value : MOCK_COURSES;
+      const exams = examsResult.status === 'fulfilled' && Array.isArray(examsResult.value)
+        ? examsResult.value : MOCK_EXAMS;
+
+      setStats({
+        studentsTotal: students.length,
+        studentsActive: students.filter((s) => s.active).length,
+        coursesTotal: courses.length,
+        examsTotal: exams.length,
+      });
+    }).finally(() => setIsLoading(false));
+  }, []);
+
+  if (isLoading) return <Loader />;
+
+  const STAT_CARDS = [
+    { icon: Users, iconBg: 'bg-indigo-50', iconColor: 'text-indigo-600', label: 'Étudiants', value: stats.studentsTotal, sublabel: `${stats.studentsActive} actifs` },
+    { icon: BookOpen, iconBg: 'bg-blue-50', iconColor: 'text-blue-600', label: 'Cours', value: stats.coursesTotal, sublabel: 'cours disponibles' },
+    { icon: FileText, iconBg: 'bg-purple-50', iconColor: 'text-purple-600', label: 'Examens', value: stats.examsTotal, sublabel: 'examens créés' },
+  ];
 
   return (
     <div>
@@ -35,7 +67,7 @@ export function AdminDashboardPage() {
         </div>
       </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {STAT_CARDS.map(({ icon, ...card }) => (
           <StatCard key={card.label} icon={icon} {...card} />
         ))}
