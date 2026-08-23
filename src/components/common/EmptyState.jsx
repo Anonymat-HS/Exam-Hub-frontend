@@ -1,8 +1,8 @@
-export function EmptyState({ icon: Icon, title, description }) {
+export function EmptyState({ icon: Icon, title, description, bubbleClass = 'bg-gray-50 text-gray-300' }) {
   return (
     <div className="flex flex-col items-center justify-center gap-1 py-14 text-center">
       {Icon && (
-        <div className="mb-2 flex h-12 w-12 items-center justify-center rounded-full bg-gray-50 text-gray-300">
+        <div className={`mb-2 flex h-12 w-12 items-center justify-center rounded-full ${bubbleClass}`}>
           <Icon size={22} />
         </div>
       )}
