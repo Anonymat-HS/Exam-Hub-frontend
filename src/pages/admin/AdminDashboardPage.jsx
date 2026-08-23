@@ -5,10 +5,10 @@ import { StatCard } from '../../components/common/StatCard';
 const stats = { studentsTotal: 3, studentsActive: 2, coursesTotal: 3, examsTotal: 3, attemptsTotal: 1 }; // TODO: brancher l'API
 
 const STAT_CARDS = [
-  { icon: Users, iconBg: 'bg-indigo-50', iconColor: 'text-indigo-600', label: 'Étudiants', value: stats.studentsTotal, sublabel: `${stats.studentsActive} actifs`, trend: { value: '+12%', direction: 'up' } },
-  { icon: BookOpen, iconBg: 'bg-blue-50', iconColor: 'text-blue-600', label: 'Cours', value: stats.coursesTotal, sublabel: 'cours disponibles', trend: { value: '+25%', direction: 'up' } },
-  { icon: FileText, iconBg: 'bg-purple-50', iconColor: 'text-purple-600', label: 'Examens', value: stats.examsTotal, sublabel: 'examens créés', trend: { value: '+8%', direction: 'up' } },
-  { icon: ClipboardCheck, iconBg: 'bg-green-50', iconColor: 'text-green-600', label: 'Tentatives', value: stats.attemptsTotal, sublabel: 'soumissions', trend: { value: '-3%', direction: 'down' } },
+  { icon: Users, iconBg: 'bg-indigo-50', iconColor: 'text-indigo-600', label: 'Étudiants', value: stats.studentsTotal, sublabel: `${stats.studentsActive} actifs` },
+  { icon: BookOpen, iconBg: 'bg-blue-50', iconColor: 'text-blue-600', label: 'Cours', value: stats.coursesTotal, sublabel: 'cours disponibles' },
+  { icon: FileText, iconBg: 'bg-purple-50', iconColor: 'text-purple-600', label: 'Examens', value: stats.examsTotal, sublabel: 'examens créés' },
+  { icon: ClipboardCheck, iconBg: 'bg-green-50', iconColor: 'text-green-600', label: 'Tentatives', value: stats.attemptsTotal, sublabel: 'soumissions' },
 ];
 
 const QUICK_ACTIONS = [
@@ -26,7 +26,7 @@ export function AdminDashboardPage() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-indigo-600">Administration</p>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Tableau de bord</h1>
           <p className="mt-1 text-gray-500">Voici ce qui se passe sur votre plateforme.</p>
         </div>
         <div className="flex items-center gap-2 rounded-xl bg-white px-4 py-2 shadow-sm">
