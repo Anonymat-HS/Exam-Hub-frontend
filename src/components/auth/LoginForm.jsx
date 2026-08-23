@@ -1,73 +1,65 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { Button } from '../../components/common/Button';
-import { Input } from '../../components/common/Input';
-import { ErrorMessage } from '../../components/common/ErrorMessage';
-import { useAuth } from '../../hooks/useAuth';
-import { ApiError } from '../../services/api';
+import { Mail, Lock } from 'lucide-react';
+import { Button } from '../common/Button';
+import { Input } from '../common/Input';
 
-const EMPTY_FORM = { email: '', password: '' };
-
-export function LoginForm() {
-  const { login } = useAuth();
-  const navigate = useNavigate();
-  const [form, setForm] = useState(EMPTY_FORM);
-  const [errors, setErrors] = useState({});
-  const [formError, setFormError] = useState('');
-  const [isSubmitting, setIsSubmitting] = useState(false);
+export function LoginForm({ onSubmit, error, loading }) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [fieldErrors, setFieldErrors] = useState({});
 
   function validate() {
     const next = {};
-    if (!form.email.trim()) next.email = "L'email est obligatoire.";
-    else if (!/^\S+@\S+\.\S+$/.test(form.email.trim())) next.email = 'Adresse email invalide.';
-    if (!form.password) next.password = 'Le mot de passe est obligatoire.';
-    setErrors(next);
+    if (!email.trim() || !/^\S+@\S+\.\S+$/.test(email.trim())) {
+      next.email = 'Adresse email invalide.';
+    }
+    if (!password) {
+      next.password = 'Mot de passe requis.';
+    }
+    setFieldErrors(next);
     return Object.keys(next).length === 0;
   }
 
-  async function handleSubmit(e) {
+  function handleSubmit(e) {
     e.preventDefault();
-    setFormError('');
     if (!validate()) return;
-    setIsSubmitting(true);
-    try {
-      const user = await login(form.email.trim(), form.password);
-      navigate(user?.role === 'ADMIN' ? '/admin' : '/student', { replace: true });
-    } catch (err) {
-      setFormError(
-        err instanceof ApiError
-          ? err.message
-          : 'Serveur inaccessible. Vérifiez que le backend est démarré.',
-      );
-      setIsSubmitting(false);
-    }
+    onSubmit(email.trim(), password);
   }
 
   return (
     <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
-      <ErrorMessage message={formError} />
       <Input
-        id="email"
-        type="email"
+        id="login-email"
         label="Email"
-        placeholder="vous@examhub.com"
-        autoComplete="email"
+        type="email"
+        icon={Mail}
+        placeholder="admin@examhub.com"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        error={fieldErrors.email}
         autoFocus
-        value={form.email}
-        onChange={(e) => setForm({ ...form, email: e.target.value })}
-        error={errors.email}
+        autoComplete="email"
       />
       <Input
-        id="password"
-        type="password"
+        id="login-password"
         label="Mot de passe"
+        type="password"
+        icon={Lock}
         placeholder="••••••••"
+        value={password}
+        onChange={(e) => setPassword(e.target.value)}
+        error={fieldErrors.password}
         autoComplete="current-password"
-        value={form.password}
-        onChange={(e) => setForm({ ...form, password: e.target.value })}
-        error={errors.password}
       />
-      <Button type="submit" variant="primary" loading={isSubmitting} className="mt-1 w-full bg-gradient-to-r from-indigo-600 to-violet-600">
+      {error && (
+        <p className="rounded-lg bg-red-50 px-3 py-2 text-sm text-red-600">{error}</p>
+      )}
+      <Button
+        type="submit"
+        variant="violet"
+        loading={loading}
+        className="mt-1 w-full bg-gradient-to-r from-violet-600 to-indigo-600"
+      >
         Se connecter
       </Button>
     </form>
