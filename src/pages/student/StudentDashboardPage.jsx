@@ -34,10 +34,10 @@ export function StudentDashboardPage() {
     user = { name: 'Alice Martin' };
   }
 
-  const studentName = user?.name ? user.name.split(' ')[0] : 'Alice';
+  const studentName = user?.name ? user.name.split(' ') : 'Alice';
 
   return (
-    <div className="max-w-5xl mx-auto w-full">
+    <div className="max-w-5xl mx-auto w-full animate-fade-in-up">
       <span className="text-xs font-bold uppercase tracking-wider text-indigo-600">
         Bonjour {studentName} 👋
       </span>
@@ -50,7 +50,8 @@ export function StudentDashboardPage() {
         Retrouvez vos examens et vos résultats.
       </p>
 
-      <div className="mt-8 rounded-3xl bg-indigo-600 p-6 sm:p-8 text-white shadow-sm">
+      {/* BANNIÈRE AVEC LE LÉGER DÉGRADÉ VIOLET-INDIGO HARMONISÉ */}
+      <div className="mt-8 rounded-3xl bg-gradient-to-r from-violet-600 to-indigo-600 p-6 sm:p-8 text-white shadow-sm">
         <span className="text-xs font-semibold uppercase tracking-wider text-indigo-200">
           Votre prochaine étape
         </span>
@@ -66,7 +67,6 @@ export function StudentDashboardPage() {
         </button>
       </div>
 
-      {/* GRILLE RESPONSIVE : 1 colonne par défaut, 3 à partir des tablettes/PC */}
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
           <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
@@ -108,7 +108,6 @@ export function StudentDashboardPage() {
           Tout voir
         </button>
       </div>
-
 
       <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
         {MOCK_EXAMS.map((exam) => (
