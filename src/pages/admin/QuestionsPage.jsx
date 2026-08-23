@@ -74,6 +74,7 @@ export function QuestionsPage() {
   const [isLocked, setIsLocked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [actionError, setActionError] = useState('');
+  const [isUsingMockData, setIsUsingMockData] = useState(false);
 
   const [addTarget, setAddTarget] = useState(null);
   const [editTarget, setEditTarget] = useState(null);
@@ -87,15 +88,18 @@ export function QuestionsPage() {
       resultService.getExamResults(examId),
       courseService.getCourses(),
     ]).then(([examRes, questionsRes, resultsRes, coursesRes]) => {
+      let usingMock = false;
       if (examRes.status === 'fulfilled') {
         setExam(examRes.value);
       } else {
         setExam({ ...MOCK_EXAM, id: examId });
+        usingMock = true;
       }
       if (questionsRes.status === 'fulfilled' && Array.isArray(questionsRes.value)) {
         setQuestions(questionsRes.value);
       } else {
         setQuestions(MOCK_QUESTIONS);
+        usingMock = true;
       }
       if (resultsRes.status === 'fulfilled' && resultsRes.value) {
         setIsLocked((resultsRes.value.totalAttempts ?? 0) > 0);
@@ -104,7 +108,9 @@ export function QuestionsPage() {
         setCourses(coursesRes.value);
       } else {
         setCourses(MOCK_COURSES);
+        usingMock = true;
       }
+      setIsUsingMockData(usingMock);
     }).finally(() => setIsLoading(false));
   }, [examId]);
 
@@ -152,8 +158,9 @@ export function QuestionsPage() {
     } catch (err) {
       if (err instanceof ApiError) {
         setActionError(err.message);
+      } else {
+        setActionError('Erreur lors de la suppression.');
       }
-      setQuestions((prev) => prev.filter((q) => q.id !== deleteTarget.id));
       setDeleteTarget(null);
     } finally {
       setIsSubmitting(false);
@@ -161,7 +168,16 @@ export function QuestionsPage() {
   }
 
   if (isLoading) return <SkeletonPage />;
-  if (!exam) return null;
+  if (!exam) {
+    return (
+      <div>
+        <Link to="/admin/exams" className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-indigo-600">
+          <ArrowLeft size={16} /> Retour aux examens
+        </Link>
+        <EmptyState icon={FileText} title="Examen introuvable" description="Cet examen n'existe pas ou a été supprimé." />
+      </div>
+    );
+  }
 
   return (
     <div>
@@ -171,6 +187,12 @@ export function QuestionsPage() {
       >
         <ArrowLeft size={16} /> Retour aux examens
       </Link>
+
+      {isUsingMockData && (
+        <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+          Données de démonstration affichées — le serveur backend est indisponible.
+        </div>
+      )}
 
       <div className="mb-6">
         <h1 className="text-3xl font-bold tracking-tight text-gray-900">{exam.title}</h1>
