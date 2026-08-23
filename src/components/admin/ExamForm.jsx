@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
+import { Textarea } from '../common/Textarea';
 import { courseService } from '../../services/courseService';
 
 function toDatetimeLocal(isoStr) {
@@ -93,17 +94,14 @@ export function ExamForm({ initial, onSubmit, onCancel, loading }) {
         autoFocus
       />
 
-      <div>
-        <label htmlFor="exam-description" className="mb-1.5 block text-sm font-medium text-gray-700">Description</label>
-        <textarea
-          id="exam-description"
-          rows={3}
-          placeholder="Évaluation des notions de Java..."
-          value={form.description}
-          onChange={(e) => set('description', e.target.value)}
-          className="w-full rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 transition-colors placeholder:text-gray-400 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
-        />
-      </div>
+      <Textarea
+        id="exam-description"
+        label="Description"
+        rows={3}
+        placeholder="Évaluation des notions de Java..."
+        value={form.description}
+        onChange={(e) => set('description', e.target.value)}
+      />
 
       <Input
         id="exam-startDate"
