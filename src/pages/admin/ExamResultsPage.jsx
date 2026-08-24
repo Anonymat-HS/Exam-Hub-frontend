@@ -12,30 +12,18 @@ const MOCK_COURSES = [
   { id: 'c1', code: 'PROG2', name: 'Programmation Java' },
 ];
 
-const MOCK_EXAM = {
-  id: 'e1', title: 'Examen final Java', courseId: 'c1',
-  startDate: '2026-09-15T09:00:00Z', endDate: '2026-09-15T11:00:00Z',
-  questions: [
-    { id: 'q1', text: 'Q1', points: 1, choices: [] },
-    { id: 'q2', text: 'Q2', points: 2, choices: [] },
-    { id: 'q3', text: 'Q3', points: 1, choices: [] },
-    { id: 'q4', text: 'Q4', points: 2, choices: [] },
-    { id: 'q5', text: 'Q5', points: 2, choices: [] },
-  ],
-};
-
 const MOCK_RESULTS = {
-  average: 14.2,
-  totalAttempts: 25,
+  average: 5.4,
+  totalAttempts: 8,
   results: [
-    { studentId: 's1', firstName: 'Jean', lastName: 'Dupont', score: 17, submittedAt: '2026-09-15T10:45:00Z' },
-    { studentId: 's2', firstName: 'Marie', lastName: 'Martin', score: 12, submittedAt: '2026-09-15T10:50:00Z' },
-    { studentId: 's3', firstName: 'Lucas', lastName: 'Bernard', score: 19, submittedAt: '2026-09-15T10:38:00Z' },
-    { studentId: 's4', firstName: 'Emma', lastName: 'Petit', score: 8, submittedAt: '2026-09-15T10:55:00Z' },
-    { studentId: 's5', firstName: 'Hugo', lastName: 'Moreau', score: 15, submittedAt: '2026-09-15T10:42:00Z' },
-    { studentId: 's6', firstName: 'Léa', lastName: 'Roux', score: 11, submittedAt: '2026-09-15T10:58:00Z' },
-    { studentId: 's7', firstName: 'Nathan', lastName: 'Garnier', score: 20, submittedAt: '2026-09-15T10:30:00Z' },
-    { studentId: 's8', firstName: 'Chloé', lastName: 'Lambert', score: 14, submittedAt: '2026-09-15T10:47:00Z' },
+    { studentId: 's1', firstName: 'Jean', lastName: 'Dupont', score: 7, submittedAt: '2026-09-15T10:45:00Z' },
+    { studentId: 's2', firstName: 'Marie', lastName: 'Martin', score: 5, submittedAt: '2026-09-15T10:50:00Z' },
+    { studentId: 's3', firstName: 'Lucas', lastName: 'Bernard', score: 8, submittedAt: '2026-09-15T10:38:00Z' },
+    { studentId: 's4', firstName: 'Emma', lastName: 'Petit', score: 4, submittedAt: '2026-09-15T10:55:00Z' },
+    { studentId: 's5', firstName: 'Hugo', lastName: 'Moreau', score: 6, submittedAt: '2026-09-15T10:42:00Z' },
+    { studentId: 's6', firstName: 'Léa', lastName: 'Roux', score: 5, submittedAt: '2026-09-15T10:58:00Z' },
+    { studentId: 's7', firstName: 'Nathan', lastName: 'Garnier', score: 3, submittedAt: '2026-09-15T10:30:00Z' },
+    { studentId: 's8', firstName: 'Chloé', lastName: 'Lambert', score: 5, submittedAt: '2026-09-15T10:47:00Z' },
   ],
 };
 
@@ -59,6 +47,7 @@ export function ExamResultsPage() {
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isUsingMockData, setIsUsingMockData] = useState(false);
+  const [hasExamDetail, setHasExamDetail] = useState(false);
 
   useEffect(() => {
     Promise.allSettled([
@@ -69,8 +58,9 @@ export function ExamResultsPage() {
       let usingMock = false;
       if (examRes.status === 'fulfilled') {
         setExam(examRes.value);
+        setHasExamDetail(true);
       } else {
-        setExam({ ...MOCK_EXAM, id: examId });
+        setExam(null);
         usingMock = true;
       }
       if (resultsRes.status === 'fulfilled') {
@@ -100,7 +90,7 @@ export function ExamResultsPage() {
   }
 
   if (isLoading) return <SkeletonPage />;
-  if (!exam) {
+  if (!exam && !resultsData) {
     return (
       <div>
         <Link to="/admin/exams" className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-indigo-600">
@@ -133,11 +123,13 @@ export function ExamResultsPage() {
 
       <div className="mb-6">
         <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-indigo-600">Résultats</p>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">{exam.title}</h1>
-        <p className="mt-1 text-gray-500">{getCourseName(exam.courseId)}</p>
-        <p className="mt-1 text-sm text-gray-400">
-          {formatDateTime(exam.startDate)} → {formatDateTime(exam.endDate)}
-        </p>
+        <h1 className="text-3xl font-bold tracking-tight text-gray-900">{exam?.title ?? 'Examen'}</h1>
+        {exam && <p className="mt-1 text-gray-500">{getCourseName(exam.courseId)}</p>}
+        {exam && (
+          <p className="mt-1 text-sm text-gray-400">
+            {formatDateTime(exam.startDate)} → {formatDateTime(exam.endDate)}
+          </p>
+        )}
       </div>
 
       <div className="mb-8 grid gap-5 sm:grid-cols-3">
@@ -146,7 +138,7 @@ export function ExamResultsPage() {
           iconBg="bg-green-50"
           iconColor="text-green-600"
           label="Moyenne"
-          value={totalAttempts > 0 && maxScore ? `${average.toFixed(1)} / ${maxScore}` : totalAttempts > 0 ? average.toFixed(1) : '—'}
+          value={totalAttempts > 0 && hasExamDetail && maxScore ? `${average.toFixed(1)} / ${maxScore}` : totalAttempts > 0 ? average.toFixed(1) : '—'}
         />
         <StatCard
           icon={Users}
@@ -191,7 +183,7 @@ export function ExamResultsPage() {
                     </td>
                     <td className="px-6 py-4">
                       <span className="font-semibold text-gray-900">
-                        {r.score}{maxScore ? ` / ${maxScore}` : ''}
+                        {r.score}{hasExamDetail && maxScore ? ` / ${maxScore}` : ''}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-gray-500">
