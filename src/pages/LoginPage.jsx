@@ -1,10 +1,13 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Sparkles, AlertCircle, Loader2 } from 'lucide-react';
-import { useAuth } from '../hooks/useAuth';
 
 
 
+const useAuth = () => ({
+  user: { role: 'STUDENT' },
+  login: async () => {},
+});
 export function LoginPage() {
   const navigate = useNavigate();
   const { login, user } = useAuth();
