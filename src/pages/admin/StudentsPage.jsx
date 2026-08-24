@@ -8,6 +8,14 @@ import { EmptyState } from '../../components/common/EmptyState';
 import { studentService } from '../../services/studentService';
 import { ApiError } from '../../services/api';
 
+const MOCK_STUDENTS = [
+  { id: 's1', firstName: 'Alice', lastName: 'Martin', email: 'alice@examhub.com', active: true },
+  { id: 's2', firstName: 'Thomas', lastName: 'Dupont', email: 'thomas@examhub.com', active: true },
+  { id: 's3', firstName: 'Sarah', lastName: 'Bernard', email: 'sarah@examhub.com', active: false },
+  { id: 's4', firstName: 'Lucas', lastName: 'Petit', email: 'lucas@examhub.com', active: true },
+  { id: 's5', firstName: 'Emma', lastName: 'Roux', email: 'emma@examhub.com', active: true },
+];
+
 const EMPTY_CREATE_FORM = { fullName: '', email: '', password: '' };
 const EMPTY_EDIT_FORM = { firstName: '', lastName: '', email: '', password: '' };
 
@@ -78,10 +86,10 @@ export function StudentsPage() {
     studentService
       .getStudents()
       .then((data) => {
-        if (Array.isArray(data)) setStudents(data);
-        else setIsUsingMockData(true);
+        if (Array.isArray(data) && data.length > 0) setStudents(data);
+        else { setStudents(MOCK_STUDENTS); setIsUsingMockData(true); }
       })
-      .catch(() => setIsUsingMockData(true))
+      .catch(() => { setStudents(MOCK_STUDENTS); setIsUsingMockData(true); })
       .finally(() => setIsLoading(false));
   }, []);
 
