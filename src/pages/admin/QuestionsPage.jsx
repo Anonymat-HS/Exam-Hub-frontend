@@ -34,7 +34,7 @@ const MOCK_QUESTIONS = [
     ],
   },
   {
-    id: 'q2', text: 'Quelle est la complexité moyenne de Arrays.sort() ?', points: 2,
+    id: 'q2', text: 'Quelle est la complexité moyenne de Arrays.sort() ?', points: 1,
     choices: [
       { id: 'ch5', text: 'O(n)', isCorrect: false },
       { id: 'ch6', text: 'O(n log n)', isCorrect: true },
