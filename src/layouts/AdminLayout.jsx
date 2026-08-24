@@ -17,7 +17,7 @@ export function AdminLayout() {
       <aside className="flex w-64 flex-col justify-between border-r border-gray-100 bg-white px-4 py-6">
         <div>
           <div className="mb-8 flex items-center gap-2 px-2">
-            <img src="/Logo-general.png" alt="" className="h-9 w-9 rounded-lg object-contain" />
+            <img src="/Icone-EH.png" alt="" className="h-9 w-9 rounded-lg object-contain" />
             <span className="text-lg font-bold text-navy">Exam Hub</span>
           </div>
           <div className="mb-6 flex items-center gap-3 rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 ring-1 ring-primary-100 px-3 py-3">

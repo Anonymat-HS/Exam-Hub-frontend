@@ -21,7 +21,7 @@ export function SplashScreenPage() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-navy">
       <div className="animate-fade-in flex flex-col items-center gap-6">
         <img
-          src="/Logo-general.png"
+          src="/Logo.png"
           alt="Exam Hub"
           className="h-28 w-28 rounded-3xl object-contain shadow-2xl shadow-black/30"
         />
