@@ -44,7 +44,7 @@ export function LoginForm({ onSubmit, error, loading }) {
             onClick={() => setSelectedRole(key)}
             className={`flex flex-col items-center gap-1 rounded-xl border-2 p-3 text-center transition-all ${
               selectedRole === key
-                ? 'border-indigo-500 bg-indigo-50 text-indigo-700 shadow-sm'
+                ? 'border-primary-500 bg-primary-50 text-primary-700 shadow-sm'
                 : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300 hover:bg-gray-50'
             }`}
           >
@@ -78,8 +78,8 @@ export function LoginForm({ onSubmit, error, loading }) {
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             autoComplete="current-password"
-            className={`w-full rounded-lg border bg-white py-2 pl-9 pr-10 text-sm text-gray-900 transition-colors placeholder:text-gray-400 focus:outline-none focus:ring-2 ${
-              fieldErrors.password ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : 'border-gray-200 focus:border-indigo-400 focus:ring-indigo-100'
+            className={`w-full rounded-lg border bg-white py-2 pl-9 pr-10 text-sm text-navy transition-colors placeholder:text-gray-400 focus:outline-none focus:ring-2 ${
+              fieldErrors.password ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : 'border-gray-200 focus:border-primary-400 focus:ring-primary-100'
             }`}
           />
           <button
@@ -98,7 +98,7 @@ export function LoginForm({ onSubmit, error, loading }) {
         type="submit"
         variant="violet"
         loading={loading}
-        className="mt-1 w-full bg-gradient-to-r from-violet-600 to-indigo-600"
+        className="mt-1 w-full bg-gradient-to-r from-primary-600 to-primary-700"
       >
         Se connecter
       </Button>

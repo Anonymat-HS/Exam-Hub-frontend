@@ -17,13 +17,13 @@ export function AdminLayout() {
       <aside className="flex w-64 flex-col justify-between border-r border-gray-100 bg-white px-4 py-6">
         <div>
           <div className="mb-8 flex items-center gap-2 px-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 font-bold text-white shadow-sm">EH</div>
-            <span className="text-lg font-bold text-gray-900">Exam Hub</span>
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-primary-600 to-primary-700 font-bold text-white shadow-sm">EH</div>
+            <span className="text-lg font-bold text-navy">Exam Hub</span>
           </div>
-          <div className="mb-6 flex items-center gap-3 rounded-xl bg-gradient-to-br from-indigo-50 to-violet-50 ring-1 ring-indigo-100 px-3 py-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-100 text-indigo-600"><Users size={18} /></div>
+          <div className="mb-6 flex items-center gap-3 rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 ring-1 ring-primary-100 px-3 py-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-100 text-primary-600"><Users size={18} /></div>
             <div>
-              <p className="text-sm font-semibold text-gray-900">Administrateur</p>
+              <p className="text-sm font-semibold text-navy">Administrateur</p>
               <p className="text-xs text-gray-400 truncate max-w-[140px]">{user?.email ?? 'admin'}</p>
             </div>
           </div>
@@ -31,7 +31,7 @@ export function AdminLayout() {
           <nav aria-label="Navigation admin" className="flex flex-col gap-1">
             {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
               <NavLink key={to} to={to} end={end}
-                className={({ isActive }) => `relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors before:absolute before:left-0 before:h-5 before:w-1 before:rounded-full before:bg-indigo-600 before:transition-opacity ${isActive ? 'bg-indigo-50 text-indigo-600 before:opacity-100' : 'text-gray-600 hover:bg-gray-50 before:opacity-0'}`}>
+                className={({ isActive }) => `relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors before:absolute before:left-0 before:h-5 before:w-1 before:rounded-full before:bg-primary-600 before:transition-opacity ${isActive ? 'bg-primary-50 text-primary-600 before:opacity-100' : 'text-gray-600 hover:bg-gray-50 before:opacity-0'}`}>
                 <Icon size={18} />{label}
               </NavLink>
             ))}

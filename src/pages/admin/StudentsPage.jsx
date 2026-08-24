@@ -20,9 +20,9 @@ const EMPTY_CREATE_FORM = { fullName: '', email: '', password: '' };
 const EMPTY_EDIT_FORM = { firstName: '', lastName: '', email: '', password: '' };
 
 const AVATAR_COLORS = [
-  'bg-indigo-100 text-indigo-600',
-  'bg-blue-100 text-blue-600',
-  'bg-purple-100 text-purple-600',
+  'bg-primary-100 text-primary-600',
+  'bg-primary-100 text-primary-600',
+  'bg-primary-100 text-primary-600',
   'bg-green-100 text-green-600',
 ];
 
@@ -239,14 +239,14 @@ export function StudentsPage() {
     <div>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-indigo-600">Administration</p>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Étudiants</h1>
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-primary-600">Administration</p>
+          <h1 className="text-3xl font-bold tracking-tight text-navy">Étudiants</h1>
           <p className="mt-1 text-gray-500">Gérez les comptes de vos étudiants.</p>
         </div>
         <Button
           variant="violet"
           onClick={openAddModal}
-          className="bg-gradient-to-r from-violet-600 to-indigo-600 shadow-md shadow-violet-200 transition-transform hover:-translate-y-0.5"
+          className="bg-gradient-to-r from-primary-600 to-primary-700 shadow-md shadow-primary-200 transition-transform hover:-translate-y-0.5"
         >
           <Plus size={16} /> Ajouter
         </Button>
@@ -272,7 +272,7 @@ export function StudentsPage() {
               <button
                 onClick={() => setSearch('')}
                 aria-label="Effacer la recherche"
-                className="absolute right-2.5 top-[30px] -translate-y-1/2 rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200"
+                className="absolute right-2.5 top-[30px] -translate-y-1/2 rounded-full p-1 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200"
               >
                 <X size={13} />
               </button>
@@ -284,8 +284,8 @@ export function StudentsPage() {
               <button
                 key={value}
                 onClick={() => setStatusFilter(value)}
-                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200 ${
-                  statusFilter === value ? 'bg-white text-indigo-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+                className={`rounded-lg px-3 py-1.5 text-xs font-semibold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200 ${
+                  statusFilter === value ? 'bg-white text-primary-600 shadow-sm' : 'text-gray-500 hover:text-gray-700'
                 }`}
               >
                 {label}
@@ -293,7 +293,7 @@ export function StudentsPage() {
             ))}
           </div>
 
-          <span className="ml-auto rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
+          <span className="ml-auto rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-600">
             {filtered.length === 0 ? '0 étudiant' : filtered.length === 1 ? '1 étudiant' : `${filtered.length} étudiants`}
           </span>
         </div>
@@ -308,7 +308,7 @@ export function StudentsPage() {
               icon={Users}
               title="Aucun étudiant"
               description="Ajoutez votre premier étudiant avec le bouton « Ajouter »."
-              bubbleClass="bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-500"
+              bubbleClass="bg-gradient-to-br from-primary-100 to-primary-50 text-primary-500"
             />
           ) : (
             <EmptyState
@@ -337,13 +337,13 @@ export function StudentsPage() {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <Avatar student={student} list={students} />
-                        <span className="font-medium text-gray-900">{`${student.firstName} ${student.lastName}`}</span>
+                        <span className="font-medium text-navy">{`${student.firstName} ${student.lastName}`}</span>
                       </div>
                     </td>
                     <td className="px-6 py-4">
                       <a
                         href={`mailto:${student.email}`}
-                        className="text-gray-500 underline-offset-2 transition-colors hover:text-indigo-600 hover:underline"
+                        className="text-gray-500 underline-offset-2 transition-colors hover:text-primary-600 hover:underline"
                       >
                         {student.email}
                       </a>
@@ -362,7 +362,7 @@ export function StudentsPage() {
                       <div className="flex items-center justify-end gap-2">
                         <button
                           onClick={() => openEditModal(student)}
-                          className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200"
+                          className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200"
                         >
                           <Pencil size={14} /> Modifier
                         </button>
@@ -421,7 +421,7 @@ export function StudentsPage() {
             error={createErrors.password}
           />
           <p className="text-xs text-gray-400">Assurez-vous d'entrer les bonnes informations.</p>
-          <Button type="submit" variant="violet" loading={isCreating} className="mt-1 w-full bg-gradient-to-r from-violet-600 to-indigo-600">
+          <Button type="submit" variant="violet" loading={isCreating} className="mt-1 w-full bg-gradient-to-r from-primary-600 to-primary-700">
             Créer le compte
           </Button>
         </form>
@@ -432,7 +432,7 @@ export function StudentsPage() {
           <form onSubmit={handleEdit} className="flex flex-col gap-4" noValidate>
             <div>
               <label className="mb-1.5 block text-sm font-medium text-gray-700">Nom complet</label>
-              <p className="rounded-lg border border-gray-100 bg-gray-50 px-3 py-2 text-sm text-gray-900">
+              <p className="rounded-lg border border-gray-100 bg-gray-50 px-3 py-2 text-sm text-navy">
                 {editTarget.firstName} {editTarget.lastName}
               </p>
             </div>
@@ -458,7 +458,7 @@ export function StudentsPage() {
               <Button variant="ghost" onClick={() => setEditTarget(null)}>
                 Annuler
               </Button>
-              <Button type="submit" variant="violet" loading={isEditing} className="bg-gradient-to-r from-violet-600 to-indigo-600">
+              <Button type="submit" variant="violet" loading={isEditing} className="bg-gradient-to-r from-primary-600 to-primary-700">
                 Enregistrer
               </Button>
             </div>
@@ -471,7 +471,7 @@ export function StudentsPage() {
           <div className="mb-4 flex items-center gap-3 rounded-xl bg-gray-50 px-4 py-3">
             <Avatar student={confirmTarget} list={students} />
             <div>
-              <p className="text-sm font-semibold text-gray-900">{`${confirmTarget.firstName} ${confirmTarget.lastName}`}</p>
+              <p className="text-sm font-semibold text-navy">{`${confirmTarget.firstName} ${confirmTarget.lastName}`}</p>
               <p className="text-xs text-gray-400">{confirmTarget.email}</p>
             </div>
           </div>

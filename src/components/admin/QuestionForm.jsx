@@ -118,7 +118,7 @@ export function QuestionForm({ question, onSubmit, onCancel, loading }) {
                 name={`correct-choice-${question?.id || 'new'}`}
                 checked={choice.isCorrect}
                 onChange={() => setCorrect(i)}
-                className="h-4 w-4 shrink-0 text-indigo-600 focus:ring-indigo-500"
+                className="h-4 w-4 shrink-0 text-primary-600 focus:ring-primary-500"
                 aria-label={`Choix ${i + 1} — correct`}
               />
               <input
@@ -126,7 +126,7 @@ export function QuestionForm({ question, onSubmit, onCancel, loading }) {
                 value={choice.text}
                 onChange={(e) => updateChoiceText(i, e.target.value)}
                 placeholder={`Choix ${i + 1}`}
-                className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-900 transition-colors placeholder:text-gray-400 focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+                className="flex-1 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-navy transition-colors placeholder:text-gray-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-100"
               />
               {choice.isCorrect && (
                 <span className="shrink-0 rounded-full bg-green-50 px-2 py-0.5 text-xs font-medium text-green-600">Correct</span>
@@ -149,7 +149,7 @@ export function QuestionForm({ question, onSubmit, onCancel, loading }) {
           type="button"
           onClick={addChoice}
           disabled={!canAddChoice}
-          className="mt-2 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-indigo-600 transition-colors hover:bg-indigo-50 disabled:pointer-events-none disabled:opacity-40"
+          className="mt-2 inline-flex items-center gap-1.5 rounded-lg px-3 py-1.5 text-xs font-medium text-primary-600 transition-colors hover:bg-primary-50 disabled:pointer-events-none disabled:opacity-40"
         >
           <Plus size={14} /> Ajouter un choix
         </button>
@@ -160,7 +160,7 @@ export function QuestionForm({ question, onSubmit, onCancel, loading }) {
 
       <div className="flex justify-end gap-3 mt-1">
         <Button variant="ghost" onClick={onCancel}>Annuler</Button>
-        <Button type="submit" variant="violet" loading={loading} className="bg-gradient-to-r from-violet-600 to-indigo-600">
+        <Button type="submit" variant="violet" loading={loading} className="bg-gradient-to-r from-primary-600 to-primary-700">
           {question ? 'Enregistrer' : 'Ajouter'}
         </Button>
       </div>

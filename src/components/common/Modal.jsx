@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 
 const TONES = {
-  violet: 'bg-gradient-to-br from-violet-600 to-indigo-600 text-white shadow-md shadow-violet-200',
+  violet: 'bg-gradient-to-br from-primary-600 to-primary-700 text-white shadow-md shadow-primary-200',
   danger: 'bg-red-50 text-red-600',
 };
 
@@ -56,7 +56,7 @@ export function Modal({ open, onClose, title, icon: Icon, tone = 'violet', child
         <button
           onClick={onClose}
           aria-label="Fermer"
-          className="absolute right-4 top-4 rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-200"
+          className="absolute right-4 top-4 rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary-200"
         >
           <X size={18} />
         </button>
@@ -65,7 +65,7 @@ export function Modal({ open, onClose, title, icon: Icon, tone = 'violet', child
             <Icon size={22} />
           </div>
         )}
-        <h2 className="mb-4 pr-8 text-lg font-bold text-gray-900">{title}</h2>
+        <h2 className="mb-4 pr-8 text-lg font-bold text-navy">{title}</h2>
         {children}
       </div>
     </div>

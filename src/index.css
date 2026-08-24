@@ -1,5 +1,20 @@
 @import "tailwindcss";
 
+@theme {
+  --color-primary-50: #F0EDFE;
+  --color-primary-100: #DDD6FE;
+  --color-primary-200: #C4B5FD;
+  --color-primary-300: #A78BFA;
+  --color-primary-400: #8B5CF6;
+  --color-primary-500: #7C3AED;
+  --color-primary-600: #5535FB;
+  --color-primary-700: #3821E1;
+  --color-primary-800: #2D1AB5;
+  --color-primary-900: #1E1180;
+  --color-accent: #553DF4;
+  --color-navy: #0F1030;
+}
+
 @keyframes fade-in {
   from { opacity: 0; }
   to { opacity: 1; }
@@ -11,7 +26,7 @@
 }
 
 @keyframes highlight-row {
-  from { background-color: #eef2ff; }
+  from { background-color: #F0EDFE; }
   to { background-color: transparent; }
 }
 

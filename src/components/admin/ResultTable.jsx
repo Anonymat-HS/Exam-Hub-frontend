@@ -9,7 +9,7 @@ export function ResultTable({ results, scoreMax, examTitle }) {
         icon={BarChart2}
         title="Aucune tentative"
         description="Aucun étudiant n'a encore soumis cet examen."
-        bubbleClass="bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-500"
+        bubbleClass="bg-gradient-to-br from-primary-100 to-primary-50 text-primary-500"
       />
     );
   }
@@ -18,7 +18,7 @@ export function ResultTable({ results, scoreMax, examTitle }) {
 
   return (
     <div>
-      {examTitle && <h2 className="p-6 pb-0 text-lg font-bold text-gray-900">{examTitle}</h2>}
+      {examTitle && <h2 className="p-6 pb-0 text-lg font-bold text-navy">{examTitle}</h2>}
       <div className="overflow-x-auto">
         <table className="w-full text-sm">
           <thead>
@@ -31,7 +31,7 @@ export function ResultTable({ results, scoreMax, examTitle }) {
           <tbody>
             {sorted.map((r) => (
               <tr key={r.studentId} className="border-b border-gray-50 transition-colors hover:bg-gray-50/70 last:border-none">
-                <td className="px-6 py-4 font-semibold text-gray-900">
+                <td className="px-6 py-4 font-semibold text-navy">
                   {r.firstName} {r.lastName}
                 </td>
                 <td className="px-6 py-4 font-semibold text-green-600">

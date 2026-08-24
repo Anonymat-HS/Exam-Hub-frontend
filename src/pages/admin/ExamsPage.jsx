@@ -29,7 +29,7 @@ function getExamStatus(startDate, endDate) {
   const now = new Date();
   const start = new Date(startDate);
   const end = new Date(endDate);
-  if (now < start) return { label: 'À venir', color: 'bg-blue-50 text-blue-600', dot: 'bg-blue-500' };
+  if (now < start) return { label: 'À venir', color: 'bg-primary-50 text-primary-600', dot: 'bg-primary-500' };
   if (now <= end) return { label: 'Ouvert', color: 'bg-green-50 text-green-600', dot: 'bg-green-500' };
   return { label: 'Terminé', color: 'bg-gray-100 text-gray-500', dot: 'bg-gray-400' };
 }
@@ -159,14 +159,14 @@ export function ExamsPage() {
     <div>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-indigo-600">Administration</p>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Examens</h1>
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-primary-600">Administration</p>
+          <h1 className="text-3xl font-bold tracking-tight text-navy">Examens</h1>
           <p className="mt-1 text-gray-500">Gérez les examens, leurs périodes de disponibilité et leurs questions.</p>
         </div>
         <Button
           variant="violet"
           onClick={() => setIsCreateOpen(true)}
-          className="bg-gradient-to-r from-violet-600 to-indigo-600 shadow-md shadow-violet-200 transition-transform hover:-translate-y-0.5"
+          className="bg-gradient-to-r from-primary-600 to-primary-700 shadow-md shadow-primary-200 transition-transform hover:-translate-y-0.5"
         >
           <Plus size={16} /> Nouvel examen
         </Button>
@@ -203,7 +203,7 @@ export function ExamsPage() {
             <select
               value={courseFilter}
               onChange={(e) => setCourseFilter(e.target.value)}
-              className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 transition-colors focus:border-indigo-400 focus:outline-none focus:ring-2 focus:ring-indigo-100"
+              className="rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 transition-colors focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-100"
             >
               <option value="">Tous les cours</option>
               {courses.map((c) => (
@@ -212,7 +212,7 @@ export function ExamsPage() {
             </select>
           </div>
 
-          <span className="ml-auto rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
+          <span className="ml-auto rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-600">
             {filtered.length === 0 ? '0 examen' : filtered.length === 1 ? '1 examen' : `${filtered.length} examens`}
           </span>
         </div>
@@ -227,7 +227,7 @@ export function ExamsPage() {
               icon={FileText}
               title="Aucun examen"
               description="Créez votre premier examen avec le bouton « Nouvel examen »."
-              bubbleClass="bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-500"
+              bubbleClass="bg-gradient-to-br from-primary-100 to-primary-50 text-primary-500"
             />
           ) : (
             <EmptyState
@@ -254,7 +254,7 @@ export function ExamsPage() {
                   return (
                     <tr key={exam.id} className="border-t border-gray-50 transition-colors hover:bg-gray-50/70">
                       <td className="px-6 py-4">
-                        <p className="font-medium text-gray-900">{exam.title}</p>
+                        <p className="font-medium text-navy">{exam.title}</p>
                         {exam.description && (
                           <p className="mt-0.5 max-w-xs truncate text-xs text-gray-400">{exam.description}</p>
                         )}
@@ -279,14 +279,14 @@ export function ExamsPage() {
                           <button
                             onClick={() => navigate(`/admin/exams/${exam.id}/questions`)}
                             title="Questions"
-                            className="inline-flex items-center gap-1 rounded-full border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-600"
+                            className="inline-flex items-center gap-1 rounded-full border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600"
                           >
                             <ListChecks size={14} />
                           </button>
                           <button
                             onClick={() => setEditTarget(exam)}
                             title="Modifier"
-                            className="inline-flex items-center gap-1 rounded-full border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-600"
+                            className="inline-flex items-center gap-1 rounded-full border border-gray-200 px-2.5 py-1.5 text-xs font-medium text-gray-600 transition-colors hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600"
                           >
                             <Pencil size={14} />
                           </button>
@@ -329,7 +329,7 @@ export function ExamsPage() {
         {deleteTarget && (
           <>
             <div className="mb-4 rounded-xl bg-gray-50 px-4 py-3">
-              <p className="font-medium text-gray-900">{deleteTarget.title}</p>
+              <p className="font-medium text-navy">{deleteTarget.title}</p>
               <p className="mt-0.5 text-xs text-gray-400">{getCourseName(deleteTarget.courseId)}</p>
             </div>
             <p className="text-sm text-gray-500">Cette action est irréversible. L&apos;examen et toutes ses questions seront supprimés.</p>

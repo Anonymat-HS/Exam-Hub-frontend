@@ -93,7 +93,7 @@ export function ExamResultsPage() {
   if (!exam && !resultsData) {
     return (
       <div>
-        <Link to="/admin/exams" className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-indigo-600">
+        <Link to="/admin/exams" className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-primary-600">
           <ArrowLeft size={16} /> Retour aux examens
         </Link>
         <EmptyState icon={BarChart2} title="Examen introuvable" description="Cet examen n'existe pas ou a été supprimé." />
@@ -110,7 +110,7 @@ export function ExamResultsPage() {
     <div>
       <Link
         to="/admin/exams"
-        className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-indigo-600"
+        className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-primary-600"
       >
         <ArrowLeft size={16} /> Retour aux examens
       </Link>
@@ -122,8 +122,8 @@ export function ExamResultsPage() {
       )}
 
       <div className="mb-6">
-        <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-indigo-600">Résultats</p>
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">{exam?.title ?? 'Examen'}</h1>
+        <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-primary-600">Résultats</p>
+        <h1 className="text-3xl font-bold tracking-tight text-navy">{exam?.title ?? 'Examen'}</h1>
         {exam && <p className="mt-1 text-gray-500">{getCourseName(exam.courseId)}</p>}
         {exam && (
           <p className="mt-1 text-sm text-gray-400">
@@ -142,15 +142,15 @@ export function ExamResultsPage() {
         />
         <StatCard
           icon={Users}
-          iconBg="bg-blue-50"
-          iconColor="text-blue-600"
+          iconBg="bg-primary-50"
+          iconColor="text-primary-600"
           label="Tentatives"
           value={totalAttempts}
         />
         <StatCard
           icon={BarChart2}
-          iconBg="bg-purple-50"
-          iconColor="text-purple-600"
+          iconBg="bg-primary-50"
+          iconColor="text-primary-600"
           label="Étudiants"
           value={results.length}
           sublabel="ayant soumis"
@@ -162,7 +162,7 @@ export function ExamResultsPage() {
           icon={BarChart2}
           title="Aucun résultat"
           description="Aucun étudiant n'a encore soumis cet examen."
-          bubbleClass="bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-500"
+          bubbleClass="bg-gradient-to-br from-primary-100 to-primary-50 text-primary-500"
         />
       ) : (
         <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
@@ -179,10 +179,10 @@ export function ExamResultsPage() {
                 {results.map((r) => (
                   <tr key={r.studentId} className="border-t border-gray-50 transition-colors hover:bg-gray-50/70">
                     <td className="px-6 py-4">
-                      <span className="font-medium text-gray-900">{r.firstName} {r.lastName}</span>
+                      <span className="font-medium text-navy">{r.firstName} {r.lastName}</span>
                     </td>
                     <td className="px-6 py-4">
-                      <span className="font-semibold text-gray-900">
+                      <span className="font-semibold text-navy">
                         {r.score}{hasExamDetail && maxScore ? ` / ${maxScore}` : ''}
                       </span>
                     </td>

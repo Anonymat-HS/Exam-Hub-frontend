@@ -171,7 +171,7 @@ export function QuestionsPage() {
   if (!exam) {
     return (
       <div>
-        <Link to="/admin/exams" className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-indigo-600">
+        <Link to="/admin/exams" className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-primary-600">
           <ArrowLeft size={16} /> Retour aux examens
         </Link>
         <EmptyState icon={FileText} title="Examen introuvable" description="Cet examen n'existe pas ou a été supprimé." />
@@ -183,7 +183,7 @@ export function QuestionsPage() {
     <div>
       <Link
         to="/admin/exams"
-        className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-indigo-600"
+        className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-primary-600"
       >
         <ArrowLeft size={16} /> Retour aux examens
       </Link>
@@ -195,7 +195,7 @@ export function QuestionsPage() {
       )}
 
       <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight text-gray-900">{exam.title}</h1>
+        <h1 className="text-3xl font-bold tracking-tight text-navy">{exam.title}</h1>
         <p className="mt-1 text-gray-500">{getCourseName(exam.courseId)}</p>
         <p className="mt-1 text-sm text-gray-400">
           {formatDateTime(exam.startDate)} → {formatDateTime(exam.endDate)}
@@ -222,7 +222,7 @@ export function QuestionsPage() {
           <Button
             variant="violet"
             onClick={() => setAddTarget(true)}
-            className="bg-gradient-to-r from-violet-600 to-indigo-600 shadow-md shadow-violet-200 transition-transform hover:-translate-y-0.5"
+            className="bg-gradient-to-r from-primary-600 to-primary-700 shadow-md shadow-primary-200 transition-transform hover:-translate-y-0.5"
           >
             <Plus size={16} /> Ajouter une question
           </Button>
@@ -236,7 +236,7 @@ export function QuestionsPage() {
           icon={FileText}
           title="Aucune question"
           description={isLocked ? 'Cet examen ne contient aucune question.' : 'Ajoutez votre première question avec le bouton ci-dessus.'}
-          bubbleClass="bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-500"
+          bubbleClass="bg-gradient-to-br from-primary-100 to-primary-50 text-primary-500"
         />
       ) : (
         <div className="flex flex-col gap-4">
@@ -248,7 +248,7 @@ export function QuestionsPage() {
                   <div className="flex items-center gap-1">
                     <button
                       onClick={() => setEditTarget(q)}
-                      className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-indigo-50 hover:text-indigo-600"
+                      className="rounded-lg p-1.5 text-gray-400 transition-colors hover:bg-primary-50 hover:text-primary-600"
                       title="Modifier"
                     >
                       <Pencil size={14} />
@@ -263,7 +263,7 @@ export function QuestionsPage() {
                   </div>
                 )}
               </div>
-              <p className="mb-2 text-sm font-medium text-gray-900">{q.text}</p>
+              <p className="mb-2 text-sm font-medium text-navy">{q.text}</p>
               <p className="mb-3 text-xs text-gray-400">{q.points} point{q.points !== 1 ? 's' : ''}</p>
               <div className="flex flex-col gap-1.5">
                 {(q.choices ?? []).map((c) => (

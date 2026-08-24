@@ -128,14 +128,14 @@ export function CoursesPage() {
     <div>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-indigo-600">Administration</p>
-          <h1 className="text-3xl font-bold tracking-tight text-gray-900">Cours</h1>
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-primary-600">Administration</p>
+          <h1 className="text-3xl font-bold tracking-tight text-navy">Cours</h1>
           <p className="mt-1 text-gray-500">Organisez les matières disponibles.</p>
         </div>
         <Button
           variant="violet"
           onClick={openAddModal}
-          className="bg-gradient-to-r from-violet-600 to-indigo-600 shadow-md shadow-violet-200 transition-transform hover:-translate-y-0.5"
+          className="bg-gradient-to-r from-primary-600 to-primary-700 shadow-md shadow-primary-200 transition-transform hover:-translate-y-0.5"
         >
           <Plus size={16} /> Nouveau cours
         </Button>
@@ -160,9 +160,9 @@ export function CoursesPage() {
           icon={BookOpen}
           title="Aucun cours"
           description="Commencez par créer votre premier cours."
-          bubbleClass="bg-gradient-to-br from-violet-100 to-indigo-100 text-violet-500"
+          bubbleClass="bg-gradient-to-br from-primary-100 to-primary-50 text-primary-500"
         >
-          <Button variant="violet" onClick={openAddModal} className="bg-gradient-to-r from-violet-600 to-indigo-600 shadow-md shadow-violet-200 transition-transform hover:-translate-y-0.5">
+          <Button variant="violet" onClick={openAddModal} className="bg-gradient-to-r from-primary-600 to-primary-700 shadow-md shadow-primary-200 transition-transform hover:-translate-y-0.5">
             <Plus size={16} /> Nouveau cours
           </Button>
         </EmptyState>
@@ -171,21 +171,21 @@ export function CoursesPage() {
           {courses.map((course, index) => (
             <div key={course.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 40}ms` }}>
               <article
-                className={`flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100/60 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-violet-200 ${
+                className={`flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100/60 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-primary-200 ${
                   course.id === lastAddedId ? 'row-highlight' : ''
                 }`}
               >
-                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-violet-50 text-violet-600 shadow-sm ring-1 ring-violet-100">
+                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-xl bg-primary-50 text-primary-600 shadow-sm ring-1 ring-primary-100">
                   <BookOpen size={18} />
                 </div>
-                <p className="text-xs font-bold uppercase tracking-wide text-violet-600">{course.code}</p>
-                <h3 className="mt-1 text-lg font-bold text-gray-900">{course.name}</h3>
+                <p className="text-xs font-bold uppercase tracking-wide text-primary-600">{course.code}</p>
+                <h3 className="mt-1 text-lg font-bold text-navy">{course.name}</h3>
                 <p className="mt-2 line-clamp-3 flex-1 text-sm leading-relaxed text-gray-500">{course.description}</p>
                 <div className="mt-6 flex items-center justify-between border-t border-gray-100 pt-4">
                   <span className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-gray-400">
                     <FileText size={13} /> Examens
                   </span>
-                  <span className="text-sm font-bold tabular-nums text-gray-900">{course.examCount ?? 0}</span>
+                  <span className="text-sm font-bold tabular-nums text-navy">{course.examCount ?? 0}</span>
                 </div>
               </article>
             </div>
@@ -222,7 +222,7 @@ export function CoursesPage() {
             onChange={(e) => setForm({ ...form, description: e.target.value })}
             error={errors.description}
           />
-          <Button type="submit" variant="violet" loading={isSubmitting} className="w-full bg-gradient-to-r from-violet-600 to-indigo-600">
+          <Button type="submit" variant="violet" loading={isSubmitting} className="w-full bg-gradient-to-r from-primary-600 to-primary-700">
             Créer le cours
           </Button>
         </form>

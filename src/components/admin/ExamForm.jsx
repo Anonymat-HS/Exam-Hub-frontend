@@ -78,8 +78,8 @@ export function ExamForm({ initial, onSubmit, onCancel, loading }) {
           id="exam-course"
           value={form.courseId}
           onChange={(e) => set('courseId', e.target.value)}
-          className={`w-full rounded-lg border bg-white px-3 py-2 text-sm text-gray-900 transition-colors focus:outline-none focus:ring-2 ${
-            errors.courseId ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : 'border-gray-200 focus:border-indigo-400 focus:ring-indigo-100'
+          className={`w-full rounded-lg border bg-white px-3 py-2 text-sm text-navy transition-colors focus:outline-none focus:ring-2 ${
+            errors.courseId ? 'border-red-300 focus:border-red-400 focus:ring-red-100' : 'border-gray-200 focus:border-primary-400 focus:ring-primary-100'
           }`}
         >
           <option value="">— Sélectionner un cours —</option>
@@ -129,7 +129,7 @@ export function ExamForm({ initial, onSubmit, onCancel, loading }) {
 
       <div className="flex justify-end gap-3 mt-1">
         <Button variant="ghost" onClick={onCancel}>Annuler</Button>
-        <Button type="submit" variant="violet" loading={loading} className="bg-gradient-to-r from-violet-600 to-indigo-600">
+        <Button type="submit" variant="violet" loading={loading} className="bg-gradient-to-r from-primary-600 to-primary-700">
           {initial ? 'Enregistrer' : 'Créer'}
         </Button>
       </div>

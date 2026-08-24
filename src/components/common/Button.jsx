@@ -1,6 +1,6 @@
 const VARIANTS = {
-  primary: 'bg-indigo-600 text-white hover:bg-indigo-700 focus-visible:outline-indigo-600',
-  violet: 'bg-violet-600 text-white hover:bg-violet-700 focus-visible:outline-violet-600',
+  primary: 'bg-primary-600 text-white hover:bg-primary-700 focus-visible:outline-primary-600',
+  violet: 'bg-primary-600 text-white hover:bg-primary-700 focus-visible:outline-primary-600',
   danger: 'bg-red-600 text-white hover:bg-red-700 focus-visible:outline-red-600',
   ghost: 'text-gray-700 hover:bg-gray-100 focus-visible:outline-gray-400',
 };

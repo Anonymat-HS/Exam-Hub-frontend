@@ -6,7 +6,7 @@ export function EmptyState({ icon: Icon, title, description, bubbleClass = 'bg-g
           <Icon size={22} />
         </div>
       )}
-      <p className="text-sm font-semibold text-gray-900">{title}</p>
+      <p className="text-sm font-semibold text-navy">{title}</p>
       {description && <p className="text-sm text-gray-400">{description}</p>}
       {children && <div className="mt-4">{children}</div>}
     </div>
