@@ -6,7 +6,7 @@ import { Textarea } from '../common/Textarea';
 
 function makeDefaultChoices() {
   return [
-    { text: '', isCorrect: true },
+    { text: '', isCorrect: false },
     { text: '', isCorrect: false },
   ];
 }
@@ -59,7 +59,7 @@ export function QuestionForm({ question, onSubmit, onCancel, loading }) {
   function validate() {
     const next = {};
     if (!state.text.trim()) next.text = 'Énoncé requis.';
-    if (!state.points || state.points < 0.5) next.points = 'Nombre de points invalide.';
+    if (state.points !== 0 && state.points !== 1) next.points = 'Les points doivent être 0 ou 1.';
     const filledChoices = state.choices.filter((c) => c.text.trim());
     if (filledChoices.length < 2) next.choices = 'Au moins 2 choix avec du texte.';
     if (state.choices.length > 6) next.choices = 'Maximum 6 choix.';
@@ -99,8 +99,9 @@ export function QuestionForm({ question, onSubmit, onCancel, loading }) {
         id="q-points"
         label="Points"
         type="number"
-        min="0.5"
-        step="0.5"
+        min="0"
+        max="1"
+        step="1"
         value={state.points}
         onChange={(e) => { setState((prev) => ({ ...prev, points: e.target.value })); if (errors.points) setErrors((prev) => ({ ...prev, points: undefined })); }}
         error={errors.points}
