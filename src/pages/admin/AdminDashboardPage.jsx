@@ -6,10 +6,7 @@ import { Loader } from '../../components/common/Loader';
 import { studentService } from '../../services/studentService';
 import { courseService } from '../../services/courseService';
 import { examService } from '../../services/examService';
-
-const MOCK_STUDENTS = [{ active: true }, { active: false }, { active: true }];
-const MOCK_COURSES = [1, 2, 3];
-const MOCK_EXAMS = [1, 2, 3];
+import { MOCK_STUDENTS, MOCK_COURSES, MOCK_EXAMS } from '../../data/mockData';
 
 const QUICK_ACTIONS = [
   { to: '/admin/students', icon: UserPlus, iconBg: 'bg-primary-50', iconColor: 'text-primary-600', title: 'Ajouter un étudiant', desc: 'Créer un nouveau compte' },

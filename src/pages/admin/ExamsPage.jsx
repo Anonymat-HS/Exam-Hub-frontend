@@ -11,19 +11,7 @@ import { examService } from '../../services/examService';
 import { courseService } from '../../services/courseService';
 import { ApiError } from '../../services/api';
 import { formatDateTime } from '../../utils/formatters';
-
-const MOCK_COURSES = [
-  { id: 'c1', code: 'PROG2', name: 'Programmation Java', description: 'Langage Java et conceptsorientés objet' },
-  { id: 'c2', code: 'WEB2', name: 'Développement Web 2', description: 'React, routing et SPA' },
-  { id: 'c3', code: 'BD2', name: 'Bases de données 2', description: 'SQL avancé et modélisation' },
-];
-
-const MOCK_EXAMS = [
-  { id: 'e1', title: 'Examen final Java', courseId: 'c1', startDate: '2026-09-15T09:00:00Z', endDate: '2026-09-15T11:00:00Z', description: 'Évaluation complète de Java et POO' },
-  { id: 'e2', title: 'Examen partiel Web', courseId: 'c2', startDate: '2026-08-20T14:00:00Z', endDate: '2026-08-20T16:00:00Z', description: 'React, hooks et routing' },
-  { id: 'e3', title: 'Quiz bases SQL', courseId: 'c3', startDate: '2026-10-01T10:00:00Z', endDate: '2026-10-01T10:30:00Z', description: 'Requêtes SELECT et JOIN' },
-  { id: 'e4', title: 'TP NOTÉ Spring Boot', courseId: 'c1', startDate: '2026-07-10T08:00:00Z', endDate: '2026-07-10T12:00:00Z', description: 'Création d\'une API REST' },
-];
+import { MOCK_COURSES, MOCK_EXAMS } from '../../data/mockData';
 
 function getExamStatus(startDate, endDate) {
   const now = new Date();

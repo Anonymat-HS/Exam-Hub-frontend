@@ -12,44 +12,7 @@ import { resultService } from '../../services/resultService';
 import { courseService } from '../../services/courseService';
 import { ApiError } from '../../services/api';
 import { formatDateTime } from '../../utils/formatters';
-
-const MOCK_COURSES = [
-  { id: 'c1', code: 'PROG2', name: 'Programmation Java' },
-];
-
-const MOCK_EXAM = {
-  id: 'e1', title: 'Examen final Java', courseId: 'c1',
-  startDate: '2026-09-15T09:00:00Z', endDate: '2026-09-15T11:00:00Z',
-  description: 'Évaluation complète de Java et POO',
-};
-
-const MOCK_QUESTIONS = [
-  {
-    id: 'q1', text: 'Quel langage est utilisé avec la JVM ?', points: 1,
-    choices: [
-      { id: 'ch1', text: 'Java', isCorrect: true },
-      { id: 'ch2', text: 'Python', isCorrect: false },
-      { id: 'ch3', text: 'HTML', isCorrect: false },
-      { id: 'ch4', text: 'SQL', isCorrect: false },
-    ],
-  },
-  {
-    id: 'q2', text: 'Quelle est la complexité moyenne de Arrays.sort() ?', points: 1,
-    choices: [
-      { id: 'ch5', text: 'O(n)', isCorrect: false },
-      { id: 'ch6', text: 'O(n log n)', isCorrect: true },
-      { id: 'ch7', text: 'O(n²)', isCorrect: false },
-    ],
-  },
-  {
-    id: 'q3', text: 'Quel mot-clé hérite d\'une classe en Java ?', points: 1,
-    choices: [
-      { id: 'ch8', text: 'extends', isCorrect: true },
-      { id: 'ch9', text: 'implements', isCorrect: false },
-      { id: 'ch10', text: 'import', isCorrect: false },
-    ],
-  },
-];
+import { MOCK_COURSES, MOCK_EXAM, MOCK_QUESTIONS } from '../../data/mockData';
 
 function SkeletonPage() {
   return (

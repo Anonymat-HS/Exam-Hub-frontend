@@ -9,12 +9,7 @@ import { EmptyState } from '../../components/common/EmptyState';
 import { courseService } from '../../services/courseService';
 import { examService } from '../../services/examService';
 import { ApiError } from '../../services/api';
-
-const DEMO_COURSES = [
-  { id: 'c1', code: 'PROG2', name: 'Programmation avancée', description: 'JavaScript, structures de données et programmation objet.', examCount: 1 },
-  { id: 'c2', code: 'WEB2', name: 'Développement Web', description: 'React, API REST et architecture frontend.', examCount: 1 },
-  { id: 'c3', code: 'BDD2', name: 'Bases de données', description: 'SQL, PostgreSQL et conception relationnelle.', examCount: 0 },
-];
+import { MOCK_COURSES } from '../../data/mockData';
 
 const EMPTY_FORM = { code: '', name: '', description: '' };
 
@@ -36,7 +31,7 @@ function SkeletonCards() {
 }
 
 export function CoursesPage() {
-  const [courses, setCourses] = useState(DEMO_COURSES);
+  const [courses, setCourses] = useState(MOCK_COURSES);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
   const [reloadKey, setReloadKey] = useState(0);

@@ -3,12 +3,7 @@ import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import { Textarea } from '../common/Textarea';
 import { courseService } from '../../services/courseService';
-
-const MOCK_COURSES = [
-  { id: 'c1', code: 'PROG2', name: 'Programmation Java' },
-  { id: 'c2', code: 'WEB2', name: 'Développement Web II' },
-  { id: 'c3', code: 'BDD2', name: 'Bases de données II' },
-];
+import { MOCK_COURSES } from '../../data/mockData';
 
 function toDatetimeLocal(isoStr) {
   if (!isoStr) return '';

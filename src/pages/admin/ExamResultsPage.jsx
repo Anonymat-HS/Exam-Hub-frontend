@@ -7,25 +7,7 @@ import { examService } from '../../services/examService';
 import { resultService } from '../../services/resultService';
 import { courseService } from '../../services/courseService';
 import { formatDateTime } from '../../utils/formatters';
-
-const MOCK_COURSES = [
-  { id: 'c1', code: 'PROG2', name: 'Programmation Java' },
-];
-
-const MOCK_RESULTS = {
-  average: 5.4,
-  totalAttempts: 8,
-  results: [
-    { studentId: 's1', firstName: 'Jean', lastName: 'Dupont', score: 7, submittedAt: '2026-09-15T10:45:00Z' },
-    { studentId: 's2', firstName: 'Marie', lastName: 'Martin', score: 5, submittedAt: '2026-09-15T10:50:00Z' },
-    { studentId: 's3', firstName: 'Lucas', lastName: 'Bernard', score: 8, submittedAt: '2026-09-15T10:38:00Z' },
-    { studentId: 's4', firstName: 'Emma', lastName: 'Petit', score: 4, submittedAt: '2026-09-15T10:55:00Z' },
-    { studentId: 's5', firstName: 'Hugo', lastName: 'Moreau', score: 6, submittedAt: '2026-09-15T10:42:00Z' },
-    { studentId: 's6', firstName: 'Léa', lastName: 'Roux', score: 5, submittedAt: '2026-09-15T10:58:00Z' },
-    { studentId: 's7', firstName: 'Nathan', lastName: 'Garnier', score: 3, submittedAt: '2026-09-15T10:30:00Z' },
-    { studentId: 's8', firstName: 'Chloé', lastName: 'Lambert', score: 5, submittedAt: '2026-09-15T10:47:00Z' },
-  ],
-};
+import { MOCK_COURSES, MOCK_RESULTS } from '../../data/mockData';
 
 function SkeletonPage() {
   return (
