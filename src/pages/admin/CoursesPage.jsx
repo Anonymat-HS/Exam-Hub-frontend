@@ -45,6 +45,7 @@ export function CoursesPage() {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [lastAddedId, setLastAddedId] = useState(null);
+  const [isUsingMockData, setIsUsingMockData] = useState(false);
 
   useEffect(() => {
     let ignore = false;
@@ -62,7 +63,10 @@ export function CoursesPage() {
         }
       })
       .catch((err) => {
-        if (!ignore && err instanceof ApiError) setLoadError('Impossible de charger les cours.');
+        if (!ignore) {
+          if (err instanceof ApiError) setLoadError('Impossible de charger les cours.');
+          setIsUsingMockData(true);
+        }
       })
       .finally(() => {
         if (!ignore) setIsLoading(false);
@@ -140,6 +144,12 @@ export function CoursesPage() {
       {!isLoading && loadError && (
         <div className="mt-6">
           <ErrorMessage message={loadError} onRetry={handleRetry} />
+        </div>
+      )}
+
+      {isUsingMockData && (
+        <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+          Données de démonstration affichées — le serveur backend est indisponible.
         </div>
       )}
 

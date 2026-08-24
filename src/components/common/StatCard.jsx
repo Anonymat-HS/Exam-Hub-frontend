@@ -13,7 +13,7 @@ export function StatCard({ icon: Icon, iconBg, iconColor, label, value, sublabel
       </div>
       <p className="text-xs font-medium uppercase tracking-wider text-gray-400">{label}</p>
       <p className="mt-1 text-3xl font-bold tabular-nums tracking-tight text-gray-900">{value}</p>
-      <p className="mt-1 text-xs text-gray-400">{sublabel}</p>
+      {sublabel && <p className="mt-1 text-xs text-gray-400">{sublabel}</p>}
     </div>
   );
 }

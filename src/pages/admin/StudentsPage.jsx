@@ -8,12 +8,6 @@ import { EmptyState } from '../../components/common/EmptyState';
 import { studentService } from '../../services/studentService';
 import { ApiError } from '../../services/api';
 
-const MOCK_STUDENTS = [
-  { id: 's1', firstName: 'Alice', lastName: 'Martin', email: 'alice@examhub.com', active: true },
-  { id: 's2', firstName: 'Thomas', lastName: 'Dupont', email: 'thomas@examhub.com', active: true },
-  { id: 's3', firstName: 'Sarah', lastName: 'Bernard', email: 'sarah@examhub.com', active: false },
-];
-
 const EMPTY_CREATE_FORM = { fullName: '', email: '', password: '' };
 const EMPTY_EDIT_FORM = { firstName: '', lastName: '', email: '', password: '' };
 
@@ -78,16 +72,16 @@ export function StudentsPage() {
   const [isToggling, setIsToggling] = useState(false);
   const [actionError, setActionError] = useState('');
   const [lastAddedId, setLastAddedId] = useState(null);
+  const [isUsingMockData, setIsUsingMockData] = useState(false);
 
   useEffect(() => {
     studentService
       .getStudents()
       .then((data) => {
         if (Array.isArray(data)) setStudents(data);
+        else setIsUsingMockData(true);
       })
-      .catch(() => {
-        setStudents(MOCK_STUDENTS);
-      })
+      .catch(() => setIsUsingMockData(true))
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -252,6 +246,12 @@ export function StudentsPage() {
         </Button>
       </div>
 
+      {isUsingMockData && (
+        <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
+          Données de démonstration affichées — le serveur backend est indisponible.
+        </div>
+      )}
+
       <div className="mt-6 overflow-hidden rounded-2xl bg-white shadow-sm">
         <div className="flex flex-wrap items-center gap-3 border-b border-gray-100 p-6 pb-4">
           <div className="relative w-full sm:max-w-xs">
@@ -288,7 +288,7 @@ export function StudentsPage() {
           </div>
 
           <span className="ml-auto rounded-full bg-indigo-50 px-3 py-1 text-xs font-semibold text-indigo-600">
-            {filtered.length} étudiant(s)
+            {filtered.length === 0 ? '0 étudiant' : filtered.length === 1 ? '1 étudiant' : `${filtered.length} étudiants`}
           </span>
         </div>
 

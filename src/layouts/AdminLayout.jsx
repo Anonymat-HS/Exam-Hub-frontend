@@ -3,7 +3,7 @@ import { LayoutGrid, Users, BookOpen, FileText, BarChart2, LogOut } from 'lucide
 import { useAuth } from '../hooks/useAuth';
 
 const NAV_ITEMS = [
-  { to: '/admin', label: 'Dashboard', icon: LayoutGrid, end: true },
+  { to: '/admin', label: 'Tableau de bord', icon: LayoutGrid, end: true },
   { to: '/admin/students', label: 'Étudiants', icon: Users },
   { to: '/admin/courses', label: 'Cours', icon: BookOpen },
   { to: '/admin/exams', label: 'Examens', icon: FileText },
@@ -28,7 +28,7 @@ export function AdminLayout() {
             </div>
           </div>
           <p className="mb-2 px-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Navigation</p>
-          <nav className="flex flex-col gap-1">
+          <nav aria-label="Navigation admin" className="flex flex-col gap-1">
             {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
               <NavLink key={to} to={to} end={end}
                 className={({ isActive }) => `relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors before:absolute before:left-0 before:h-5 before:w-1 before:rounded-full before:bg-indigo-600 before:transition-opacity ${isActive ? 'bg-indigo-50 text-indigo-600 before:opacity-100' : 'text-gray-600 hover:bg-gray-50 before:opacity-0'}`}>

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 
 const TONES = {
@@ -7,16 +7,43 @@ const TONES = {
 };
 
 export function Modal({ open, onClose, title, icon: Icon, tone = 'violet', children }) {
+  const contentRef = useRef(null);
+
   useEffect(() => {
     if (!open) return undefined;
     const onKeyDown = (e) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        onClose();
+        return;
+      }
+      if (e.key === 'Tab' && contentRef.current) {
+        const focusable = contentRef.current.querySelectorAll(
+          'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+        );
+        if (focusable.length === 0) return;
+        const first = focusable[0];
+        const last = focusable[focusable.length - 1];
+        if (e.shiftKey && document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        } else if (!e.shiftKey && document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
     };
     document.addEventListener('keydown', onKeyDown);
     document.body.style.overflow = 'hidden';
+    const timer = setTimeout(() => {
+      const first = contentRef.current?.querySelector(
+        'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
+      );
+      if (first) first.focus();
+    }, 50);
     return () => {
       document.removeEventListener('keydown', onKeyDown);
       document.body.style.overflow = '';
+      clearTimeout(timer);
     };
   }, [open, onClose]);
 
@@ -25,7 +52,7 @@ export function Modal({ open, onClose, title, icon: Icon, tone = 'violet', child
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
       <div className="animate-fade-in absolute inset-0 bg-gray-900/50 backdrop-blur-sm" onClick={onClose} />
-      <div className="animate-scale-in relative w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+      <div ref={contentRef} className="animate-scale-in relative w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
         <button
           onClick={onClose}
           aria-label="Fermer"
