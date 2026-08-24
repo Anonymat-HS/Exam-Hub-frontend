@@ -26,7 +26,7 @@ const MOCK_EXAMS = [
 ];
 
 export function StudentDashboardPage() {
-  const navigate = useNavigate(); // 2. Initialisation de la fonction de navigation
+  const navigate = useNavigate();
   let user;
 
   try {
@@ -36,9 +36,9 @@ export function StudentDashboardPage() {
     user = { name: 'Alice Martin' };
   }
 
-  const studentName = user?.name ? user.name.split(' ') : 'Alice';
+  const studentName = user?.name || 'Alice';
 
-  // 3. Fonction pour rediriger l'étudiant vers la page des examens
+
   const handleNavigateToExams = () => {
     navigate('/student/exams');
   };
@@ -65,7 +65,7 @@ export function StudentDashboardPage() {
         <p className="mt-2 text-sm text-indigo-100">
           Consultez vos examens disponibles et commencez lorsque vous êtes prêt.
         </p>
-        {/* Branchement du clic sur le bouton de la bannière */}
+
         <button 
           onClick={handleNavigateToExams}
           className="mt-6 flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-indigo-600 shadow-sm transition-transform active:scale-95 cursor-pointer"
@@ -108,7 +108,7 @@ export function StudentDashboardPage() {
           <h2 className="text-xl font-bold text-gray-900">Examens disponibles</h2>
           <p className="text-sm text-gray-500 mt-0.5">Commencez quand vous êtes prêt.</p>
         </div>
-        {/* Branchement du clic sur le lien "Tout voir" */}
+
         <button 
           onClick={handleNavigateToExams}
           className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors cursor-pointer"
