@@ -77,7 +77,7 @@ export function LoginPage() {
           </div>
         </div>
 
-        {/* Formulaire d'authentification */}
+
         <div className="p-8 sm:p-12 flex flex-col justify-center bg-white">
           <div>
             <span className="text-xs font-medium text-gray-400 uppercase tracking-wider">
