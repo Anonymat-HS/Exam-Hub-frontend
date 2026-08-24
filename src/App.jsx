@@ -8,11 +8,6 @@ import { CoursesPage } from './pages/admin/CoursesPage';
 import { ExamsPage } from './pages/admin/ExamsPage';
 import { QuestionsPage } from './pages/admin/QuestionsPage';
 import { ExamResultsPage } from './pages/admin/ExamResultsPage';
-import { StudentLayout } from './layouts/StudentLayout';
-import { StudentDashboardPage } from './pages/student/StudentDashboardPage';
-import { TakeExamPage } from './pages/student/TakeExamPage';
-import { StudentResultsPage } from './pages/student/StudentResultsPage';
-import { ExamResultPage } from './pages/student/ExamResultPage';
 
 export default function App() {
   return (
@@ -30,16 +25,6 @@ export default function App() {
             <Route path="/admin/exams/:examId/questions" element={<QuestionsPage />} />
             <Route path="/admin/exams/:examId/results" element={<ExamResultsPage />} />
             <Route path="/admin/results" element={<ExamResultsPage />} />
-          </Route>
-        </Route>
-
-        <Route element={<RoleRoute allowedRole="STUDENT" />}>
-          <Route element={<StudentLayout />}>
-            <Route path="/student" element={<Navigate to="/student/exams" replace />} />
-            <Route path="/student/exams" element={<StudentDashboardPage />} />
-            <Route path="/student/exams/:examId" element={<TakeExamPage />} />
-            <Route path="/student/results" element={<StudentResultsPage />} />
-            <Route path="/student/results/:id" element={<ExamResultPage />} />
           </Route>
         </Route>
 
