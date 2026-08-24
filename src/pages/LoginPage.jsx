@@ -32,9 +32,7 @@ export function LoginPage() {
     <div className="flex min-h-screen items-center justify-center bg-gray-50 px-4">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary-600 to-primary-700 shadow-lg shadow-primary-200">
-            <span className="text-xl font-bold text-white">EH</span>
-          </div>
+          <img src="/Logo-Exam-Hub.png" alt="" className="mx-auto mb-4 h-14 w-14 rounded-2xl object-contain shadow-lg shadow-primary-200" />
           <h1 className="text-2xl font-bold tracking-tight text-navy">Exam Hub</h1>
           <p className="mt-1 text-sm text-gray-500">Connectez-vous à votre compte</p>
         </div>

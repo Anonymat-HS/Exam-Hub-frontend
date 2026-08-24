@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { SplashScreenPage } from './pages/SplashScreenPage';
 import { LoginPage } from './pages/LoginPage';
 import { RoleRoute } from './routes/RoleRoute';
 import { AdminLayout } from './layouts/AdminLayout';
@@ -13,8 +14,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={<SplashScreenPage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/" element={<Navigate to="/admin" replace />} />
 
         <Route element={<RoleRoute allowedRole="ADMIN" />}>
           <Route element={<AdminLayout />}>
