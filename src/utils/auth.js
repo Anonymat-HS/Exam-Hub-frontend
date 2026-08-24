@@ -13,5 +13,7 @@ export function parseJwt(token) {
 
 export function isTokenExpired(token) {
   const p = parseJwt(token);
-  return p?.exp ? Date.now() >= p.exp * 1000 : false;
+  if (!p) return true;
+  if (!p.exp) return true;
+  return Date.now() >= p.exp * 1000;
 }
