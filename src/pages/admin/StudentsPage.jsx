@@ -127,8 +127,6 @@ export function StudentsPage() {
 
   function validateEditForm() {
     const next = {};
-    if (!editForm.firstName.trim()) next.firstName = 'Prénom requis.';
-    if (!editForm.lastName.trim()) next.lastName = 'Nom requis.';
     if (!/^\S+@\S+\.\S+$/.test(editForm.email.trim())) {
       next.email = 'Adresse email invalide.';
     }
@@ -414,6 +412,7 @@ export function StudentsPage() {
             onChange={(e) => setCreateForm({ ...createForm, password: e.target.value })}
             error={createErrors.password}
           />
+          <p className="text-xs text-gray-400">Assurez-vous d'entrer les bonnes informations.</p>
           <Button type="submit" variant="violet" loading={isCreating} className="mt-1 w-full bg-gradient-to-r from-violet-600 to-indigo-600">
             Créer le compte
           </Button>
@@ -423,21 +422,12 @@ export function StudentsPage() {
       <Modal open={Boolean(editTarget)} onClose={() => setEditTarget(null)} title="Modifier l'étudiant" icon={Pencil} tone="violet">
         {editTarget && (
           <form onSubmit={handleEdit} className="flex flex-col gap-4" noValidate>
-            <Input
-              id="edit-firstName"
-              label="Prénom"
-              value={editForm.firstName}
-              onChange={(e) => setEditForm({ ...editForm, firstName: e.target.value })}
-              error={editErrors.firstName}
-              autoFocus
-            />
-            <Input
-              id="edit-lastName"
-              label="Nom"
-              value={editForm.lastName}
-              onChange={(e) => setEditForm({ ...editForm, lastName: e.target.value })}
-              error={editErrors.lastName}
-            />
+            <div>
+              <label className="mb-1.5 block text-sm font-medium text-gray-700">Nom complet</label>
+              <p className="rounded-lg border border-gray-100 bg-gray-50 px-3 py-2 text-sm text-gray-900">
+                {editTarget.firstName} {editTarget.lastName}
+              </p>
+            </div>
             <Input
               id="edit-email"
               type="email"
@@ -445,6 +435,7 @@ export function StudentsPage() {
               value={editForm.email}
               onChange={(e) => setEditForm({ ...editForm, email: e.target.value })}
               error={editErrors.email}
+              autoFocus
             />
             <Input
               id="edit-password"
