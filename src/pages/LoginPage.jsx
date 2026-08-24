@@ -11,8 +11,7 @@ export function LoginPage() {
   const [loading, setLoading] = useState(false);
 
   if (user) {
-    const redirectPath = user.role === 'ADMIN' ? '/admin' : '/student';
-    navigate(redirectPath, { replace: true });
+    navigate(user.role === 'ADMIN' ? '/admin' : '/student/exams', { replace: true });
     return null;
   }
 
@@ -20,16 +19,10 @@ export function LoginPage() {
     setError('');
     setLoading(true);
     try {
-      await login(email, password);
-      const tokenPayload = JSON.parse(atob(localStorage.getItem('exam_hub_token').split('.')[1]));
-      const role = tokenPayload?.role;
-      navigate(role === 'ADMIN' ? '/admin' : '/student', { replace: true });
+      const loggedUser = await login(email, password);
+      navigate(loggedUser.role === 'ADMIN' ? '/admin' : '/student/exams', { replace: true });
     } catch (err) {
-      if (err instanceof ApiError) {
-        setError(err.message);
-      } else {
-        setError('Erreur de connexion au serveur.');
-      }
+      setError(err instanceof ApiError ? err.message : 'Erreur de connexion au serveur.');
     } finally {
       setLoading(false);
     }
