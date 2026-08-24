@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
 import { LoginForm } from '../components/auth/LoginForm';
@@ -10,10 +10,13 @@ export function LoginPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  if (user) {
-    navigate(user.role === 'ADMIN' ? '/admin' : '/student/exams', { replace: true });
-    return null;
-  }
+  useEffect(() => {
+    if (user) {
+      navigate(user.role === 'ADMIN' ? '/admin' : '/student/exams', { replace: true });
+    }
+  }, [user, navigate]);
+
+  if (user) return null;
 
   async function handleLogin(email, password) {
     setError('');
