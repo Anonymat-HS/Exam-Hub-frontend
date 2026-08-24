@@ -1,4 +1,4 @@
-import { getToken } from '../utils/auth';
+import { getToken, clearToken } from '../utils/auth';
 
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
 
@@ -15,7 +15,10 @@ async function request(path, { method = 'GET', body, headers = {} } = {}) {
   });
   if (res.status === 204) return null;
   const data = await res.json().catch(() => null);
-  if (!res.ok) throw new ApiError(data?.message || `Erreur ${res.status}`, res.status);
+  if (!res.ok) {
+    if (res.status === 401) clearToken();
+    throw new ApiError(data?.message || `Erreur ${res.status}`, res.status);
+  }
   return data;
 }
 
