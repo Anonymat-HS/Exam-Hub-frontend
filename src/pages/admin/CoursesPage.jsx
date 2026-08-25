@@ -124,7 +124,7 @@ export function CoursesPage() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-primary-600">Administration</p>
-          <h1 className="text-3xl font-bold tracking-tight text-navy">Cours</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-navy">Cours</h1>
           <p className="mt-1 text-gray-500">Organisez les matières disponibles.</p>
         </div>
         <Button

@@ -50,9 +50,9 @@ export function Modal({ open, onClose, title, icon: Icon, tone = 'violet', child
   if (!open) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
+    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-4" role="dialog" aria-modal="true">
       <div className="animate-fade-in absolute inset-0 bg-gray-900/50 backdrop-blur-sm" onClick={onClose} />
-      <div ref={contentRef} className="animate-scale-in relative w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
+      <div ref={contentRef} className="animate-scale-in relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl bg-white p-5 sm:p-6 shadow-xl">
         <button
           onClick={onClose}
           aria-label="Fermer"

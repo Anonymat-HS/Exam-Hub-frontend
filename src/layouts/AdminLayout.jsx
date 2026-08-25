@@ -1,5 +1,6 @@
-import { NavLink, Outlet } from 'react-router-dom';
-import { LayoutGrid, Users, BookOpen, FileText, BarChart2, LogOut } from 'lucide-react';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { NavLink, Outlet, useLocation } from 'react-router-dom';
+import { LayoutGrid, Users, BookOpen, FileText, BarChart2, LogOut, Menu, X } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 const NAV_ITEMS = [
@@ -10,38 +11,125 @@ const NAV_ITEMS = [
   { to: '/admin/results', label: 'Résultats', icon: BarChart2 },
 ];
 
+function SidebarContent({ user, logout, onNavClick }) {
+  return (
+    <>
+      <div>
+        <div className="mb-8 flex items-center gap-2 px-2">
+          <img src="/Icone-EH.png" alt="" className="h-9 w-9 rounded-lg object-contain" />
+          <span className="text-lg font-bold text-navy ">Exam Hub</span>
+        </div>
+        <div className="mb-6 flex items-center gap-3 rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 ring-1 ring-primary-100 px-3 py-3">
+          <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-primary-100 text-primary-600">
+            <Users size={18} />
+          </div>
+          <div className="min-w-0">
+            <p className="text-sm font-semibold text-navy ">Administrateur</p>
+            <p className="text-xs text-gray-400 truncate max-w-[140px] ">{user?.email ?? 'admin'}</p>
+          </div>
+        </div>
+        <p className="mb-2 px-2 text-xs font-semibold uppercase tracking-wide text-gray-400 ">Navigation</p>
+        <nav aria-label="Navigation admin" className="flex flex-col gap-1">
+          {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
+            <NavLink key={to} to={to} end={end} onClick={onNavClick}
+              className={({ isActive }) => `relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors before:absolute before:left-0 before:h-5 before:w-1 before:rounded-full before:bg-primary-600 before:transition-opacity ${isActive ? 'bg-primary-50 text-primary-600 before:opacity-100' : 'text-gray-600 hover:bg-gray-50 before:opacity-0'}`}>
+              <Icon size={18} className="shrink-0" /><span className="">{label}</span>
+            </NavLink>
+          ))}
+        </nav>
+      </div>
+      <button onClick={logout} className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50">
+        <LogOut size={18} className="shrink-0" /><span className="">Déconnexion</span>
+      </button>
+    </>
+  );
+}
+
 export function AdminLayout() {
   const { user, logout } = useAuth();
+  const location = useLocation();
+  const [drawerOpen, setDrawerOpen] = useState(false);
+
+  const closeDrawer = useCallback(() => setDrawerOpen(false), []);
+  const prevPathname = useRef(location.pathname);
+
+  useEffect(() => {
+    if (prevPathname.current !== location.pathname) {
+      prevPathname.current = location.pathname;
+      setDrawerOpen(false);
+    }
+  }, [location.pathname]);
+
+  useEffect(() => {
+    if (drawerOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => { document.body.style.overflow = ''; };
+  }, [drawerOpen]);
+
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50">
-      <aside className="flex w-64 flex-col justify-between border-r border-gray-100 bg-white px-4 py-6">
-        <div>
-          <div className="mb-8 flex items-center gap-2 px-2">
-            <img src="/Icone-EH.png" alt="" className="h-9 w-9 rounded-lg object-contain" />
-            <span className="text-lg font-bold text-navy">Exam Hub</span>
-          </div>
-          <div className="mb-6 flex items-center gap-3 rounded-xl bg-gradient-to-br from-primary-50 to-primary-100 ring-1 ring-primary-100 px-3 py-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-100 text-primary-600"><Users size={18} /></div>
-            <div>
-              <p className="text-sm font-semibold text-navy">Administrateur</p>
-              <p className="text-xs text-gray-400 truncate max-w-[140px]">{user?.email ?? 'admin'}</p>
-            </div>
-          </div>
-          <p className="mb-2 px-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Navigation</p>
-          <nav aria-label="Navigation admin" className="flex flex-col gap-1">
-            {NAV_ITEMS.map(({ to, label, icon: Icon, end }) => (
+      {/* Desktop sidebar (lg+) */}
+      <aside className="hidden lg:flex w-64 flex-col justify-between border-r border-gray-100 bg-white px-4 py-6">
+        <SidebarContent user={user} logout={logout} />
+      </aside>
+
+      {/* Tablet sidebar (md–lg) — icons only */}
+      <aside className="hidden md:flex lg:hidden w-16 flex-col items-center justify-between border-r border-gray-100 bg-white py-6">
+        <div className="flex flex-col items-center gap-6">
+          <img src="/Icone-EH.png" alt="" className="h-9 w-9 rounded-lg object-contain" />
+          <nav aria-label="Navigation admin" className="flex flex-col gap-2">
+            {NAV_ITEMS.map(({ to, icon: Icon, end }) => (
               <NavLink key={to} to={to} end={end}
-                className={({ isActive }) => `relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors before:absolute before:left-0 before:h-5 before:w-1 before:rounded-full before:bg-primary-600 before:transition-opacity ${isActive ? 'bg-primary-50 text-primary-600 before:opacity-100' : 'text-gray-600 hover:bg-gray-50 before:opacity-0'}`}>
-                <Icon size={18} />{label}
+                className={({ isActive }) => `flex h-10 w-10 items-center justify-center rounded-lg transition-colors ${isActive ? 'bg-primary-50 text-primary-600' : 'text-gray-500 hover:bg-gray-50'}`}>
+                <Icon size={20} />
               </NavLink>
             ))}
           </nav>
         </div>
-        <button onClick={logout} className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50">
-          <LogOut size={18} />Déconnexion
+        <button onClick={logout} className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-50">
+          <LogOut size={20} />
         </button>
       </aside>
-      <main className="flex-1 overflow-y-auto p-8"><Outlet /></main>
+
+      {/* Mobile header */}
+      <div className="fixed inset-x-0 top-0 z-40 flex h-14 items-center gap-3 border-b border-gray-100 bg-white px-4 lg:hidden">
+        <button
+          onClick={() => setDrawerOpen(true)}
+          className="flex h-9 w-9 items-center justify-center rounded-lg text-gray-600 transition-colors hover:bg-gray-100"
+          aria-label="Ouvrir le menu"
+        >
+          <Menu size={20} />
+        </button>
+        <img src="/Icone-EH.png" alt="" className="h-7 w-7 rounded-lg object-contain" />
+        <span className="text-sm font-bold text-navy">Exam Hub</span>
+      </div>
+
+      {/* Mobile drawer overlay */}
+      {drawerOpen && (
+        <div className="fixed inset-0 z-50 lg:hidden">
+          <div className="animate-fade-in absolute inset-0 bg-gray-900/50 backdrop-blur-sm" onClick={closeDrawer} />
+          <aside className="animate-slide-in-left relative flex h-full w-72 flex-col justify-between bg-white px-4 py-6 shadow-xl">
+            <button
+              onClick={closeDrawer}
+              className="absolute right-3 top-3 flex h-8 w-8 items-center justify-center rounded-lg text-gray-400 transition-colors hover:bg-gray-100 hover:text-gray-600"
+              aria-label="Fermer le menu"
+            >
+              <X size={18} />
+            </button>
+            <SidebarContent user={user} logout={logout} onNavClick={closeDrawer} />
+          </aside>
+        </div>
+      )}
+
+      {/* Main content */}
+      <main className="flex-1 overflow-y-auto pt-14 lg:pt-0">
+        <div className="p-4 sm:p-6 lg:p-8">
+          <Outlet />
+        </div>
+      </main>
     </div>
   );
 }

@@ -101,7 +101,7 @@ export function ExamResultsPage() {
 
       <div className="mb-6">
         <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-primary-600">Résultats</p>
-        <h1 className="text-3xl font-bold tracking-tight text-navy">{exam?.title ?? 'Examen'}</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-navy">{exam?.title ?? 'Examen'}</h1>
         {exam && <p className="mt-1 text-gray-500">{getCourseName(exam.courseId)}</p>}
         {exam && (
           <p className="mt-1 text-sm text-gray-400">
@@ -144,8 +144,23 @@ export function ExamResultsPage() {
         />
       ) : (
         <div className="overflow-hidden rounded-2xl bg-white shadow-sm">
+          {/* Mobile card view */}
+          <div className="flex flex-col gap-3 p-4 md:hidden">
+            {results.map((r) => (
+              <div key={r.studentId} className="flex items-center justify-between rounded-xl bg-gray-50 px-4 py-3 ring-1 ring-gray-100">
+                <div>
+                  <p className="text-sm font-semibold text-navy">{r.firstName} {r.lastName}</p>
+                  <p className="text-xs text-gray-400">{formatDateTime(r.submittedAt)}</p>
+                </div>
+                <span className="text-sm font-bold tabular-nums text-navy">
+                  {r.score}{maxScore ? ` / ${maxScore}` : ''}
+                </span>
+              </div>
+            ))}
+          </div>
+          {/* Desktop table */}
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            <table className="hidden md:table w-full text-sm">
               <thead>
                 <tr className="bg-gray-50/60 text-left text-xs uppercase tracking-wider text-gray-400">
                   <th scope="col" className="px-6 py-3 font-medium">Étudiant</th>

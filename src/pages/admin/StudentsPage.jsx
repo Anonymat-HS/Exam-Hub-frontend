@@ -231,8 +231,8 @@ export function StudentsPage() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-primary-600">Administration</p>
-          <h1 className="text-3xl font-bold tracking-tight text-navy">Étudiants</h1>
-          <p className="mt-1 text-gray-500">Gérez les comptes de vos étudiants.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-navy">Étudiants</h1>
+          <p className="mt-1 text-sm text-gray-500">Gérez les comptes de vos étudiants.</p>
         </div>
         <Button
           variant="violet"
@@ -250,7 +250,7 @@ export function StudentsPage() {
       )}
 
       <div className="mt-6 overflow-hidden rounded-2xl bg-white shadow-sm">
-        <div className="flex flex-wrap items-center gap-3 border-b border-gray-100 p-6 pb-4">
+        <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 border-b border-gray-100 p-4 sm:p-6 pb-4">
           <div className="relative w-full sm:max-w-xs">
             <Input
               icon={Search}
@@ -284,7 +284,7 @@ export function StudentsPage() {
             ))}
           </div>
 
-          <span className="ml-auto rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-600">
+          <span className="sm:ml-auto rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-600">
             {filtered.length === 0 ? '0 étudiant' : filtered.length === 1 ? '1 étudiant' : `${filtered.length} étudiants`}
           </span>
         </div>
@@ -310,7 +310,40 @@ export function StudentsPage() {
           )
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+            {/* Mobile card view */}
+            <div className="flex flex-col gap-3 p-4 md:hidden">
+              {filtered.map((student) => (
+                <div key={student.id} className={`rounded-xl bg-gray-50 p-4 ring-1 ring-gray-100 ${student.id === lastAddedId ? 'row-highlight' : ''}`}>
+                  <div className="flex items-center gap-3">
+                    <Avatar student={student} list={students} />
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-sm font-semibold text-navy">{`${student.firstName} ${student.lastName}`}</p>
+                      <p className="truncate text-xs text-gray-400">{student.email}</p>
+                    </div>
+                    <span className={`shrink-0 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${student.active ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-gray-500'}`}>
+                      <span className={`h-1.5 w-1.5 rounded-full ${student.active ? 'bg-green-500' : 'bg-gray-400'}`} />
+                      {student.active ? 'Actif' : 'Désactivé'}
+                    </span>
+                  </div>
+                  <div className="mt-3 flex items-center gap-2">
+                    <button onClick={() => openEditModal(student)} className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-600 transition-colors hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600">
+                      <Pencil size={13} /> Modifier
+                    </button>
+                    {student.active ? (
+                      <button onClick={() => setConfirmTarget(student)} className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-red-500 transition-colors hover:border-red-200 hover:bg-red-50">
+                        <UserX size={13} /> Désactiver
+                      </button>
+                    ) : (
+                      <button onClick={() => handleActivate(student)} className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-green-600 transition-colors hover:border-green-200 hover:bg-green-50">
+                        <UserCheck size={13} /> Réactiver
+                      </button>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+            {/* Desktop table */}
+            <table className="hidden md:table w-full text-sm">
               <thead>
                 <tr className="bg-gray-50/60 text-left text-xs uppercase tracking-wider text-gray-400">
                   <th scope="col" className="px-6 py-3 font-medium">Étudiant</th>

@@ -58,7 +58,7 @@ export function AdminDashboardPage() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-primary-600">Administration</p>
-          <h1 className="text-3xl font-bold tracking-tight text-navy">Tableau de bord</h1>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-navy">Tableau de bord</h1>
           <p className="mt-1 text-gray-500">Voici ce qui se passe sur votre plateforme.</p>
         </div>
         <div className="flex items-center gap-2 rounded-xl bg-white px-4 py-2 shadow-sm">

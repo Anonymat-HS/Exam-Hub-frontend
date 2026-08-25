@@ -20,7 +20,7 @@ function SkeletonPage() {
       <div className="mb-6 h-4 w-40 rounded-full bg-gray-100" />
       <div className="mb-2 h-8 w-64 rounded-full bg-gray-100" />
       <div className="mb-6 h-4 w-48 rounded-full bg-gray-100" />
-      <div className="flex gap-4">
+      <div className="flex flex-col gap-4 sm:flex-row">
         {[0, 1, 2].map((i) => (
           <div key={i} className="h-48 flex-1 rounded-2xl bg-gray-100" />
         ))}
@@ -158,7 +158,7 @@ export function QuestionsPage() {
       )}
 
       <div className="mb-6">
-        <h1 className="text-3xl font-bold tracking-tight text-navy">{exam.title}</h1>
+        <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-navy">{exam.title}</h1>
         <p className="mt-1 text-gray-500">{getCourseName(exam.courseId)}</p>
         <p className="mt-1 text-sm text-gray-400">
           {formatDateTime(exam.startDate)} → {formatDateTime(exam.endDate)}
