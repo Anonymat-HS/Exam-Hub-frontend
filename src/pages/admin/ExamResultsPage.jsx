@@ -29,8 +29,6 @@ export function ExamResultsPage() {
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isUsingMockData, setIsUsingMockData] = useState(false);
-  const [hasExamDetail, setHasExamDetail] = useState(false);
-
   useEffect(() => {
     Promise.allSettled([
       examService.getExamDetail(examId),
@@ -40,7 +38,6 @@ export function ExamResultsPage() {
       let usingMock = false;
       if (examRes.status === 'fulfilled') {
         setExam(examRes.value);
-        setHasExamDetail(true);
       } else {
         setExam(null);
         usingMock = true;
@@ -67,8 +64,7 @@ export function ExamResultsPage() {
   }
 
   function getMaxScore() {
-    if (!exam?.questions) return null;
-    return exam.questions.reduce((sum, q) => sum + (q.points ?? 0), 0);
+    return resultsData?.totalPoints ?? exam?.totalPoints ?? null;
   }
 
   if (isLoading) return <SkeletonPage />;
@@ -85,7 +81,7 @@ export function ExamResultsPage() {
 
   const maxScore = getMaxScore();
   const results = resultsData?.results ?? [];
-  const average = resultsData?.average ?? 0;
+  const average = resultsData?.average;
   const totalAttempts = resultsData?.totalAttempts ?? 0;
 
   return (
@@ -120,7 +116,7 @@ export function ExamResultsPage() {
           iconBg="bg-green-50"
           iconColor="text-green-600"
           label="Moyenne"
-          value={totalAttempts > 0 && hasExamDetail && maxScore ? `${average.toFixed(1)} / ${maxScore}` : totalAttempts > 0 ? average.toFixed(1) : '—'}
+          value={average != null && maxScore ? `${average.toFixed(1)} / ${maxScore}` : average != null ? average.toFixed(1) : '—'}
         />
         <StatCard
           icon={Users}
@@ -165,7 +161,7 @@ export function ExamResultsPage() {
                     </td>
                     <td className="px-6 py-4">
                       <span className="font-semibold text-navy">
-                        {r.score}{hasExamDetail && maxScore ? ` / ${maxScore}` : ''}
+                        {r.score}{maxScore ? ` / ${maxScore}` : ''}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-gray-500">
