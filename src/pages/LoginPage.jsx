@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, Sparkles, AlertCircle, Loader2 } from 'lucide-react';
+import { ArrowRight, Sparkles, AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 import { ApiError } from '../services/api';
 
@@ -11,6 +11,7 @@ export function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   useEffect(() => {
     if (user) {
@@ -42,9 +43,7 @@ export function LoginPage() {
         <div className="bg-primary-600 p-8 sm:p-12 flex flex-col justify-between text-white relative overflow-hidden">
           <div>
             <div className="flex items-center gap-3">
-              <div className="h-10 w-10 rounded-xl bg-white text-primary-600 font-extrabold flex items-center justify-center text-lg shadow-sm">
-                EH
-              </div>
+              <img src="/Icone-EH.png" alt="Exam Hub" className="h-10 w-10 rounded-xl object-contain shadow-sm" />
               <span className="text-xl font-bold tracking-tight">Exam Hub</span>
             </div>
 
@@ -100,19 +99,27 @@ export function LoginPage() {
               />
             </div>
 
-            <div>
+            <div className="relative">
               <label htmlFor="password" className="block text-xs font-bold text-gray-700 mb-1.5">
                 Mot de passe
               </label>
               <input
                 id="password"
-                type="password"
+                type={showPassword ? 'text' : 'password'}
                 required
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 placeholder="••••••••"
-                className="w-full rounded-xl border-0 bg-gray-50 px-4 py-3 text-sm text-navy placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary-600 transition-all outline-none"
+                className="w-full rounded-xl border-0 bg-gray-50 px-4 py-3 pr-10 text-sm text-navy placeholder-gray-400 focus:bg-white focus:ring-2 focus:ring-primary-600 transition-all outline-none"
               />
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                className="absolute right-3 top-[38px] text-gray-400 transition-colors hover:text-gray-600"
+                tabIndex={-1}
+              >
+                {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+              </button>
             </div>
 
             <button
