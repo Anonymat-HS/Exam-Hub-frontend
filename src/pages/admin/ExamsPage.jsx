@@ -249,7 +249,7 @@ export function ExamsPage() {
                       </td>
                       <td className="px-6 py-4">
                         <span className="rounded-md bg-gray-50 px-2 py-1 font-mono text-xs text-gray-500">
-                          {getCourseCode(exam.courseId)}
+                          {exam.course?.code ?? getCourseCode(exam.courseId)}
                         </span>
                       </td>
                       <td className="px-6 py-4 text-xs text-gray-500">
