@@ -174,8 +174,6 @@ export function StudentsPage() {
     if (!validateEditForm()) return;
     setIsEditing(true);
     const payload = {
-      firstName: editForm.firstName.trim(),
-      lastName: editForm.lastName.trim(),
       email: editForm.email.trim(),
     };
     if (editForm.password) payload.password = editForm.password;
