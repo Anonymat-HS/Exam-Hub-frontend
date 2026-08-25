@@ -25,12 +25,17 @@ export function SplashScreenPage() {
           alt="Exam Hub"
           className="h-28 w-28 rounded-3xl object-contain shadow-2xl shadow-black/30"
         />
-        <div className="text-center">
-          <h1 className="text-3xl font-bold tracking-tight text-white">Exam Hub</h1>
-          <p className="mt-2 text-sm text-primary-300">GCM &middot; Examens &middot; Résultats</p>
-        </div>
-        <div className="mt-4">
-          <span className="h-6 w-6 animate-spin rounded-full border-[3px] border-primary-800 border-t-primary-400" />
+        <div className="flex items-center gap-2">
+          {[0, 1, 2].map((i) => (
+            <span
+              key={i}
+              className="block h-2 w-2 rounded-full bg-primary-400"
+              style={{
+                animation: 'dot-bounce 1.4s ease-in-out infinite',
+                animationDelay: `${i * 0.2}s`,
+              }}
+            />
+          ))}
         </div>
       </div>
     </div>
