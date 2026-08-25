@@ -29,3 +29,4 @@ export const api = {
   patch: (p, b) => request(p, { method: 'PATCH', body: b }),
   delete: (p) => request(p, { method: 'DELETE' }),
 };
+
