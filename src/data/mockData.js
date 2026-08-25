@@ -13,10 +13,10 @@ export const MOCK_COURSES = [
 ];
 
 export const MOCK_EXAMS = [
-  { id: 'e1', title: 'Examen final Java', courseId: 'c1', startDate: '2026-09-15T09:00:00Z', endDate: '2026-09-15T11:00:00Z', description: 'Évaluation complète de Java et POO' },
-  { id: 'e2', title: 'Examen partiel Web', courseId: 'c2', startDate: '2026-08-20T14:00:00Z', endDate: '2026-08-20T16:00:00Z', description: 'React, hooks et routing' },
-  { id: 'e3', title: 'Quiz bases SQL', courseId: 'c3', startDate: '2026-10-01T10:00:00Z', endDate: '2026-10-01T10:30:00Z', description: 'Requêtes SELECT et JOIN' },
-  { id: 'e4', title: 'TP NOTÉ Spring Boot', courseId: 'c1', startDate: '2026-07-10T08:00:00Z', endDate: '2026-07-10T12:00:00Z', description: "Création d'une API REST" },
+  { id: 'e1', title: 'Examen final Java', courseId: 'c1', course: MOCK_COURSES[0], questionCount: 3, attemptCount: 8, totalPoints: 3, startDate: '2026-09-15T09:00:00Z', endDate: '2026-09-15T11:00:00Z', description: 'Évaluation complète de Java et POO' },
+  { id: 'e2', title: 'Examen partiel Web', courseId: 'c2', course: MOCK_COURSES[1], questionCount: 2, attemptCount: 5, totalPoints: 2, startDate: '2026-08-20T14:00:00Z', endDate: '2026-08-20T16:00:00Z', description: 'React, hooks et routing' },
+  { id: 'e3', title: 'Quiz bases SQL', courseId: 'c3', course: MOCK_COURSES[2], questionCount: 1, attemptCount: 3, totalPoints: 1, startDate: '2026-10-01T10:00:00Z', endDate: '2026-10-01T10:30:00Z', description: 'Requêtes SELECT et JOIN' },
+  { id: 'e4', title: 'TP NOTÉ Spring Boot', courseId: 'c1', course: MOCK_COURSES[0], questionCount: 2, attemptCount: 0, totalPoints: 2, startDate: '2026-07-10T08:00:00Z', endDate: '2026-07-10T12:00:00Z', description: "Création d'une API REST" },
 ];
 
 export const MOCK_EXAM = {
@@ -56,6 +56,7 @@ export const MOCK_QUESTIONS = [
 export const MOCK_RESULTS = {
   average: 5.4,
   totalAttempts: 8,
+  totalPoints: 3,
   results: [
     { studentId: 's1', firstName: 'Alice', lastName: 'Martin', score: 7, submittedAt: '2026-09-15T10:45:00Z' },
     { studentId: 's2', firstName: 'Thomas', lastName: 'Dupont', score: 5, submittedAt: '2026-09-15T10:50:00Z' },
