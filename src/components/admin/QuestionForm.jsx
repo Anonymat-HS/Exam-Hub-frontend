@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { Plus, Trash2 } from 'lucide-react';
 import { Button } from '../common/Button';
-import { Input } from '../common/Input';
 import { Textarea } from '../common/Textarea';
 
 function makeDefaultChoices() {
@@ -96,17 +95,26 @@ export function QuestionForm({ question, onSubmit, onCancel, loading }) {
         error={errors.text}
       />
 
-      <Input
-        id="q-points"
-        label="Points"
-        type="number"
-        min="0"
-        max="1"
-        step="1"
-        value={state.points}
-        onChange={(e) => { const val = e.target.value === '' ? '' : Number(e.target.value); setState((prev) => ({ ...prev, points: val })); if (errors.points) setErrors((prev) => ({ ...prev, points: undefined })); }}
-        error={errors.points}
-      />
+      <div>
+        <label className="mb-1.5 block text-sm font-medium text-gray-700">Points</label>
+        <div className="flex gap-3">
+          {[0, 1].map((v) => (
+            <button
+              key={v}
+              type="button"
+              onClick={() => { setState((prev) => ({ ...prev, points: v })); if (errors.points) setErrors((prev) => ({ ...prev, points: undefined })); }}
+              className={`rounded-lg border-2 px-4 py-2 text-sm font-semibold transition-all ${
+                state.points === v
+                  ? 'border-primary-600 bg-primary-50 text-primary-700'
+                  : 'border-gray-200 text-gray-500 hover:border-gray-300'
+              }`}
+            >
+              {v}
+            </button>
+          ))}
+        </div>
+        {errors.points && <p className="mt-1 text-xs text-red-500">{errors.points}</p>}
+      </div>
 
       <div>
         <label className="mb-2 block text-sm font-medium text-gray-700">Choix</label>
