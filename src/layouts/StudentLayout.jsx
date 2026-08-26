@@ -1,3 +1,4 @@
+
 import { useState } from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
 import { Home, FileText, Award, LogOut, Menu, X } from 'lucide-react';
@@ -28,7 +29,7 @@ export function StudentLayout() {
   return (
     <div className="flex h-screen overflow-hidden bg-gray-50 flex-col md:flex-row">
       
-      {/* BARRE DE NAVIGATION SUPÉRIEURE (UNIQUEMENT SUR MOBILE) */}
+
       <header className="flex h-16 w-full items-center justify-between border-b border-gray-100 bg-white px-4 md:hidden z-50">
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 font-bold text-white text-sm shadow-sm">
@@ -44,14 +45,14 @@ export function StudentLayout() {
         </button>
       </header>
 
-      {/* BARRE LATÉRALE (SIDEBAR) RESPONSIVE */}
+
       <aside className={`
         fixed inset-y-0 left-0 z-40 flex w-64 flex-col justify-between border-r border-gray-100 bg-white px-4 py-6 transition-transform duration-300 ease-in-out
         md:translate-x-0 md:static
         ${isMobileMenuOpen ? 'translate-x-0 pt-20' : '-translate-x-full'}
       `}>
         <div>
-          {/* Logo masqué sur mobile car déjà dans le header */}
+
           <div className="hidden md:flex mb-8 items-center gap-2 px-2">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 font-bold text-white shadow-sm">
               EH
@@ -106,7 +107,7 @@ export function StudentLayout() {
         </button>
       </aside>
 
-      {/* ARRIÈRE-PLAN SOMBRE QUAND LE MENU MOBILE EST OUVERT */}
+
       {isMobileMenuOpen && (
         <div 
           onClick={() => setIsMobileMenuOpen(false)}
@@ -121,3 +122,4 @@ export function StudentLayout() {
     </div>
   );
 }
+

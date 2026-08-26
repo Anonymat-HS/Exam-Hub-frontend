@@ -1,4 +1,5 @@
-import { useNavigate } from 'react-router-dom'; // 1. Importation du hook de navigation
+
+import { useNavigate } from 'react-router-dom';
 import { ArrowRight, FileText, CheckCircle, Trophy } from 'lucide-react';
 import { ExamCard } from '../../components/student/ExamCard';
 
@@ -129,3 +130,4 @@ export function StudentDashboardPage() {
     </div>
   );
 }
+
