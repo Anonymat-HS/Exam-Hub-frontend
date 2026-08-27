@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import { Textarea } from '../common/Textarea';
-import { courseService } from '../../services/courseService';
+import { courseService } from '../../api/courseService';
 import { MOCK_COURSES } from '../../data/mockData';
 
 function toDatetimeLocal(isoStr) {

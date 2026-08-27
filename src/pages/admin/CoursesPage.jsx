@@ -6,9 +6,9 @@ import { Textarea } from '../../components/common/Textarea';
 import { Modal } from '../../components/common/Modal';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { EmptyState } from '../../components/common/EmptyState';
-import { courseService } from '../../services/courseService';
-import { examService } from '../../services/examService';
-import { ApiError } from '../../services/api';
+import { courseService } from '../../api/courseService';
+import { examService } from '../../api/examService';
+import { ApiError } from '../../api/api';
 import { MOCK_COURSES } from '../../data/mockData';
 
 const EMPTY_FORM = { code: '', name: '', description: '' };

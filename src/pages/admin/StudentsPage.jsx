@@ -5,8 +5,8 @@ import { Input } from '../../components/common/Input';
 import { Modal } from '../../components/common/Modal';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { EmptyState } from '../../components/common/EmptyState';
-import { studentService } from '../../services/studentService';
-import { ApiError } from '../../services/api';
+import { studentService } from '../../api/studentService';
+import { ApiError } from '../../api/api';
 import { MOCK_STUDENTS } from '../../data/mockData';
 
 const EMPTY_CREATE_FORM = { fullName: '', email: '', password: '' };

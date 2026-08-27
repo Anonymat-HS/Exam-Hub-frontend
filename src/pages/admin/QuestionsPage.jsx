@@ -6,11 +6,11 @@ import { Modal } from '../../components/common/Modal';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { EmptyState } from '../../components/common/EmptyState';
 import { QuestionForm } from '../../components/admin/QuestionForm';
-import { examService } from '../../services/examService';
-import { questionService } from '../../services/questionService';
-import { resultService } from '../../services/resultService';
-import { courseService } from '../../services/courseService';
-import { ApiError } from '../../services/api';
+import { examService } from '../../api/examService';
+import { questionService } from '../../api/questionService';
+import { resultService } from '../../api/resultService';
+import { courseService } from '../../api/courseService';
+import { ApiError } from '../../api/api';
 import { formatDateTime } from '../../utils/formatters';
 import { MOCK_COURSES, MOCK_EXAM, MOCK_QUESTIONS } from '../../data/mockData';
 

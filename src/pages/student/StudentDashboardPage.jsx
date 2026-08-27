@@ -4,8 +4,8 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, FileText, CheckCircle, Trophy, Loader2 } from 'lucide-react';
 import { ExamCard } from '../../components/common/ExamCard';
 import { useAuth } from '../../hooks/useAuth';
-import { myExamService } from '../../services/myExamService';
-import { myResultService } from '../../services/myResultService';
+import { myExamService } from '../../api/myExamService';
+import { myResultService } from '../../api/myResultService';
 
 const MOCK_EXAMS = [
   {

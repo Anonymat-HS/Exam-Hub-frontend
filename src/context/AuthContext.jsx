@@ -1,6 +1,6 @@
 import { createContext, useState } from 'react';
 import { getToken, setToken, clearToken, parseJwt, isTokenExpired } from '../utils/auth';
-import { authService } from '../services/authService';
+import { authService } from '../api/authService';
 
 export const AuthContext = createContext(null);
 

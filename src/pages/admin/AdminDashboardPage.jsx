@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { Users, BookOpen, FileText, UserPlus, BookPlus, FilePlus, BarChart2, Sparkles, CalendarDays, ArrowRight } from 'lucide-react';
 import { StatCard } from '../../components/common/StatCard';
 import { Loader } from '../../components/common/Loader';
-import { studentService } from '../../services/studentService';
-import { courseService } from '../../services/courseService';
-import { examService } from '../../services/examService';
+import { studentService } from '../../api/studentService';
+import { courseService } from '../../api/courseService';
+import { examService } from '../../api/examService';
 import { MOCK_STUDENTS, MOCK_COURSES, MOCK_EXAMS } from '../../data/mockData';
 
 const QUICK_ACTIONS = [

@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ChevronLeft, XCircle, CheckCircle, Loader2 } from 'lucide-react';
-import { myExamService } from '../../services/myExamService';
+import { myExamService } from '../../api/myExamService';
 
 const MOCK_RESULT_DATA = {
   examTitle: 'React Fundamentals',

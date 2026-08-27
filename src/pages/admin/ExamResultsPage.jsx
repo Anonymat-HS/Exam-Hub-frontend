@@ -3,9 +3,9 @@ import { useParams, Link } from 'react-router-dom';
 import { ArrowLeft, BarChart2, Users, TrendingUp } from 'lucide-react';
 import { StatCard } from '../../components/common/StatCard';
 import { EmptyState } from '../../components/common/EmptyState';
-import { examService } from '../../services/examService';
-import { resultService } from '../../services/resultService';
-import { courseService } from '../../services/courseService';
+import { examService } from '../../api/examService';
+import { resultService } from '../../api/resultService';
+import { courseService } from '../../api/courseService';
 import { formatDateTime } from '../../utils/formatters';
 import { MOCK_COURSES, MOCK_RESULTS } from '../../data/mockData';
 

@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Sparkles, Loader2 } from 'lucide-react';
 import { ExamCard } from '../../components/common/ExamCard';
-import { myExamService } from '../../services/myExamService';
+import { myExamService } from '../../api/myExamService';
 
 const MOCK_EXAMS = [
   {

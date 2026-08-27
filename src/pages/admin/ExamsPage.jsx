@@ -7,9 +7,9 @@ import { Modal } from '../../components/common/Modal';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { EmptyState } from '../../components/common/EmptyState';
 import { ExamForm } from '../../components/admin/ExamForm';
-import { examService } from '../../services/examService';
-import { courseService } from '../../services/courseService';
-import { ApiError } from '../../services/api';
+import { examService } from '../../api/examService';
+import { courseService } from '../../api/courseService';
+import { ApiError } from '../../api/api';
 import { formatDateTime } from '../../utils/formatters';
 import { MOCK_COURSES, MOCK_EXAMS } from '../../data/mockData';
 

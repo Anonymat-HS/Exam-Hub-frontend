@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trophy, ChevronRight, Loader2 } from 'lucide-react';
-import { myResultService } from '../../services/myResultService';
+import { myResultService } from '../../api/myResultService';
 
 const MOCK_RESULTS = [
   {

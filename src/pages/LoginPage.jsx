@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, Sparkles, AlertCircle, Loader2, Eye, EyeOff } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
-import { ApiError } from '../services/api';
+import { ApiError } from '../api/api';
 
 export function LoginPage() {
   const { user, login } = useAuth();
