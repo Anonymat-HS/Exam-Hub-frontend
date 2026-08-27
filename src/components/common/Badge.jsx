@@ -1,7 +1,7 @@
 const colorMap = {
   green: 'bg-emerald-50 text-emerald-600',
   red: 'bg-red-50 text-red-500',
-  blue: 'bg-blue-50 text-blue-600',
+  primary: 'bg-primary-50 text-primary-600',
   gray: 'bg-gray-100 text-gray-600',
   amber: 'bg-amber-50 text-amber-600',
 };

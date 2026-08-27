@@ -48,7 +48,7 @@ export function ExamStudentPage() {
 
   return (
     <div className="max-w-5xl mx-auto w-full animate-fade-in-up">
-      <span className="text-xs font-bold uppercase tracking-wider text-indigo-600">
+      <span className="text-xs font-bold uppercase tracking-wider text-primary-600">
         Espace Étudiant
       </span>
       
@@ -60,14 +60,14 @@ export function ExamStudentPage() {
         Les examens actuellement ouverts pour vous.
       </p>
 
-      <div className="mt-6 rounded-3xl bg-gradient-to-r from-violet-600 to-indigo-600 p-6 sm:p-8 text-white shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="mt-6 rounded-3xl bg-gradient-to-r from-primary-600 to-primary-700 p-6 sm:p-8 text-white shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-start gap-4">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-white backdrop-blur-sm animate-pulse">
             <Sparkles size={24} />
           </div>
           <div>
             <h2 className="text-xl font-bold">Donnez le meilleur de vous-même !</h2>
-            <p className="mt-1 text-sm text-indigo-100 max-w-xl">
+            <p className="mt-1 text-sm text-primary-100 max-w-xl">
               Chaque évaluation est une opportunité de valider vos compétences et de progresser. Prenez votre temps, lisez bien les consignes et concentrez-vous. Bonne chance !
             </p>
           </div>
@@ -75,7 +75,7 @@ export function ExamStudentPage() {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-12 text-indigo-600">
+        <div className="flex items-center justify-center py-12 text-primary-600">
           <Loader2 className="animate-spin" size={32} />
         </div>
       ) : exams.length === 0 ? (

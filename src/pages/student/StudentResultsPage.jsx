@@ -62,7 +62,7 @@ export function StudentResultsPage() {
 
   return (
     <div className="max-w-5xl mx-auto w-full animate-fade-in-up">
-      <span className="text-xs font-bold uppercase tracking-wider text-indigo-600">
+      <span className="text-xs font-bold uppercase tracking-wider text-primary-600">
         Espace Étudiant
       </span>
 
@@ -76,7 +76,7 @@ export function StudentResultsPage() {
 
       <div className="mt-8 space-y-4">
         {isLoading ? (
-          <div className="flex items-center justify-center py-12 text-indigo-600">
+          <div className="flex items-center justify-center py-12 text-primary-600">
             <Loader2 className="animate-spin" size={32} />
           </div>
         ) : results.length === 0 ? (
@@ -90,7 +90,7 @@ export function StudentResultsPage() {
               className="group flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-2xl bg-white p-5 shadow-sm border border-gray-100/80 hover:shadow-md transition-all duration-200"
             >
               <div className="flex items-center gap-4">
-                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-indigo-50 text-indigo-600 group-hover:scale-105 transition-transform duration-200">
+                <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-primary-50 text-primary-600 group-hover:scale-105 transition-transform duration-200">
                   <Trophy size={22} />
                 </div>
                 <div>
@@ -111,7 +111,7 @@ export function StudentResultsPage() {
                 <button
                   type="button"
                   onClick={() => handleCorrectionClick(item.examId)}
-                  className="inline-flex items-center gap-1.5 rounded-xl bg-gray-50 hover:bg-indigo-50 hover:text-indigo-600 px-4 py-2.5 text-xs font-semibold text-gray-700 transition-all duration-200 active:scale-95 cursor-pointer"
+                  className="inline-flex items-center gap-1.5 rounded-xl bg-gray-50 hover:bg-primary-50 hover:text-primary-600 px-4 py-2.5 text-xs font-semibold text-gray-700 transition-all duration-200 active:scale-95 cursor-pointer"
                 >
                   Correction
                   <ChevronRight size={15} />

@@ -7,7 +7,7 @@ export function Select({ label, error, options = [], className = '', ...props })
         </label>
       )}
       <select
-        className={`w-full rounded-xl border bg-gray-50 px-4 py-2.5 text-sm text-gray-900 transition-colors focus:border-indigo-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 ${
+        className={`w-full rounded-xl border bg-gray-50 px-4 py-2.5 text-sm text-gray-900 transition-colors focus:border-primary-500 focus:bg-white focus:outline-none focus:ring-2 focus:ring-primary-500/20 ${
           error ? 'border-red-300' : 'border-gray-200'
         }`}
         {...props}

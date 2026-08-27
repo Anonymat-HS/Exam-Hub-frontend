@@ -14,7 +14,7 @@ export function ExamCard({ exam, onStart }) {
   let statusColor = 'green';
   if (start && now < start) {
     status = 'À venir';
-    statusColor = 'blue';
+    statusColor = 'primary';
   } else if (end && now > end) {
     status = 'Fermé';
     statusColor = 'gray';
@@ -24,7 +24,7 @@ export function ExamCard({ exam, onStart }) {
     <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm flex flex-col justify-between transition-all hover:shadow-md">
       <div>
         <div className="flex items-center justify-between">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-50 text-primary-600">
             <FileText size={20} />
           </div>
           <Badge color={statusColor}>{status}</Badge>
@@ -53,7 +53,7 @@ export function ExamCard({ exam, onStart }) {
         {onStart && (
           <button
             onClick={onStart}
-            className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-indigo-600 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-indigo-700 active:scale-[0.98] cursor-pointer"
+            className="mt-5 flex w-full items-center justify-center gap-2 rounded-xl bg-primary-600 py-3 text-sm font-semibold text-white shadow-sm transition-all hover:bg-primary-700 active:scale-[0.98] cursor-pointer"
           >
             Commencer <ArrowRight size={16} />
           </button>

@@ -93,7 +93,7 @@ export function TakeExamPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-64 items-center justify-center text-indigo-600">
+      <div className="flex h-64 items-center justify-center text-primary-600">
         <Loader2 className="animate-spin" size={36} />
       </div>
     );
@@ -104,7 +104,7 @@ export function TakeExamPage() {
       
       <div className="flex items-center justify-between pb-6 border-b border-gray-100 mb-8">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-indigo-600">
+          <span className="text-xs font-bold uppercase tracking-wider text-primary-600">
             Examen en cours
           </span>
           <h1 className="mt-0.5 text-2xl sm:text-3xl font-extrabold text-gray-900">
@@ -120,8 +120,8 @@ export function TakeExamPage() {
         </div>
       </div>
 
-      <div className="rounded-2xl bg-gradient-to-r from-indigo-600 to-violet-600 p-6 sm:p-8 text-white shadow-lg mb-8">
-        <p className="text-sm font-medium text-indigo-100">
+      <div className="rounded-2xl bg-gradient-to-r from-primary-600 to-primary-700 p-6 sm:p-8 text-white shadow-lg mb-8">
+        <p className="text-sm font-medium text-primary-100">
           Répondez aux questions suivantes
         </p>
         <h2 className="text-2xl sm:text-3xl font-black mt-1">
@@ -138,12 +138,12 @@ export function TakeExamPage() {
             <div
               key={q.id}
               className={`rounded-2xl bg-white p-6 shadow-sm border transition-all duration-200 ${
-                isAnswered ? 'border-indigo-200 ring-1 ring-indigo-50' : 'border-gray-100'
+                isAnswered ? 'border-primary-200 ring-1 ring-primary-50' : 'border-gray-100'
               }`}
             >
               <div className="flex items-start justify-between gap-4 mb-6">
                 <div className="flex items-start gap-3">
-                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-indigo-50 font-bold text-indigo-600 text-sm">
+                  <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-primary-50 font-bold text-primary-600 text-sm">
                     {index + 1}
                   </span>
                   <h3 className="text-base sm:text-lg font-bold text-gray-900 mt-1">
@@ -168,14 +168,14 @@ export function TakeExamPage() {
                       onClick={() => handleOptionSelect(q.id, choice.id)}
                       className={`w-full flex items-center gap-4 rounded-xl p-4 text-left transition-all duration-200 cursor-pointer border ${
                         isSelected
-                          ? 'bg-indigo-50/70 border-indigo-400 text-indigo-950 shadow-sm'
+                          ? 'bg-primary-50/70 border-primary-400 text-primary-900 shadow-sm'
                           : 'bg-gray-50/80 hover:bg-gray-100 border-transparent text-gray-800'
                       }`}
                     >
                       <span
                         className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-lg text-xs font-bold transition-colors ${
                           isSelected
-                            ? 'bg-indigo-600 text-white'
+                            ? 'bg-primary-600 text-white'
                             : 'bg-white text-gray-500 shadow-sm'
                         }`}
                       >
@@ -205,7 +205,7 @@ export function TakeExamPage() {
           type="button"
           onClick={() => setShowSubmitModal(true)}
           disabled={isSubmitting}
-          className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 px-6 py-3 text-sm font-bold text-white shadow-md shadow-indigo-200 transition-all active:scale-95 cursor-pointer disabled:opacity-50"
+          className="inline-flex items-center gap-2 rounded-xl bg-primary-600 hover:bg-primary-700 px-6 py-3 text-sm font-bold text-white shadow-md shadow-primary-200 transition-all active:scale-95 cursor-pointer disabled:opacity-50"
         >
           {isSubmitting ? (
             <>
@@ -249,7 +249,7 @@ export function TakeExamPage() {
               <button
                 type="button"
                 onClick={handleConfirmSubmit}
-                className="rounded-xl bg-indigo-600 hover:bg-indigo-700 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-indigo-200 transition-all cursor-pointer"
+                className="rounded-xl bg-primary-600 hover:bg-primary-700 px-5 py-2.5 text-sm font-semibold text-white shadow-md shadow-primary-200 transition-all cursor-pointer"
               >
                 Confirmer
               </button>

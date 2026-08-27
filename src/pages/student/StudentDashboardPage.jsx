@@ -60,7 +60,7 @@ export function StudentDashboardPage() {
 
   return (
     <div className="max-w-5xl mx-auto w-full animate-fade-in-up">
-      <span className="text-xs font-bold uppercase tracking-wider text-indigo-600">
+      <span className="text-xs font-bold uppercase tracking-wider text-primary-600">
         Bonjour {studentName} 👋
       </span>
       
@@ -72,18 +72,18 @@ export function StudentDashboardPage() {
         Retrouvez vos examens et vos résultats.
       </p>
 
-      <div className="mt-8 rounded-3xl bg-gradient-to-r from-violet-600 to-indigo-600 p-6 sm:p-8 text-white shadow-sm">
-        <span className="text-xs font-semibold uppercase tracking-wider text-indigo-200">
+      <div className="mt-8 rounded-3xl bg-gradient-to-r from-primary-600 to-primary-700 p-6 sm:p-8 text-white shadow-sm">
+        <span className="text-xs font-semibold uppercase tracking-wider text-primary-200">
           Votre prochaine étape
         </span>
         <h2 className="mt-3 text-2xl sm:text-3xl font-bold">Un examen vous attend.</h2>
-        <p className="mt-2 text-sm text-indigo-100">
+        <p className="mt-2 text-sm text-primary-100">
           Consultez vos examens disponibles et commencez lorsque vous êtes prêt.
         </p>
 
         <button 
           onClick={handleNavigateToExams}
-          className="mt-6 flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-indigo-600 shadow-sm transition-transform active:scale-95 cursor-pointer"
+          className="mt-6 flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-semibold text-primary-600 shadow-sm transition-transform active:scale-95 cursor-pointer"
         >
           Commencer maintenant <ArrowRight size={16} />
         </button>
@@ -91,7 +91,7 @@ export function StudentDashboardPage() {
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
         <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-blue-50 text-blue-600">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-50 text-primary-600">
             <FileText size={20} />
           </div>
           <p className="mt-4 text-xs font-medium text-gray-400">Disponibles</p>
@@ -109,7 +109,7 @@ export function StudentDashboardPage() {
         </div>
 
         <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-purple-50 text-purple-600">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-50 text-primary-600">
             <Trophy size={20} />
           </div>
           <p className="mt-4 text-xs font-medium text-gray-400">Résultats</p>
@@ -126,14 +126,14 @@ export function StudentDashboardPage() {
 
         <button 
           onClick={handleNavigateToExams}
-          className="text-sm font-semibold text-indigo-600 hover:text-indigo-700 transition-colors cursor-pointer"
+          className="text-sm font-semibold text-primary-600 hover:text-primary-700 transition-colors cursor-pointer"
         >
           Tout voir
         </button>
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-12 text-indigo-600">
+        <div className="flex items-center justify-center py-12 text-primary-600">
           <Loader2 className="animate-spin" size={32} />
         </div>
       ) : (

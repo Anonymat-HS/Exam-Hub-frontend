@@ -59,7 +59,7 @@ export function ExamResultPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-64 items-center justify-center text-indigo-600">
+      <div className="flex h-64 items-center justify-center text-primary-600">
         <Loader2 className="animate-spin" size={36} />
       </div>
     );
@@ -72,7 +72,7 @@ export function ExamResultPage() {
       
       <div className="flex items-center justify-between pb-4">
         <div>
-          <span className="text-xs font-bold uppercase tracking-wider text-indigo-600">
+          <span className="text-xs font-bold uppercase tracking-wider text-primary-600">
             Correction
           </span>
           <h1 className="mt-0.5 text-3xl font-extrabold text-gray-900">
@@ -188,8 +188,8 @@ export function ExamResultPage() {
                     <p className="mt-1 text-sm font-semibold">{q.chosenChoiceId || 'Pas de réponse'}</p>
                   </div>
 
-                  <div className="rounded-2xl bg-indigo-50/50 border border-indigo-100/60 p-4 text-indigo-950">
-                    <p className="text-xs font-medium text-indigo-500">Bonne réponse</p>
+                  <div className="rounded-2xl bg-primary-50/50 border border-primary-100/60 p-4 text-primary-900">
+                    <p className="text-xs font-medium text-primary-500">Bonne réponse</p>
                     <p className="mt-1 text-sm font-semibold">{q.correctChoiceId}</p>
                   </div>
                 </div>

@@ -36,10 +36,8 @@ export function StudentLayout() {
 
       <header className="flex h-16 w-full items-center justify-between border-b border-gray-100 bg-white px-4 md:hidden z-50">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 font-bold text-white text-sm shadow-sm">
-            EH
-          </div>
-          <span className="text-base font-bold text-gray-900">Exam Hub</span>
+          <img src="/Icone-EH.png" alt="" className="h-8 w-8 rounded-lg object-contain" />
+          <span className="text-base font-bold text-navy">Exam Hub</span>
         </div>
         <button
           onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -56,18 +54,16 @@ export function StudentLayout() {
       `}>
         <div>
           <div className="hidden md:flex mb-8 items-center gap-2 px-2">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-gradient-to-br from-indigo-600 to-violet-600 font-bold text-white shadow-sm">
-              EH
-            </div>
-            <span className="text-lg font-bold text-gray-900">Exam Hub</span>
+            <img src="/Icone-EH.png" alt="" className="h-9 w-9 rounded-lg object-contain" />
+            <span className="text-lg font-bold text-navy">Exam Hub</span>
           </div>
 
           <div className="mb-6 flex items-center gap-3 rounded-xl bg-gray-50 ring-1 ring-gray-100 px-3 py-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-indigo-50 text-indigo-600 font-semibold text-sm">
+            <div className="flex h-9 w-9 items-center justify-center rounded-full bg-primary-50 text-primary-600 font-semibold text-sm">
               {initials}
             </div>
             <div>
-              <p className="text-sm font-semibold text-gray-900">{fullName}</p>
+              <p className="text-sm font-semibold text-navy">{fullName}</p>
               <p className="text-xs text-gray-400">Étudiant</p>
             </div>
           </div>
@@ -87,7 +83,7 @@ export function StudentLayout() {
                   className={({ isActive }) => `
                     relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors
                     ${isActive
-                      ? 'bg-indigo-50 text-indigo-600 font-semibold'
+                      ? 'bg-primary-50 text-primary-600 font-semibold'
                       : 'text-gray-500 hover:bg-gray-50'
                     }
                   `}
