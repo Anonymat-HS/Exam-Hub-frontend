@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trophy, ChevronRight, Loader2 } from 'lucide-react';
+import { myResultService } from '../../services/myResultService';
 
 const MOCK_RESULTS = [
   {
@@ -27,20 +28,7 @@ export function StudentResultsPage() {
   useEffect(() => {
     const fetchResults = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await fetch('/api/student/results', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(token && { Authorization: `Bearer ${token}` }),
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`Erreur réseau HTTP : ${response.status}`);
-        }
-
-        const data = await response.json();
+        const data = await myResultService.getResults();
         setResults(data);
       } catch (error) {
         console.error('Erreur API (passage aux données locales) :', error.message);
@@ -54,10 +42,11 @@ export function StudentResultsPage() {
   }, []);
 
   const handleCorrectionClick = (examId) => {
-    navigate(`/student/results/${examId}/`);
+    navigate(`/student/results/${examId}`);
   };
 
   const formatDate = (isoString) => {
+    if (!isoString) return '';
     const date = new Date(isoString);
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -116,12 +105,12 @@ export function StudentResultsPage() {
 
               <div className="flex items-center justify-between sm:justify-end gap-6 pt-3 sm:pt-0 border-t sm:border-t-0 border-gray-50">
                 <span className={`text-base font-extrabold ${getScoreColorClass(item.score, item.maxScore)}`}>
-                  {item.score.toFixed(1)}/{item.maxScore}
+                  {item.score}/{item.maxScore}
                 </span>
 
                 <button
                   type="button"
-                  onClick={() => handleCorrectionClick(item.id)}
+                  onClick={() => handleCorrectionClick(item.examId)}
                   className="inline-flex items-center gap-1.5 rounded-xl bg-gray-50 hover:bg-indigo-50 hover:text-indigo-600 px-4 py-2.5 text-xs font-semibold text-gray-700 transition-all duration-200 active:scale-95 cursor-pointer"
                 >
                   Correction

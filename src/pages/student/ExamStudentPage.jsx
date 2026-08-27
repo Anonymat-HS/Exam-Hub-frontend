@@ -1,30 +1,46 @@
-import { ExamCard } from '../../components/common/ExamCard';
-import { Sparkles } from 'lucide-react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Sparkles, Loader2 } from 'lucide-react';
+import { ExamCard } from '../../components/common/ExamCard';
+import { myExamService } from '../../services/myExamService';
 
-const ALL_EXAMS = [
+const MOCK_EXAMS = [
   {
     id: 1,
-    category: 'WEB2',
     title: 'React Fundamentals',
     description: 'Composants, hooks et gestion de l\'état avec React.',
-    questionsCount: 2,
-    dueDate: '31/12/2026 23:59',
-    status: 'Disponible'
+    questionCount: 2,
+    endDate: '2026-12-31T23:59:00',
   },
   {
     id: 2,
-    category: 'BDD2',
     title: 'SQL & PostgreSQL',
     description: 'Évaluation SQL et conception de bases relationnelles.',
-    questionsCount: 2,
-    dueDate: '31/12/2026 23:59',
-    status: 'Disponible'
-  }
+    questionCount: 2,
+    endDate: '2026-12-31T23:59:00',
+  },
 ];
 
 export function ExamStudentPage() {
   const navigate = useNavigate();
+  const [exams, setExams] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchExams = async () => {
+      try {
+        const data = await myExamService.getExams('open');
+        setExams(data);
+      } catch (error) {
+        console.error('Erreur API (fallback données de simulation) :', error.message);
+        setExams(MOCK_EXAMS);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchExams();
+  }, []);
 
   const handleStartExam = (id) => {
     navigate(`/student/exams/${id}`);
@@ -44,7 +60,6 @@ export function ExamStudentPage() {
         Les examens actuellement ouverts pour vous.
       </p>
 
-
       <div className="mt-6 rounded-3xl bg-gradient-to-r from-violet-600 to-indigo-600 p-6 sm:p-8 text-white shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-start gap-4">
           <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-white/10 text-white backdrop-blur-sm animate-pulse">
@@ -59,16 +74,25 @@ export function ExamStudentPage() {
         </div>
       </div>
 
-
-      <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
-        {ALL_EXAMS.map((exam) => (
-          <ExamCard 
-            key={exam.id} 
-            exam={exam} 
-            onStart={() => handleStartExam(exam.id)} 
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="flex items-center justify-center py-12 text-indigo-600">
+          <Loader2 className="animate-spin" size={32} />
+        </div>
+      ) : exams.length === 0 ? (
+        <div className="mt-8 rounded-3xl bg-white p-8 text-center text-gray-500 shadow-sm border border-gray-100">
+          Aucun examen disponible pour le moment.
+        </div>
+      ) : (
+        <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2">
+          {exams.map((exam) => (
+            <ExamCard 
+              key={exam.id} 
+              exam={exam} 
+              onStart={() => handleStartExam(exam.id)} 
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

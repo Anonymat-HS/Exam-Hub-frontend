@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
+import { myExamService } from '../../services/myExamService';
 
 const MOCK_EXAM_DATA = {
   id: 1,
@@ -10,55 +11,27 @@ const MOCK_EXAM_DATA = {
     {
       id: 101,
       text: 'Quel Hook permet de gérer un état local ?',
-      points: 2,
-      options: [
-        { id: 'a', label: 'A', text: 'useEffect' },
-        { id: 'b', label: 'B', text: 'useState' },
-        { id: 'c', label: 'C', text: 'useMemo' },
+      points: 1,
+      choices: [
+        { id: 'a', text: 'useEffect' },
+        { id: 'b', text: 'useState' },
+        { id: 'c', text: 'useMemo' },
       ],
     },
     {
       id: 102,
       text: "Quelle syntaxe permet d'afficher une variable dans JSX ?",
       points: 1,
-      options: [
-        { id: 'a', label: 'A', text: '{{ variable }}' },
-        { id: 'b', label: 'B', text: '[[ variable ]]' },
-        { id: 'c', label: 'C', text: '{variable}' },
-      ],
-    },
-    {
-      id: 103,
-      text: 'Quel composant React est utilisé pour envelopper les routes dans React Router ?',
-      points: 2,
-      options: [
-        { id: 'a', label: 'A', text: 'BrowserRouter' },
-        { id: 'b', label: 'B', text: 'RouteHandler' },
-        { id: 'c', label: 'C', text: 'SwitchContainer' },
-      ],
-    },
-    {
-      id: 104,
-      text: 'Quelle méthode permet de transmettre des données aux composants enfants ?',
-      points: 1,
-      options: [
-        { id: 'a', label: 'A', text: 'les Props' },
-        { id: 'b', label: 'B', text: 'les States' },
-        { id: 'c', label: 'C', text: 'les Reducers' },
-      ],
-    },
-    {
-      id: 105,
-      text: 'À quoi sert le hook useEffect ?',
-      points: 2,
-      options: [
-        { id: 'a', label: 'A', text: 'Créer un style CSS en ligne' },
-        { id: 'b', label: 'B', text: 'Exécuter des effets secondaires' },
-        { id: 'c', label: 'C', text: 'Interdire le re-rendu du composant' },
+      choices: [
+        { id: 'a', text: '{{ variable }}' },
+        { id: 'b', text: '[[ variable ]]' },
+        { id: 'c', text: '{variable}' },
       ],
     },
   ],
 };
+
+const CHOICE_LABELS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
 export function TakeExamPage() {
   const { examId } = useParams();
@@ -67,25 +40,13 @@ export function TakeExamPage() {
   const [exam, setExam] = useState(null);
   const [answers, setAnswers] = useState({});
   const [isLoading, setIsLoading] = useState(true);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
 
   useEffect(() => {
     const fetchExam = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`/api/student/exams/${examId || 1}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(token && { Authorization: `Bearer ${token}` }),
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`Erreur réseau HTTP : ${response.status}`);
-        }
-
-        const data = await response.json();
+        const data = await myExamService.getExamDetail(examId);
         setExam(data);
       } catch (error) {
         console.error('Erreur API (fallback données de simulation) :', error.message);
@@ -98,10 +59,10 @@ export function TakeExamPage() {
     fetchExam();
   }, [examId]);
 
-  const handleOptionSelect = (questionId, optionId) => {
+  const handleOptionSelect = (questionId, choiceId) => {
     setAnswers((prev) => ({
       ...prev,
-      [questionId]: optionId,
+      [questionId]: choiceId,
     }));
   };
 
@@ -114,19 +75,18 @@ export function TakeExamPage() {
 
   const handleConfirmSubmit = async () => {
     setShowSubmitModal(false);
+    setIsSubmitting(true);
+
+    const answersArray = Object.entries(answers).map(([questionId, choiceId]) => ({
+      questionId,
+      choiceId,
+    }));
+
     try {
-      const token = localStorage.getItem('token');
-      await fetch(`/api/student/exams/${exam?.id || 1}/submit`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...(token && { Authorization: `Bearer ${token}` }),
-        },
-        body: JSON.stringify({ answers }),
-      });
+      await myExamService.submitExam(exam?.id || examId, answersArray);
+      navigate('/student/results');
     } catch (error) {
       console.error('Erreur soumission :', error.message);
-    } finally {
       navigate('/student/results');
     }
   };
@@ -172,6 +132,7 @@ export function TakeExamPage() {
       <div className="space-y-6">
         {exam?.questions?.map((q, index) => {
           const isAnswered = answers[q.id] !== undefined;
+          const choices = q.choices || [];
 
           return (
             <div
@@ -196,14 +157,15 @@ export function TakeExamPage() {
               </div>
 
               <div className="space-y-3">
-                {q.options.map((option) => {
-                  const isSelected = answers[q.id] === option.id;
+                {choices.map((choice, choiceIndex) => {
+                  const isSelected = answers[q.id] === choice.id;
+                  const label = CHOICE_LABELS[choiceIndex] || String(choiceIndex + 1);
 
                   return (
                     <button
-                      key={option.id}
+                      key={choice.id}
                       type="button"
-                      onClick={() => handleOptionSelect(q.id, option.id)}
+                      onClick={() => handleOptionSelect(q.id, choice.id)}
                       className={`w-full flex items-center gap-4 rounded-xl p-4 text-left transition-all duration-200 cursor-pointer border ${
                         isSelected
                           ? 'bg-indigo-50/70 border-indigo-400 text-indigo-950 shadow-sm'
@@ -217,9 +179,9 @@ export function TakeExamPage() {
                             : 'bg-white text-gray-500 shadow-sm'
                         }`}
                       >
-                        {option.label}
+                        {label}
                       </span>
-                      <span className="text-sm font-semibold">{option.text}</span>
+                      <span className="text-sm font-semibold">{choice.text}</span>
                     </button>
                   );
                 })}
@@ -233,7 +195,8 @@ export function TakeExamPage() {
         <button
           type="button"
           onClick={handleQuit}
-          className="rounded-xl bg-white border border-gray-200 px-6 py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all active:scale-95 cursor-pointer shadow-sm"
+          disabled={isSubmitting}
+          className="rounded-xl bg-white border border-gray-200 px-6 py-3 text-sm font-bold text-gray-700 hover:bg-gray-50 transition-all active:scale-95 cursor-pointer shadow-sm disabled:opacity-50"
         >
           Quitter
         </button>
@@ -241,16 +204,26 @@ export function TakeExamPage() {
         <button
           type="button"
           onClick={() => setShowSubmitModal(true)}
-          className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 px-6 py-3 text-sm font-bold text-white shadow-md shadow-indigo-200 transition-all active:scale-95 cursor-pointer"
+          disabled={isSubmitting}
+          className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 hover:bg-indigo-700 px-6 py-3 text-sm font-bold text-white shadow-md shadow-indigo-200 transition-all active:scale-95 cursor-pointer disabled:opacity-50"
         >
-          Soumettre
-          <ArrowRight size={16} />
+          {isSubmitting ? (
+            <>
+              <Loader2 className="animate-spin" size={16} />
+              Soumission...
+            </>
+          ) : (
+            <>
+              Soumettre
+              <ArrowRight size={16} />
+            </>
+          )}
         </button>
       </div>
 
       {showSubmitModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm animate-fade-in">
-          <div className="w-full max-w-md rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-gray-100 text-left animate-scale-up">
+          <div className="w-full max-w-md rounded-3xl bg-white p-6 sm:p-8 shadow-2xl border border-gray-100 text-left animate-scale-in">
             <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-amber-50 text-amber-500 mb-5">
               <AlertCircle size={24} />
             </div>
@@ -260,7 +233,8 @@ export function TakeExamPage() {
             </h3>
 
             <p className="mt-2 text-sm text-gray-500 leading-relaxed">
-              Cette action est définitive. Vous ne pourrez plus modifier vos réponses.
+              Vous avez répondu à {answeredCount}/{totalQuestions} question{totalQuestions > 1 ? 's' : ''}.
+              Cette action est définitive.
             </p>
 
             <div className="mt-6 flex items-center justify-end gap-3">

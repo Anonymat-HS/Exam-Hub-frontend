@@ -1,33 +1,58 @@
 
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, FileText, CheckCircle, Trophy } from 'lucide-react';
+import { ArrowRight, FileText, CheckCircle, Trophy, Loader2 } from 'lucide-react';
 import { ExamCard } from '../../components/common/ExamCard';
 import { useAuth } from '../../hooks/useAuth';
+import { myExamService } from '../../services/myExamService';
+import { myResultService } from '../../services/myResultService';
 
 const MOCK_EXAMS = [
   {
     id: 1,
     title: 'React Fundamentals',
     description: 'Composants, hooks et gestion de l\'état avec React.',
-    questionsCount: 2,
-    dueDate: '31/12/2026 23:59',
-    status: 'Disponible'
+    questionCount: 2,
+    endDate: '2026-12-31T23:59:00',
   },
   {
     id: 2,
     title: 'SQL & PostgreSQL',
     description: 'Évaluation SQL et conception de bases relationnelles.',
-    questionsCount: 2,
-    dueDate: '31/12/2026 23:59',
-    status: 'Disponible'
-  }
+    questionCount: 2,
+    endDate: '2026-12-31T23:59:00',
+  },
 ];
 
 export function StudentDashboardPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const studentName = user?.name || 'Étudiant';
+  const studentName = user?.name || user?.email || 'Étudiant';
 
+  const [exams, setExams] = useState([]);
+  const [results, setResults] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [examsData, resultsData] = await Promise.all([
+          myExamService.getExams('open'),
+          myResultService.getResults(),
+        ]);
+        setExams(examsData);
+        setResults(resultsData);
+      } catch (error) {
+        console.error('Erreur API (fallback données de simulation) :', error.message);
+        setExams(MOCK_EXAMS);
+        setResults([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const handleNavigateToExams = () => {
     navigate('/student/exams');
@@ -70,8 +95,8 @@ export function StudentDashboardPage() {
             <FileText size={20} />
           </div>
           <p className="mt-4 text-xs font-medium text-gray-400">Disponibles</p>
-          <p className="mt-1 text-2xl font-bold text-gray-900">2</p>
-          <p className="text-xs text-gray-400">examens</p>
+          <p className="mt-1 text-2xl font-bold text-gray-900">{exams.length}</p>
+          <p className="text-xs text-gray-400">examen{exams.length > 1 ? 's' : ''}</p>
         </div>
 
         <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
@@ -79,8 +104,8 @@ export function StudentDashboardPage() {
             <CheckCircle size={20} />
           </div>
           <p className="mt-4 text-xs font-medium text-gray-400">Terminés</p>
-          <p className="mt-1 text-2xl font-bold text-gray-900">1</p>
-          <p className="text-xs text-gray-400">examens passés</p>
+          <p className="mt-1 text-2xl font-bold text-gray-900">{results.length}</p>
+          <p className="text-xs text-gray-400">examen{results.length > 1 ? 's' : ''} passé{results.length > 1 ? 's' : ''}</p>
         </div>
 
         <div className="rounded-2xl border border-gray-100 bg-white p-6 shadow-sm">
@@ -88,8 +113,8 @@ export function StudentDashboardPage() {
             <Trophy size={20} />
           </div>
           <p className="mt-4 text-xs font-medium text-gray-400">Résultats</p>
-          <p className="mt-1 text-2xl font-bold text-gray-900">1</p>
-          <p className="text-xs text-gray-400">notes disponibles</p>
+          <p className="mt-1 text-2xl font-bold text-gray-900">{results.length}</p>
+          <p className="text-xs text-gray-400">note{results.length > 1 ? 's' : ''} disponible{results.length > 1 ? 's' : ''}</p>
         </div>
       </div>
 
@@ -107,15 +132,21 @@ export function StudentDashboardPage() {
         </button>
       </div>
 
-      <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
-        {MOCK_EXAMS.map((exam) => (
-          <ExamCard 
-            key={exam.id} 
-            exam={exam} 
-            onStart={() => console.log(`Examen ${exam.id}`)} 
-          />
-        ))}
-      </div>
+      {isLoading ? (
+        <div className="flex items-center justify-center py-12 text-indigo-600">
+          <Loader2 className="animate-spin" size={32} />
+        </div>
+      ) : (
+        <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+          {exams.slice(0, 2).map((exam) => (
+            <ExamCard 
+              key={exam.id} 
+              exam={exam} 
+              onStart={() => navigate(`/student/exams/${exam.id}`)} 
+            />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

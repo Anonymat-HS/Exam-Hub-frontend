@@ -1,30 +1,31 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ChevronLeft, XCircle, CheckCircle, Loader2 } from 'lucide-react';
+import { myExamService } from '../../services/myExamService';
 
 const MOCK_RESULT_DATA = {
   examTitle: 'React Fundamentals',
-  scoreOn20: 10,
-  isValidated: false,
-  obtainedPoints: 1,
-  totalPoints: 3,
-  questionsCount: 2,
+  score: 10,
+  maxScore: 20,
+  submittedAt: '2026-08-22T18:18:00',
   corrections: [
     {
-      id: 101,
-      questionNumber: 1,
-      text: 'Quel Hook permet de gérer un état local ?',
+      questionId: 101,
+      questionText: 'Quel Hook permet de gérer un état local ?',
       isCorrect: false,
-      userAnswer: 'useMemo',
-      correctAnswer: 'useState',
+      chosenChoiceId: 'c',
+      correctChoiceId: 'b',
+      pointsEarned: 0,
+      pointsPossible: 1,
     },
     {
-      id: 102,
-      questionNumber: 2,
-      text: "Quelle syntaxe permet d'afficher une variable dans JSX ?",
+      questionId: 102,
+      questionText: "Quelle syntaxe permet d'afficher une variable dans JSX ?",
       isCorrect: true,
-      userAnswer: '{variable}',
-      correctAnswer: '{variable}',
+      chosenChoiceId: 'c',
+      correctChoiceId: 'c',
+      pointsEarned: 1,
+      pointsPossible: 1,
     },
   ],
 };
@@ -39,20 +40,7 @@ export function ExamResultPage() {
   useEffect(() => {
     const fetchResult = async () => {
       try {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`/api/student/results/${examId || 1}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            ...(token && { Authorization: `Bearer ${token}` }),
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error(`Erreur HTTP : ${response.status}`);
-        }
-
-        const data = await response.json();
+        const data = await myExamService.getExamResult(examId);
         setResult(data);
       } catch (error) {
         console.error('Erreur API (données de simulation utilisées) :', error.message);
@@ -69,11 +57,6 @@ export function ExamResultPage() {
     navigate('/student/results');
   };
 
-  const formatPoints = (val) => {
-    if (val === undefined || val === null) return '0';
-    return Number.isInteger(val) ? val.toString() : val.toFixed(1);
-  };
-
   if (isLoading) {
     return (
       <div className="flex h-64 items-center justify-center text-indigo-600">
@@ -82,7 +65,7 @@ export function ExamResultPage() {
     );
   }
 
-  const isValidated = (result?.scoreOn20 ?? 0) >= 10;
+  const isValidated = (result?.score ?? 0) >= (result?.maxScore ?? 20) / 2;
 
   return (
     <div className="max-w-5xl mx-auto w-full pb-16">
@@ -121,9 +104,9 @@ export function ExamResultPage() {
           
           <div className="my-6">
             <span className="text-6xl font-black tracking-tight">
-              {formatPoints(result?.scoreOn20)}
+              {result?.score ?? 0}
             </span>
-            <span className="text-2xl font-bold text-white/80">/20</span>
+            <span className="text-2xl font-bold text-white/80">/{result?.maxScore ?? 20}</span>
           </div>
 
           <div className="flex items-center gap-2 font-bold text-sm text-white/95">
@@ -148,14 +131,14 @@ export function ExamResultPage() {
             <div className="rounded-2xl bg-gray-50/80 p-5 border border-gray-100/50">
               <p className="text-xs font-semibold text-gray-400">Points obtenus</p>
               <p className="mt-2 text-2xl font-black text-gray-900">
-                {formatPoints(result?.obtainedPoints)}/{formatPoints(result?.totalPoints)}
+                {result?.corrections?.reduce((sum, c) => sum + (c.pointsEarned || 0), 0) ?? 0}/{result?.maxScore ?? 0}
               </p>
             </div>
 
             <div className="rounded-2xl bg-gray-50/80 p-5 border border-gray-100/50">
               <p className="text-xs font-semibold text-gray-400">Questions</p>
               <p className="mt-2 text-2xl font-black text-gray-900">
-                {result?.questionsCount || result?.corrections?.length || 0}
+                {result?.corrections?.length || 0}
               </p>
             </div>
           </div>
@@ -171,7 +154,7 @@ export function ExamResultPage() {
 
             return (
               <div
-                key={q.id || index}
+                key={q.questionId || index}
                 className="rounded-3xl bg-white p-6 sm:p-8 border border-gray-100 shadow-sm"
               >
                 <div className="flex items-start gap-3 mb-6">
@@ -185,10 +168,10 @@ export function ExamResultPage() {
 
                   <div>
                     <span className="text-xs font-bold uppercase tracking-wider text-gray-400">
-                      QUESTION {q.questionNumber || index + 1}
+                      QUESTION {index + 1}
                     </span>
                     <h3 className="text-base sm:text-lg font-bold text-gray-900 mt-0.5">
-                      {q.text}
+                      {q.questionText}
                     </h3>
                   </div>
                 </div>
@@ -202,13 +185,17 @@ export function ExamResultPage() {
                     }`}
                   >
                     <p className="text-xs font-medium text-gray-400">Votre réponse</p>
-                    <p className="mt-1 text-sm font-semibold">{q.userAnswer}</p>
+                    <p className="mt-1 text-sm font-semibold">{q.chosenChoiceId || 'Pas de réponse'}</p>
                   </div>
 
                   <div className="rounded-2xl bg-indigo-50/50 border border-indigo-100/60 p-4 text-indigo-950">
                     <p className="text-xs font-medium text-indigo-500">Bonne réponse</p>
-                    <p className="mt-1 text-sm font-semibold">{q.correctAnswer}</p>
+                    <p className="mt-1 text-sm font-semibold">{q.correctChoiceId}</p>
                   </div>
+                </div>
+
+                <div className="mt-3 text-xs text-gray-400">
+                  {q.pointsEarned}/{q.pointsPossible} point{q.pointsPossible > 1 ? 's' : ''}
                 </div>
               </div>
             );
