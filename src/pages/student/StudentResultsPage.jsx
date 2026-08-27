@@ -54,7 +54,7 @@ export function StudentResultsPage() {
   }, []);
 
   const handleCorrectionClick = (examId) => {
-    navigate(`/student/results/${examId}/correction`);
+    navigate(`/student/results/${examId}/`);
   };
 
   const formatDate = (isoString) => {

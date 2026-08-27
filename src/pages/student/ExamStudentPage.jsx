@@ -1,5 +1,6 @@
 import { ExamCard } from '../../components/student/ExamCard';
 import { Sparkles } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const ALL_EXAMS = [
   {
@@ -23,8 +24,10 @@ const ALL_EXAMS = [
 ];
 
 export function ExamStudentPage() {
+  const navigate = useNavigate();
+
   const handleStartExam = (id) => {
-    console.log(`Lancement de l'examen numéro : ${id}`);
+    navigate(`/student/exams/${id}`); // 3. Rediriger vers l'examen
   };
 
   return (
@@ -48,7 +51,7 @@ export function ExamStudentPage() {
             <Sparkles size={24} />
           </div>
           <div>
-            <h2 className="text-xl font-bold">Donnez le meilleur de vous-même ! 🚀</h2>
+            <h2 className="text-xl font-bold">Donnez le meilleur de vous-même !</h2>
             <p className="mt-1 text-sm text-indigo-100 max-w-xl">
               Chaque évaluation est une opportunité de valider vos compétences et de progresser. Prenez votre temps, lisez bien les consignes et concentrez-vous. Bonne chance !
             </p>

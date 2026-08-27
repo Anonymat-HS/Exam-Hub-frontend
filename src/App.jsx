@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { LoginPage } from './pages/LoginPage.jsx';
+// import { LoginPage } from './pages/LoginPage.jsx';
 import { StudentLayout } from './layouts/StudentLayout.jsx';
 import { StudentDashboardPage } from './pages/student/StudentDashboardPage.jsx';
 import { ExamStudentPage } from './pages/student/ExamStudentPage.jsx';
@@ -11,7 +11,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/login" element={<LoginPage />} />
+        {/* <Route path="/login" element={<LoginPage />} /> */}
 
         <Route path="/student" element={<StudentLayout />}>
           <Route index element={<StudentDashboardPage />} />
