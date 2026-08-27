@@ -1,4 +1,4 @@
-import { ExamCard } from '../../components/common/ExamCard';
+import { ExamCard } from '../../components/student/ExamCard';
 import { Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -27,7 +27,7 @@ export function ExamStudentPage() {
   const navigate = useNavigate();
 
   const handleStartExam = (id) => {
-    navigate(`/student/exams/${id}`); // 3. Rediriger vers l'examen
+    navigate(`/student/exams/${id}`);
   };
 
   return (
