@@ -9,6 +9,12 @@ import { CoursesPage } from './pages/admin/CoursesPage';
 import { ExamsPage } from './pages/admin/ExamsPage';
 import { QuestionsPage } from './pages/admin/QuestionsPage';
 import { ExamResultsPage } from './pages/admin/ExamResultsPage';
+import { StudentLayout } from './layouts/StudentLayout';
+import { StudentDashboardPage } from './pages/student/StudentDashboardPage';
+import { ExamStudentPage } from './pages/student/ExamStudentPage';
+import { TakeExamPage } from './pages/student/TakeExamPage';
+import { StudentResultsPage } from './pages/student/StudentResultsPage';
+import { ExamResultPage } from './pages/student/ExamResultPage';
 
 export default function App() {
   return (
@@ -29,7 +35,17 @@ export default function App() {
           </Route>
         </Route>
 
-        <Route path="*" element={<Navigate to="/admin" replace />} />
+        <Route element={<RoleRoute allowedRole="STUDENT" />}>
+          <Route element={<StudentLayout />}>
+            <Route path="/student" element={<StudentDashboardPage />} />
+            <Route path="/student/exams" element={<ExamStudentPage />} />
+            <Route path="/student/exams/:examId" element={<TakeExamPage />} />
+            <Route path="/student/results" element={<StudentResultsPage />} />
+            <Route path="/student/results/:examId" element={<ExamResultPage />} />
+          </Route>
+        </Route>
+
+        <Route path="*" element={<Navigate to="/login" replace />} />
       </Routes>
     </BrowserRouter>
   );
