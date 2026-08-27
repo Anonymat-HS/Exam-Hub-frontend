@@ -1,7 +1,7 @@
 
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight, FileText, CheckCircle, Trophy } from 'lucide-react';
-import { ExamCard } from '../../components/student/ExamCard';
+import { ExamCard } from '../../components/common/ExamCard';
 
 const useAuth = () => {
   throw new Error("Pas de contexte");
@@ -130,4 +130,3 @@ export function StudentDashboardPage() {
     </div>
   );
 }
-

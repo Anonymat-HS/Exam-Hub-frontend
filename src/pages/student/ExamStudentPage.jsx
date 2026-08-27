@@ -1,4 +1,4 @@
-import { ExamCard } from '../../components/student/ExamCard';
+import { ExamCard } from '../../components/common/ExamCard';
 import { Sparkles } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
