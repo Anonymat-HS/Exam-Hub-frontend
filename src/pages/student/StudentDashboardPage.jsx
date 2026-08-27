@@ -27,7 +27,7 @@ const MOCK_EXAMS = [
 export function StudentDashboardPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const studentName = user?.name || user?.email || 'Étudiant';
+  const studentName = user?.email || 'Étudiant';
 
   const [exams, setExams] = useState([]);
   const [results, setResults] = useState([]);

@@ -244,7 +244,7 @@ export function ExamsPage() {
                     </div>
                     <p className="mt-1 text-xs text-gray-400">{formatDateTime(exam.startDate)} → {formatDateTime(exam.endDate)}</p>
                     <div className="mt-3 flex items-center gap-2">
-                      <button onClick={() => navigate(`/admin/exams/${exam.id}/questions)`)} className="flex-1 inline-flex items-center justify-center gap-1 rounded-lg border border-gray-200 px-2 py-2 text-xs font-medium text-gray-600 hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600">
+                      <button onClick={() => navigate(`/admin/exams/${exam.id}/questions`)} className="flex-1 inline-flex items-center justify-center gap-1 rounded-lg border border-gray-200 px-2 py-2 text-xs font-medium text-gray-600 hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600">
                         <ListChecks size={13} />
                       </button>
                       <button onClick={() => setEditTarget(exam)} className="flex-1 inline-flex items-center justify-center gap-1 rounded-lg border border-gray-200 px-2 py-2 text-xs font-medium text-gray-600 hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600">

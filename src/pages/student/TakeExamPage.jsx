@@ -77,14 +77,15 @@ export function TakeExamPage() {
     setShowSubmitModal(false);
     setIsSubmitting(true);
 
-    const answersArray = Object.entries(answers).map(([questionId, choiceId]) => ({
-      questionId,
-      choiceId,
+    const answersArray = (exam?.questions || []).map((q) => ({
+      questionId: q.id,
+      choiceId: answers[q.id] || null,
     }));
 
+    const resolvedExamId = exam?.id || examId;
     try {
-      await myExamService.submitExam(exam?.id || examId, answersArray);
-      navigate('/student/results');
+      await myExamService.submitExam(resolvedExamId, answersArray);
+      navigate(`/student/results/${resolvedExamId}`);
     } catch (error) {
       console.error('Erreur soumission :', error.message);
       navigate('/student/results');

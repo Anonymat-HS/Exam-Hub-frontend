@@ -65,7 +65,7 @@ export function ExamResultPage() {
     );
   }
 
-  const isValidated = (result?.score ?? 0) >= (result?.maxScore ?? 20) / 2;
+  const isValidated = (result?.score ?? 0) >= (result?.maxScore ?? result?.corrections?.reduce((s, c) => s + c.pointsPossible, 0) ?? 20) / 2;
 
   return (
     <div className="max-w-5xl mx-auto w-full pb-16">
@@ -185,12 +185,12 @@ export function ExamResultPage() {
                     }`}
                   >
                     <p className="text-xs font-medium text-gray-400">Votre réponse</p>
-                    <p className="mt-1 text-sm font-semibold">{q.chosenChoiceId || 'Pas de réponse'}</p>
+                    <p className="mt-1 text-sm font-semibold">{q.chosenChoiceId ? `Choix ${q.chosenChoiceId}` : 'Pas de réponse'}</p>
                   </div>
 
                   <div className="rounded-2xl bg-primary-50/50 border border-primary-100/60 p-4 text-primary-900">
                     <p className="text-xs font-medium text-primary-500">Bonne réponse</p>
-                    <p className="mt-1 text-sm font-semibold">{q.correctChoiceId}</p>
+                    <p className="mt-1 text-sm font-semibold">Choix {q.correctChoiceId}</p>
                   </div>
                 </div>
 

@@ -2,10 +2,12 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trophy, ChevronRight, Loader2 } from 'lucide-react';
 import { myResultService } from '../../api/myResultService';
+import { formatDateTime } from '../../utils/formatters';
 
 const MOCK_RESULTS = [
   {
     id: 1,
+    examId: '1',
     examTitle: 'React Fundamentals',
     submittedAt: '2026-08-22T18:18:00',
     score: 6.7,
@@ -13,6 +15,7 @@ const MOCK_RESULTS = [
   },
   {
     id: 2,
+    examId: '2',
     examTitle: 'JavaScript avancé',
     submittedAt: '2026-08-15T14:30:00',
     score: 12.0,
@@ -43,17 +46,6 @@ export function StudentResultsPage() {
 
   const handleCorrectionClick = (examId) => {
     navigate(`/student/results/${examId}`);
-  };
-
-  const formatDate = (isoString) => {
-    if (!isoString) return '';
-    const date = new Date(isoString);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const year = date.getFullYear();
-    const hours = String(date.getHours()).padStart(2, '0');
-    const minutes = String(date.getMinutes()).padStart(2, '0');
-    return `${day}/${month}/${year} ${hours}:${minutes}`;
   };
 
   const getScoreColorClass = (score, maxScore = 20) => {
@@ -98,7 +90,7 @@ export function StudentResultsPage() {
                     {item.examTitle}
                   </h3>
                   <p className="text-xs text-gray-400 mt-0.5">
-                    {formatDate(item.submittedAt)}
+                    {formatDateTime(item.submittedAt)}
                   </p>
                 </div>
               </div>

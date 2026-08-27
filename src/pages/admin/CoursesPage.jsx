@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { BookOpen, FileText, Plus } from 'lucide-react';
+import { BookOpen, FileText, Plus, Pencil, Trash2 } from 'lucide-react';
 import { Button } from '../../components/common/Button';
 import { Input } from '../../components/common/Input';
 import { Textarea } from '../../components/common/Textarea';
@@ -31,7 +31,7 @@ function SkeletonCards() {
 }
 
 export function CoursesPage() {
-  const [courses, setCourses] = useState(MOCK_COURSES);
+  const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState('');
   const [reloadKey, setReloadKey] = useState(0);
@@ -41,6 +41,8 @@ export function CoursesPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [lastAddedId, setLastAddedId] = useState(null);
   const [isUsingMockData, setIsUsingMockData] = useState(false);
+  const [editTarget, setEditTarget] = useState(null);
+  const [deleteTarget, setDeleteTarget] = useState(null);
 
   useEffect(() => {
     let ignore = false;
@@ -60,6 +62,7 @@ export function CoursesPage() {
       .catch((err) => {
         if (!ignore) {
           if (err instanceof ApiError) setLoadError('Impossible de charger les cours.');
+          setCourses(MOCK_COURSES);
           setIsUsingMockData(true);
         }
       })
@@ -117,6 +120,47 @@ export function CoursesPage() {
     setIsSubmitting(false);
     setIsAddOpen(false);
     setForm(EMPTY_FORM);
+  }
+
+  function openEditModal(course) {
+    setForm({ code: course.code, name: course.name, description: course.description || '' });
+    setErrors({});
+    setIsSubmitting(false);
+    setEditTarget(course);
+  }
+
+  async function handleEdit(e) {
+    e.preventDefault();
+    if (!validateForm()) return;
+    setIsSubmitting(true);
+    const payload = { code: form.code.trim().toUpperCase(), name: form.name.trim(), description: form.description.trim() };
+    try {
+      const updated = await courseService.updateCourse(editTarget.id, payload);
+      setCourses((prev) => prev.map((c) => (c.id === editTarget.id ? { ...c, ...updated } : c)));
+    } catch (err) {
+      if (err instanceof ApiError) {
+        setErrors({ code: err.status === 409 ? 'Ce code cours est déjà utilisé.' : err.message });
+        setIsSubmitting(false);
+        return;
+      }
+      setCourses((prev) => prev.map((c) => (c.id === editTarget.id ? { ...c, ...payload } : c)));
+    }
+    setIsSubmitting(false);
+    setEditTarget(null);
+    setForm(EMPTY_FORM);
+  }
+
+  async function handleDelete() {
+    if (!deleteTarget) return;
+    setIsSubmitting(true);
+    try {
+      await courseService.deleteCourse(deleteTarget.id);
+      setCourses((prev) => prev.filter((c) => c.id !== deleteTarget.id));
+    } catch {
+      setCourses((prev) => prev.filter((c) => c.id !== deleteTarget.id));
+    }
+    setIsSubmitting(false);
+    setDeleteTarget(null);
   }
 
   return (
@@ -180,7 +224,15 @@ export function CoursesPage() {
                   <span className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wider text-gray-400">
                     <FileText size={13} /> Examens
                   </span>
-                  <span className="text-sm font-bold tabular-nums text-navy">{course.examCount ?? 0}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-sm font-bold tabular-nums text-navy">{course.examCount ?? 0}</span>
+                    <button onClick={() => openEditModal(course)} className="rounded-lg border border-gray-200 p-1.5 text-gray-400 hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600 transition-colors cursor-pointer">
+                      <Pencil size={13} />
+                    </button>
+                    <button onClick={() => setDeleteTarget(course)} className="rounded-lg border border-gray-200 p-1.5 text-gray-400 hover:border-red-200 hover:bg-red-50 hover:text-red-500 transition-colors cursor-pointer">
+                      <Trash2 size={13} />
+                    </button>
+                  </div>
                 </div>
               </article>
             </div>
@@ -221,6 +273,52 @@ export function CoursesPage() {
             Créer le cours
           </Button>
         </form>
+      </Modal>
+
+      <Modal open={!!editTarget} onClose={() => setEditTarget(null)} title="Modifier le cours" icon={Pencil} tone="violet">
+        <form onSubmit={handleEdit} className="flex flex-col gap-4" noValidate>
+          <Input
+            id="code"
+            label="Code"
+            placeholder="PROG3"
+            value={form.code}
+            onChange={(e) => setForm({ ...form, code: e.target.value })}
+            error={errors.code}
+            style={{ textTransform: 'uppercase' }}
+            autoFocus
+          />
+          <Input
+            id="name"
+            label="Nom du cours"
+            placeholder="Programmation"
+            value={form.name}
+            onChange={(e) => setForm({ ...form, name: e.target.value })}
+            error={errors.name}
+          />
+          <Textarea
+            id="description"
+            label="Description"
+            placeholder="Description du cours..."
+            rows={4}
+            value={form.description}
+            onChange={(e) => setForm({ ...form, description: e.target.value })}
+            error={errors.description}
+          />
+          <Button type="submit" variant="violet" loading={isSubmitting} className="w-full bg-gradient-to-r from-primary-600 to-primary-700">
+            Enregistrer
+          </Button>
+        </form>
+      </Modal>
+
+      <Modal open={!!deleteTarget} onClose={() => setDeleteTarget(null)} title="Supprimer le cours" icon={Trash2} tone="red">
+        <p className="text-sm text-gray-500">
+          Voulez-vous vraiment supprimer le cours <span className="font-semibold text-gray-900">{deleteTarget?.name}</span> ?
+          Cette action est irréversible.
+        </p>
+        <div className="mt-6 flex justify-end gap-3">
+          <Button variant="ghost" onClick={() => setDeleteTarget(null)}>Annuler</Button>
+          <Button variant="danger" loading={isSubmitting} onClick={handleDelete}>Supprimer</Button>
+        </div>
       </Modal>
     </div>
   );
