@@ -1,34 +1,14 @@
 import { createContext, useState } from 'react';
-import { getToken, setToken, clearToken, parseJwt, isTokenExpired } from '../utils/auth';
-import { authService } from '../api/authService';
 
 export const AuthContext = createContext(null);
 
-function buildUser(token, apiRole) {
-  const p = parseJwt(token);
-  if (!p) return null;
-  return { id: p.sub ?? p.id, email: p.email, role: apiRole ?? p.role };
-}
-
-function readSessionUser() {
-  const token = getToken();
-  if (!token) return null;
-  if (isTokenExpired(token)) { clearToken(); return null; }
-  return buildUser(token);
-}
+const MOCK_USER = { id: '1', email: 'admin@examhub.com', role: 'ADMIN' };
 
 export function AuthProvider({ children }) {
-  const [user, setUser] = useState(readSessionUser);
+  const [user, setUser] = useState(MOCK_USER);
 
-  async function login(email, password) {
-    const data = await authService.login(email, password);
-    setToken(data.token);
-    const builtUser = buildUser(data.token, data.role);
-    setUser(builtUser);
-    return builtUser;
-  }
-
-  function logout() { clearToken(); setUser(null); }
+  async function login() { return user; }
+  function logout() { setUser(null); }
 
   return (
     <AuthContext.Provider value={{ user, isLoading: false, login, logout }}>

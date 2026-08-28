@@ -1,21 +1,15 @@
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../hooks/useAuth';
 
 export function SplashScreenPage() {
   const navigate = useNavigate();
-  const { user } = useAuth();
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (user) {
-        navigate(user.role === 'ADMIN' ? '/admin' : '/student', { replace: true });
-      } else {
-        navigate('/login', { replace: true });
-      }
+      navigate('/admin', { replace: true });
     }, 3000);
     return () => clearTimeout(timer);
-  }, [navigate, user]);
+  }, [navigate]);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-navy">

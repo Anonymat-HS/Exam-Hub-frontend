@@ -1,5 +1,3 @@
-import { getToken, clearToken } from '../utils/auth';
-
 const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080/api';
 
 export class ApiError extends Error {
@@ -7,16 +5,14 @@ export class ApiError extends Error {
 }
 
 async function request(path, { method = 'GET', body, headers = {} } = {}) {
-  const token = getToken();
   const res = await fetch(`${BASE_URL}${path}`, {
     method,
-    headers: { 'Content-Type': 'application/json', ...(token && { Authorization: `Bearer ${token}` }), ...headers },
+    headers: { 'Content-Type': 'application/json', ...headers },
     body: body ? JSON.stringify(body) : undefined,
   });
   if (res.status === 204) return null;
   const data = await res.json().catch(() => null);
   if (!res.ok) {
-    if (res.status === 401) clearToken();
     throw new ApiError(data?.message || `Erreur ${res.status}`, res.status);
   }
   return data;
@@ -29,4 +25,3 @@ export const api = {
   patch: (p, b) => request(p, { method: 'PATCH', body: b }),
   delete: (p) => request(p, { method: 'DELETE' }),
 };
-
