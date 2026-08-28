@@ -38,7 +38,7 @@ function SidebarContent({ user, onLogout, onNavClick }) {
           ))}
         </nav>
       </div>
-      <button onClick={onLogout} className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50">
+      <button onClick={onLogout} className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer">
         <LogOut size={18} className="shrink-0" /><span>Déconnexion</span>
       </button>
     </>
@@ -93,7 +93,7 @@ export function AdminLayout() {
             ))}
           </nav>
         </div>
-        <button onClick={handleLogout} className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-50">
+        <button onClick={handleLogout} className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:text-red-500 hover:bg-red-50 transition-colors cursor-pointer">
           <LogOut size={20} />
         </button>
       </aside>
