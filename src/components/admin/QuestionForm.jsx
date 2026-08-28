@@ -59,7 +59,9 @@ export function QuestionForm({ question, onSubmit, onCancel, loading }) {
     const next = {};
     if (!state.text.trim()) next.text = 'Énoncé requis.';
     const numericPoints = Number(state.points);
-    if (numericPoints !== 0 && numericPoints !== 1) next.points = 'Les points doivent être 0 ou 1.';
+    if (!Number.isInteger(numericPoints) || numericPoints < 1 || numericPoints > 5) {
+      next.points = 'Les points doivent être un entier entre 1 et 5.';
+    }
     const filledChoices = state.choices.filter((c) => c.text.trim());
     if (filledChoices.length < 2) next.choices = 'Au moins 2 choix avec du texte.';
     if (state.choices.length > 6) next.choices = 'Maximum 6 choix.';
@@ -97,22 +99,22 @@ export function QuestionForm({ question, onSubmit, onCancel, loading }) {
 
       <div>
         <label className="mb-1.5 block text-sm font-medium text-gray-700">Points</label>
-        <div className="flex gap-3">
-          {[0, 1].map((v) => (
-            <button
-              key={v}
-              type="button"
-              onClick={() => { setState((prev) => ({ ...prev, points: v })); if (errors.points) setErrors((prev) => ({ ...prev, points: undefined })); }}
-              className={`rounded-lg border-2 px-4 py-2 text-sm font-semibold transition-all ${
-                state.points === v
-                  ? 'border-primary-600 bg-primary-50 text-primary-700'
-                  : 'border-gray-200 text-gray-500 hover:border-gray-300'
-              }`}
-            >
-              {v}
-            </button>
-          ))}
-        </div>
+        <input
+          type="number"
+          min="1"
+          max="5"
+          step="1"
+          value={state.points}
+          onChange={(e) => {
+            const val = e.target.value === '' ? '' : Number(e.target.value);
+            setState((prev) => ({ ...prev, points: val }));
+            if (errors.points) setErrors((prev) => ({ ...prev, points: undefined }));
+          }}
+          className="w-full max-w-xs rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm text-navy placeholder:text-gray-400 focus:border-primary-400 focus:outline-none focus:ring-2 focus:ring-primary-100"
+          placeholder="Points (1-5)"
+          aria-describedby="points-hint"
+        />
+        <p id="points-hint" className="mt-1 text-xs text-gray-400">Nombre de points pour cette question (1 à 5). L'étudiant obtient ces points s'il répond correct, 0 sinon.</p>
         {errors.points && <p className="mt-1 text-xs text-red-500">{errors.points}</p>}
       </div>
 
