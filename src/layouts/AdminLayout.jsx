@@ -25,7 +25,7 @@ function SidebarContent({ user, onLogout, onNavClick }) {
           </div>
           <div className="min-w-0">
             <p className="text-sm font-semibold text-navy">Administrateur</p>
-            <p className="text-xs text-gray-400 truncate max-w-[140px]">{user?.email ?? 'admin'}</p>
+            <p className="text-xs text-gray-400 truncate max-w-[140px]">{`${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim() || user?.email || 'admin'}</p>
           </div>
         </div>
         <p className="mb-2 px-2 text-xs font-semibold uppercase tracking-wide text-gray-400">Navigation</p>
