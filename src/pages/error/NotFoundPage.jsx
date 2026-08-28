@@ -1,11 +1,10 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { FileQuestion, Home } from 'lucide-react';
-import { useAuth } from '../../hooks/useAuth';
 
 export function NotFoundPage() {
   const navigate = useNavigate();
-  const { user } = useAuth();
-  const homePath = user?.role === 'ADMIN' ? '/admin' : user?.role === 'STUDENT' ? '/student' : '/login';
+  const { pathname } = useLocation();
+  const homePath = pathname.startsWith('/student') ? '/student' : pathname.startsWith('/admin') ? '/admin' : '/login';
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4">
