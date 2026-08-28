@@ -9,7 +9,7 @@ import { examService } from '../../api/examService';
 
 
 const QUICK_ACTIONS = [
-  { to: '/admin/students', icon: UserPlus, iconBg: 'bg-primary-50', iconColor: 'text-primary-600', title: 'Ajouter un étudiant', desc: 'Créer un nouveau compte' },
+  { to: '/admin/users', icon: UserPlus, iconBg: 'bg-primary-50', iconColor: 'text-primary-600', title: 'Ajouter un utilisateur', desc: 'Créer un nouveau compte' },
   { to: '/admin/courses', icon: BookPlus, iconBg: 'bg-primary-50', iconColor: 'text-primary-600', title: 'Créer un cours', desc: 'Ajouter une matière' },
   { to: '/admin/exams', icon: FilePlus, iconBg: 'bg-primary-50', iconColor: 'text-primary-600', title: 'Créer un examen', desc: 'Préparer une évaluation' },
   { to: '/admin/results', icon: BarChart2, iconBg: 'bg-green-50', iconColor: 'text-green-600', title: 'Voir les résultats', desc: 'Analyser les performances' },
@@ -39,7 +39,7 @@ export function AdminDashboardPage() {
   if (isLoading) return <Loader />;
 
   const STAT_CARDS = [
-    { icon: Users, iconBg: 'bg-primary-50', iconColor: 'text-primary-600', label: 'Étudiants', value: stats.studentsTotal, sublabel: `${stats.studentsActive} actifs` },
+    { icon: Users, iconBg: 'bg-primary-50', iconColor: 'text-primary-600', label: 'Utilisateurs', value: stats.studentsTotal, sublabel: `${stats.studentsActive} actifs` },
     { icon: BookOpen, iconBg: 'bg-primary-50', iconColor: 'text-primary-600', label: 'Cours', value: stats.coursesTotal, sublabel: 'cours disponibles' },
     { icon: FileText, iconBg: 'bg-primary-50', iconColor: 'text-primary-600', label: 'Examens', value: stats.examsTotal, sublabel: 'examens créés' },
   ];

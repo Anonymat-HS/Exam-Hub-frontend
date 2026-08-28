@@ -41,7 +41,7 @@ function Avatar({ student, list }) {
 
 function SkeletonRows() {
   return (
-    <div className="flex flex-col gap-5 p-6" role="status" aria-label="Chargement des étudiants">
+    <div className="flex flex-col gap-5 p-6" role="status" aria-label="Chargement des utilisateurs">
       {[0, 1, 2, 3].map((i) => (
         <div key={i} className="flex animate-pulse items-center gap-4">
           <span className="h-10 w-10 rounded-full bg-gray-100" />
@@ -150,7 +150,7 @@ export function StudentsPage() {
       setLastAddedId(created?.id ?? null);
       setIsAddOpen(false);
       setCreateForm(EMPTY_CREATE_FORM);
-      toast.success('Étudiant créé');
+      toast.success('Utilisateur créé');
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.status === 409) {
@@ -189,7 +189,7 @@ export function StudentsPage() {
       const updated = await studentService.updateStudent(editTarget.id, payload);
       setStudents((prev) => prev.map((s) => (s.id === editTarget.id ? updated : s)));
       setEditTarget(null);
-      toast.success('Étudiant modifié');
+      toast.success('Utilisateur modifié');
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.status === 409) {
@@ -223,7 +223,7 @@ export function StudentsPage() {
       await studentService.deactivateStudent(confirmTarget.id);
       setStudents((prev) => prev.map((s) => (s.id === confirmTarget.id ? { ...s, active: false } : s)));
       setConfirmTarget(null);
-      toast.success('Étudiant désactivé');
+      toast.success('Utilisateur désactivé');
     } catch (err) {
       const msg = err instanceof ApiError ? err.message : 'Erreur lors de la désactivation.';
       setActionError(msg);
@@ -239,7 +239,7 @@ export function StudentsPage() {
     try {
       await studentService.activateStudent(student.id);
       setStudents((prev) => prev.map((s) => (s.id === student.id ? { ...s, active: true } : s)));
-      toast.success('Étudiant réactivé');
+      toast.success('Utilisateur réactivé');
     } catch (err) {
       const msg = err instanceof ApiError ? err.message : 'Erreur lors de la réactivation.';
       setActionError(msg);
@@ -252,8 +252,8 @@ export function StudentsPage() {
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-primary-600">Administration</p>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-navy">Étudiants</h1>
-          <p className="mt-1 text-sm text-gray-500">Gérez les comptes de vos étudiants.</p>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-navy">Utilisateurs</h1>
+          <p className="mt-1 text-sm text-gray-500">Gérez les comptes de vos utilisateurs.</p>
         </div>
         <Button
           variant="violet"
@@ -272,7 +272,7 @@ export function StudentsPage() {
               placeholder="Rechercher..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              aria-label="Rechercher un étudiant par nom ou email"
+              aria-label="Rechercher un utilisateur par nom ou email"
             />
             {search && (
               <button
@@ -300,7 +300,7 @@ export function StudentsPage() {
           </div>
 
           <span className="sm:ml-auto rounded-full bg-primary-50 px-3 py-1 text-xs font-semibold text-primary-600">
-            {filtered.length === 0 ? '0 étudiant' : filtered.length === 1 ? '1 étudiant' : `${filtered.length} étudiants`}
+            {filtered.length === 0 ? '0 utilisateur' : filtered.length === 1 ? '1 utilisateur' : `${filtered.length} utilisateurs`}
           </span>
         </div>
 
@@ -312,15 +312,15 @@ export function StudentsPage() {
           students.length === 0 ? (
             <EmptyState
               icon={Users}
-              title="Aucun étudiant"
-              description="Ajoutez votre premier étudiant avec le bouton « Ajouter »."
+              title="Aucun utilisateur"
+              description="Ajoutez votre premier utilisateur avec le bouton « Ajouter »."
               bubbleClass="bg-gradient-to-br from-primary-100 to-primary-50 text-primary-500"
             />
           ) : (
             <EmptyState
               icon={UserX}
               title="Aucun résultat"
-              description={`Aucun étudiant ne correspond à votre recherche${statusFilter !== 'all' ? ' et au filtre sélectionné' : ''}.`}
+              description={`Aucun utilisateur ne correspond à votre recherche${statusFilter !== 'all' ? ' et au filtre sélectionné' : ''}.`}
             />
           )
         ) : (
@@ -361,7 +361,7 @@ export function StudentsPage() {
             <table className="hidden md:table w-full text-sm">
               <thead>
                 <tr className="bg-gray-50/60 text-left text-xs uppercase tracking-wider text-gray-400">
-                  <th scope="col" className="px-6 py-3 font-medium">Étudiant</th>
+                  <th scope="col" className="px-6 py-3 font-medium">Utilisateur</th>
                   <th scope="col" className="px-6 py-3 font-medium">Email</th>
                   <th scope="col" className="px-6 py-3 font-medium">Statut</th>
                   <th scope="col" className="px-6 py-3 text-right font-medium">Actions</th>
@@ -430,7 +430,7 @@ export function StudentsPage() {
         )}
       </div>
 
-      <Modal open={isAddOpen} onClose={() => setIsAddOpen(false)} title="Ajouter un étudiant" icon={UserPlus} tone="violet">
+      <Modal open={isAddOpen} onClose={() => setIsAddOpen(false)} title="Ajouter un utilisateur" icon={UserPlus} tone="violet">
         <form onSubmit={handleCreate} className="flex flex-col gap-4" noValidate>
           <Input
             id="create-fullName"
@@ -466,7 +466,7 @@ export function StudentsPage() {
         </form>
       </Modal>
 
-      <Modal open={Boolean(editTarget)} onClose={() => setEditTarget(null)} title="Modifier l'étudiant" icon={Pencil} tone="violet">
+      <Modal open={Boolean(editTarget)} onClose={() => setEditTarget(null)} title="Modifier l'utilisateur" icon={Pencil} tone="violet">
         {editTarget && (
           <form onSubmit={handleEdit} className="flex flex-col gap-4" noValidate>
             <div>
@@ -505,7 +505,7 @@ export function StudentsPage() {
         )}
       </Modal>
 
-      <Modal open={Boolean(confirmTarget)} onClose={() => setConfirmTarget(null)} title="Désactiver cet étudiant ?" icon={UserX} tone="danger">
+      <Modal open={Boolean(confirmTarget)} onClose={() => setConfirmTarget(null)} title="Désactiver cet utilisateur ?" icon={UserX} tone="danger">
         {confirmTarget && (
           <div className="mb-4 flex items-center gap-3 rounded-xl bg-gray-50 px-4 py-3">
             <Avatar student={confirmTarget} list={students} />

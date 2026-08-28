@@ -5,7 +5,7 @@ import { useAuth } from '../hooks/useAuth';
 
 const NAV_ITEMS = [
   { to: '/admin', label: 'Tableau de bord', icon: LayoutGrid, end: true },
-  { to: '/admin/students', label: 'Étudiants', icon: Users },
+  { to: '/admin/users', label: 'Utilisateurs', icon: Users },
   { to: '/admin/courses', label: 'Cours', icon: BookOpen },
   { to: '/admin/exams', label: 'Examens', icon: FileText },
   { to: '/admin/results', label: 'Résultats', icon: BarChart2 },
