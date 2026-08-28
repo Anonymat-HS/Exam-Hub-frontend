@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { SplashScreenPage } from './pages/SplashScreenPage';
 import { LoginPage } from './pages/LoginPage';
 import { AdminLayout } from './layouts/AdminLayout';
@@ -14,6 +14,7 @@ import { ExamStudentPage } from './pages/student/ExamStudentPage';
 import { TakeExamPage } from './pages/student/TakeExamPage';
 import { StudentResultsPage } from './pages/student/StudentResultsPage';
 import { ExamResultPage } from './pages/student/ExamResultPage';
+import { NotFoundPage } from './pages/error/NotFoundPage';
 
 export default function App() {
   return (
@@ -40,7 +41,7 @@ export default function App() {
           <Route path="/student/results/:examId" element={<ExamResultPage />} />
         </Route>
 
-        <Route path="*" element={<Navigate to="/admin" replace />} />
+        <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
   );

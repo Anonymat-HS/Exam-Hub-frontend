@@ -2,34 +2,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ChevronLeft, XCircle, CheckCircle } from 'lucide-react';
 import { ExamResultSkeleton } from '../../components/student/ExamResultSkeleton';
+import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { myExamService } from '../../api/myExamService';
-
-const MOCK_RESULT_DATA = {
-  examTitle: 'React Fundamentals',
-  score: 10,
-  maxScore: 20,
-  submittedAt: '2026-08-22T18:18:00',
-  corrections: [
-    {
-      questionId: 101,
-      questionText: 'Quel Hook permet de gérer un état local ?',
-      isCorrect: false,
-      chosenChoiceId: 'c',
-      correctChoiceId: 'b',
-      pointsEarned: 0,
-      pointsPossible: 1,
-    },
-    {
-      questionId: 102,
-      questionText: "Quelle syntaxe permet d'afficher une variable dans JSX ?",
-      isCorrect: true,
-      chosenChoiceId: 'c',
-      correctChoiceId: 'c',
-      pointsEarned: 1,
-      pointsPossible: 1,
-    },
-  ],
-};
 
 export function ExamResultPage() {
   const { examId } = useParams();
@@ -37,15 +11,17 @@ export function ExamResultPage() {
 
   const [result, setResult] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchResult = async () => {
       try {
+        setError(null);
+        setIsLoading(true);
         const data = await myExamService.getExamResult(examId);
         setResult(data);
-      } catch (error) {
-        console.error('Erreur API (données de simulation utilisées) :', error.message);
-        setResult(MOCK_RESULT_DATA);
+      } catch (err) {
+        setError(err.message || 'Une erreur est survenue lors du chargement du résultat.');
       } finally {
         setIsLoading(false);
       }
@@ -60,6 +36,14 @@ export function ExamResultPage() {
 
   if (isLoading) {
     return <ExamResultSkeleton />;
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-5xl mx-auto w-full pt-8">
+        <ErrorMessage message={error} onRetry={() => { setError(null); setIsLoading(true); }} />
+      </div>
+    );
   }
 
   const isValidated = (result?.score ?? 0) >= (result?.maxScore ?? result?.corrections?.reduce((s, c) => s + c.pointsPossible, 0) ?? 20) / 2;

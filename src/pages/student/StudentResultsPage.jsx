@@ -2,41 +2,25 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Trophy, ChevronRight } from 'lucide-react';
 import { StudentResultsSkeleton } from '../../components/student/StudentResultsSkeleton';
+import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { myResultService } from '../../api/myResultService';
 import { formatDateTime } from '../../utils/formatters';
-
-const MOCK_RESULTS = [
-  {
-    id: 1,
-    examId: '1',
-    examTitle: 'React Fundamentals',
-    submittedAt: '2026-08-22T18:18:00',
-    score: 6.7,
-    maxScore: 20,
-  },
-  {
-    id: 2,
-    examId: '2',
-    examTitle: 'JavaScript avancé',
-    submittedAt: '2026-08-15T14:30:00',
-    score: 12.0,
-    maxScore: 20,
-  },
-];
 
 export function StudentResultsPage() {
   const navigate = useNavigate();
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchResults = async () => {
       try {
+        setError(null);
+        setIsLoading(true);
         const data = await myResultService.getResults();
         setResults(data);
-      } catch (error) {
-        console.error('Erreur API (passage aux données locales) :', error.message);
-        setResults(MOCK_RESULTS);
+      } catch (err) {
+        setError(err.message || 'Une erreur est survenue lors du chargement des résultats.');
       } finally {
         setIsLoading(false);
       }
@@ -70,6 +54,8 @@ export function StudentResultsPage() {
       <div className="mt-8 space-y-4">
         {isLoading ? (
           <StudentResultsSkeleton />
+      ) : error ? (
+        <ErrorMessage message={error} onRetry={() => { setError(null); setIsLoading(true); }} />
         ) : results.length === 0 ? (
           <div className="rounded-3xl bg-white p-8 text-center text-gray-500 shadow-sm border border-gray-100">
             Aucun résultat disponible pour le moment.

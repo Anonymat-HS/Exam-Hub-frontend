@@ -3,34 +3,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
 import { TakeExamSkeleton } from '../../components/student/TakeExamSkeleton';
+import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { myExamService } from '../../api/myExamService';
-
-const MOCK_EXAM_DATA = {
-  id: 1,
-  title: 'React Fundamentals',
-  questions: [
-    {
-      id: 101,
-      text: 'Quel Hook permet de gérer un état local ?',
-      points: 1,
-      choices: [
-        { id: 'a', text: 'useEffect' },
-        { id: 'b', text: 'useState' },
-        { id: 'c', text: 'useMemo' },
-      ],
-    },
-    {
-      id: 102,
-      text: "Quelle syntaxe permet d'afficher une variable dans JSX ?",
-      points: 1,
-      choices: [
-        { id: 'a', text: '{{ variable }}' },
-        { id: 'b', text: '[[ variable ]]' },
-        { id: 'c', text: '{variable}' },
-      ],
-    },
-  ],
-};
 
 const CHOICE_LABELS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
@@ -43,15 +17,18 @@ export function TakeExamPage() {
   const [isLoading, setIsLoading] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showSubmitModal, setShowSubmitModal] = useState(false);
+  const [error, setError] = useState(null);
+  const [submitError, setSubmitError] = useState(null);
 
   useEffect(() => {
     const fetchExam = async () => {
       try {
+        setError(null);
+        setIsLoading(true);
         const data = await myExamService.getExamDetail(examId);
         setExam(data);
-      } catch (error) {
-        console.error('Erreur API (fallback données de simulation) :', error.message);
-        setExam(MOCK_EXAM_DATA);
+      } catch (err) {
+        setError(err.message || 'Une erreur est survenue lors du chargement de l\'examen.');
       } finally {
         setIsLoading(false);
       }
@@ -77,6 +54,7 @@ export function TakeExamPage() {
   const handleConfirmSubmit = async () => {
     setShowSubmitModal(false);
     setIsSubmitting(true);
+    setSubmitError(null);
 
     const answersArray = (exam?.questions || []).map((q) => ({
       questionId: q.id,
@@ -87,14 +65,22 @@ export function TakeExamPage() {
     try {
       await myExamService.submitExam(resolvedExamId, answersArray);
       navigate(`/student/results/${resolvedExamId}`);
-    } catch (error) {
-      console.error('Erreur soumission :', error.message);
-      navigate('/student/results');
+    } catch (err) {
+      setSubmitError(err.message || 'Erreur lors de la soumission de l\'examen.');
+      setIsSubmitting(false);
     }
   };
 
   if (isLoading) {
     return <TakeExamSkeleton />;
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-4xl mx-auto w-full pt-8">
+        <ErrorMessage message={error} onRetry={() => { setError(null); setIsLoading(true); }} />
+      </div>
+    );
   }
 
   return (
@@ -218,6 +204,12 @@ export function TakeExamPage() {
           )}
         </button>
       </div>
+
+      {submitError && (
+        <div className="mt-6">
+          <ErrorMessage message={submitError} onRetry={handleConfirmSubmit} />
+        </div>
+      )}
 
       {showSubmitModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-900/40 backdrop-blur-sm animate-fade-in">
