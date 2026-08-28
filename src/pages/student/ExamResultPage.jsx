@@ -166,12 +166,12 @@ export function ExamResultPage() {
                     }`}
                   >
                     <p className="text-xs font-medium text-gray-400">Votre réponse</p>
-                    <p className="mt-1 text-sm font-semibold">{q.chosenChoiceId ? `Choix ${q.chosenChoiceId}` : 'Pas de réponse'}</p>
+                    <p className="mt-1 text-sm font-semibold">{q.chosenChoiceText ?? (q.chosenChoiceId ? `Choix ${q.chosenChoiceId}` : 'Pas de réponse')}</p>
                   </div>
 
                   <div className="rounded-2xl bg-primary-50/50 border border-primary-100/60 p-4 text-primary-900">
                     <p className="text-xs font-medium text-primary-500">Bonne réponse</p>
-                    <p className="mt-1 text-sm font-semibold">Choix {q.correctChoiceId}</p>
+                    <p className="mt-1 text-sm font-semibold">{q.correctChoiceText ?? `Choix ${q.correctChoiceId}`}</p>
                   </div>
                 </div>
 
