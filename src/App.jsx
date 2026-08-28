@@ -29,7 +29,7 @@ export default function App() {
           <Route element={<RoleRoute roles={['admin']} />}>
             <Route element={<AdminLayout />}>
               <Route path="/admin" element={<AdminDashboardPage />} />
-              <Route path="/admin/students" element={<StudentsPage />} />
+              <Route path="/admin/users" element={<StudentsPage />} />
               <Route path="/admin/courses" element={<CoursesPage />} />
               <Route path="/admin/exams" element={<ExamsPage />} />
               <Route path="/admin/exams/:examId/questions" element={<QuestionsPage />} />
