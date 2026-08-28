@@ -5,6 +5,7 @@ import { ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
 import { TakeExamSkeleton } from '../../components/student/TakeExamSkeleton';
 import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { myExamService } from '../../api/myExamService';
+import { toast } from 'sonner';
 
 const CHOICE_LABELS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
@@ -64,9 +65,11 @@ export function TakeExamPage() {
     const resolvedExamId = exam?.id || examId;
     try {
       await myExamService.submitExam(resolvedExamId, answersArray);
+      toast.success('Examen soumis avec succès');
       navigate(`/student/results/${resolvedExamId}`);
     } catch (err) {
       setSubmitError(err.message || 'Erreur lors de la soumission de l\'examen.');
+      toast.error(err.message);
       setIsSubmitting(false);
     }
   };

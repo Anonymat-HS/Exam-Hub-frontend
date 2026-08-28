@@ -10,6 +10,7 @@ import { ExamForm } from '../../components/admin/ExamForm';
 import { examService } from '../../api/examService';
 import { courseService } from '../../api/courseService';
 import { ApiError } from '../../api/api';
+import { toast } from 'sonner';
 import { formatDateTime } from '../../utils/formatters';
 
 
@@ -89,8 +90,10 @@ export function ExamsPage() {
       const created = await examService.createExam(payload);
       setExams((prev) => [created, ...prev]);
       setIsCreateOpen(false);
-    } catch {
+      toast.success('Examen créé');
+    } catch (err) {
       setActionError('Erreur lors de la création.');
+      toast.error(err.message);
     }
   }
 
@@ -102,8 +105,10 @@ export function ExamsPage() {
       const updated = await examService.updateExam(editTarget.id, payload);
       setExams((prev) => prev.map((e) => (e.id === editTarget.id ? updated : e)));
       setEditTarget(null);
-    } catch {
+      toast.success('Examen modifié');
+    } catch (err) {
       setExams((prev) => prev.map((e) => (e.id === editTarget.id ? { ...e, ...payload } : e)));
+      toast.error(err.message);
       setEditTarget(null);
     }
   }
@@ -116,12 +121,14 @@ export function ExamsPage() {
       await examService.deleteExam(deleteTarget.id);
       setExams((prev) => prev.filter((e) => e.id !== deleteTarget.id));
       setDeleteTarget(null);
+      toast.success('Examen supprimé');
     } catch (err) {
       if (err instanceof ApiError) {
         setActionError(err.message);
       } else {
         setActionError('Erreur lors de la suppression.');
       }
+      toast.error(err.message);
       setDeleteTarget(null);
     } finally {
       setIsDeleting(false);

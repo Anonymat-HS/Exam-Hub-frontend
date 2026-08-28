@@ -11,6 +11,7 @@ import { questionService } from '../../api/questionService';
 import { resultService } from '../../api/resultService';
 import { courseService } from '../../api/courseService';
 import { ApiError } from '../../api/api';
+import { toast } from 'sonner';
 import { formatDateTime } from '../../utils/formatters';
 
 
@@ -69,8 +70,10 @@ export function QuestionsPage() {
       const created = await questionService.createQuestion(examId, payload);
       setQuestions((prev) => [...prev, created]);
       setAddTarget(null);
-    } catch {
+      toast.success('Question créée');
+    } catch (err) {
       setActionError('Erreur lors de la création.');
+      toast.error(err.message);
     }
   }
 
@@ -82,8 +85,10 @@ export function QuestionsPage() {
       const updated = await questionService.updateQuestion(editTarget.id, payload);
       setQuestions((prev) => prev.map((q) => (q.id === editTarget.id ? updated : q)));
       setEditTarget(null);
-    } catch {
+      toast.success('Question modifiée');
+    } catch (err) {
       setQuestions((prev) => prev.map((q) => (q.id === editTarget.id ? { ...q, ...payload } : q)));
+      toast.error(err.message);
       setEditTarget(null);
     }
   }
@@ -96,12 +101,14 @@ export function QuestionsPage() {
       await questionService.deleteQuestion(deleteTarget.id);
       setQuestions((prev) => prev.filter((q) => q.id !== deleteTarget.id));
       setDeleteTarget(null);
+      toast.success('Question supprimée');
     } catch (err) {
       if (err instanceof ApiError) {
         setActionError(err.message);
       } else {
         setActionError('Erreur lors de la suppression.');
       }
+      toast.error(err.message);
       setDeleteTarget(null);
     } finally {
       setIsSubmitting(false);

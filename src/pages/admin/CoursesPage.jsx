@@ -9,6 +9,7 @@ import { EmptyState } from '../../components/common/EmptyState';
 import { courseService } from '../../api/courseService';
 import { examService } from '../../api/examService';
 import { ApiError } from '../../api/api';
+import { toast } from 'sonner';
 
 
 const EMPTY_FORM = { code: '', name: '', description: '' };
@@ -105,9 +106,11 @@ export function CoursesPage() {
       const created = await courseService.createCourse(payload);
       setCourses((prev) => [{ ...created, examCount: 0 }, ...prev]);
       setLastAddedId(created?.id ?? null);
+      toast.success('Cours créé');
     } catch (err) {
       if (err instanceof ApiError) {
         setErrors({ code: err.status === 409 ? 'Ce code cours est déjà utilisé.' : err.message });
+        toast.error(err.message);
         setIsSubmitting(false);
         return;
       }
@@ -135,9 +138,11 @@ export function CoursesPage() {
     try {
       const updated = await courseService.updateCourse(editTarget.id, payload);
       setCourses((prev) => prev.map((c) => (c.id === editTarget.id ? { ...c, ...updated } : c)));
+      toast.success('Cours modifié');
     } catch (err) {
       if (err instanceof ApiError) {
         setErrors({ code: err.status === 409 ? 'Ce code cours est déjà utilisé.' : err.message });
+        toast.error(err.message);
         setIsSubmitting(false);
         return;
       }
@@ -154,7 +159,9 @@ export function CoursesPage() {
     try {
       await courseService.deleteCourse(deleteTarget.id);
       setCourses((prev) => prev.filter((c) => c.id !== deleteTarget.id));
-    } catch {
+      toast.success('Cours supprimé');
+    } catch (err) {
+      if (err instanceof ApiError) toast.error(err.message);
       setCourses((prev) => prev.filter((c) => c.id !== deleteTarget.id));
     }
     setIsSubmitting(false);

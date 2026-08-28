@@ -7,6 +7,7 @@ import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { EmptyState } from '../../components/common/EmptyState';
 import { studentService } from '../../api/studentService';
 import { ApiError } from '../../api/api';
+import { toast } from 'sonner';
 
 
 const EMPTY_CREATE_FORM = { fullName: '', email: '', password: '' };
@@ -149,6 +150,7 @@ export function StudentsPage() {
       setLastAddedId(created?.id ?? null);
       setIsAddOpen(false);
       setCreateForm(EMPTY_CREATE_FORM);
+      toast.success('Étudiant créé');
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.status === 409) {
@@ -158,6 +160,7 @@ export function StudentsPage() {
         } else {
           setActionError(err.message);
         }
+        toast.error(err.message);
         setIsCreating(false);
         return;
       }
@@ -179,6 +182,7 @@ export function StudentsPage() {
       const updated = await studentService.updateStudent(editTarget.id, payload);
       setStudents((prev) => prev.map((s) => (s.id === editTarget.id ? updated : s)));
       setEditTarget(null);
+      toast.success('Étudiant modifié');
     } catch (err) {
       if (err instanceof ApiError) {
         if (err.status === 409) {
@@ -188,6 +192,7 @@ export function StudentsPage() {
         } else {
           setActionError(err.message);
         }
+        toast.error(err.message);
         setIsEditing(false);
         return;
       }
@@ -204,9 +209,11 @@ export function StudentsPage() {
       await studentService.deactivateStudent(confirmTarget.id);
       setStudents((prev) => prev.map((s) => (s.id === confirmTarget.id ? { ...s, active: false } : s)));
       setConfirmTarget(null);
+      toast.success('Étudiant désactivé');
     } catch (err) {
       const msg = err instanceof ApiError ? err.message : 'Erreur lors de la désactivation.';
       setActionError(msg);
+      toast.error(msg);
       setConfirmTarget(null);
     } finally {
       setIsToggling(false);
@@ -218,9 +225,11 @@ export function StudentsPage() {
     try {
       await studentService.activateStudent(student.id);
       setStudents((prev) => prev.map((s) => (s.id === student.id ? { ...s, active: true } : s)));
+      toast.success('Étudiant réactivé');
     } catch (err) {
       const msg = err instanceof ApiError ? err.message : 'Erreur lors de la réactivation.';
       setActionError(msg);
+      toast.error(msg);
     }
   }
 
