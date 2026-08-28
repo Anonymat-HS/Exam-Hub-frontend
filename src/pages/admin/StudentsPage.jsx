@@ -34,7 +34,7 @@ function getAvatarClass(student, list) {
 function Avatar({ student, list }) {
   return (
     <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sm font-bold shadow-sm ring-2 ring-white ${getAvatarClass(student, list)}`}>
-      {`${student.firstName[0]}${student.lastName[0]}`.toUpperCase()}
+      {`${student.firstName[0] ?? ''}${student.lastName?.[0] ?? ''}`.toUpperCase()}
     </span>
   );
 }
@@ -116,11 +116,11 @@ export function StudentsPage() {
   function validateCreateForm() {
     const next = {};
     const words = createForm.fullName.trim().split(/\s+/).filter(Boolean);
-    if (words.length < 2) next.fullName = 'Entrez le prénom et le nom.';
+    if (words.length === 0) next.fullName = 'Le nom est obligatoire.';
     if (!/^\S+@\S+\.\S+$/.test(createForm.email.trim())) {
       next.email = 'Adresse email invalide.';
     }
-    if (createForm.password.length < 6) next.password = 'Mot de passe : 6 caractères minimum.';
+    if (createForm.password.length < 8) next.password = 'Mot de passe : 8 caractères minimum.';
     setCreateErrors(next);
     return Object.keys(next).length === 0;
   }
@@ -130,8 +130,8 @@ export function StudentsPage() {
     if (!/^\S+@\S+\.\S+$/.test(editForm.email.trim())) {
       next.email = 'Adresse email invalide.';
     }
-    if (editForm.password && editForm.password.length < 6) {
-      next.password = '6 caractères minimum.';
+    if (editForm.password && editForm.password.length < 8) {
+      next.password = '8 caractères minimum.';
     }
     setEditErrors(next);
     return Object.keys(next).length === 0;
@@ -156,7 +156,14 @@ export function StudentsPage() {
         if (err.status === 409) {
           setCreateErrors({ email: 'Cet email est déjà utilisé.' });
         } else if (err.status === 400) {
-          setCreateErrors({ fullName: err.message });
+          const msg = err.message || '';
+          if (/password/i.test(msg)) {
+            setCreateErrors({ password: msg });
+          } else if (/email/i.test(msg)) {
+            setCreateErrors({ email: msg });
+          } else {
+            setCreateErrors({ fullName: msg });
+          }
         } else {
           setActionError(err.message);
         }
@@ -188,7 +195,14 @@ export function StudentsPage() {
         if (err.status === 409) {
           setEditErrors({ email: 'Cet email est déjà utilisé.' });
         } else if (err.status === 400) {
-          setEditErrors({ firstName: err.message });
+          const msg = err.message || '';
+          if (/password/i.test(msg)) {
+            setEditErrors({ password: msg });
+          } else if (/email/i.test(msg)) {
+            setEditErrors({ email: msg });
+          } else {
+            setActionError(msg);
+          }
         } else {
           setActionError(err.message);
         }
