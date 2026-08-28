@@ -5,7 +5,6 @@ import { StatCard } from '../../components/common/StatCard';
 import { EmptyState } from '../../components/common/EmptyState';
 import { examService } from '../../api/examService';
 import { resultService } from '../../api/resultService';
-import { courseService } from '../../api/courseService';
 import { formatDateTime } from '../../utils/formatters';
 
 
@@ -26,25 +25,17 @@ export function ExamResultsPage() {
   const { examId } = useParams();
   const [exam, setExam] = useState(null);
   const [resultsData, setResultsData] = useState(null);
-  const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     Promise.all([
       examService.getExamDetail(examId),
       resultService.getExamResults(examId),
-      courseService.getCourses(),
-    ]).then(([examData, resultsData, coursesData]) => {
+    ]).then(([examData, resultsData]) => {
       setExam(examData);
       setResultsData(resultsData);
-      if (Array.isArray(coursesData)) setCourses(coursesData);
     }).catch(() => {}).finally(() => setIsLoading(false));
   }, [examId]);
-
-  function getCourseName(courseId) {
-    const c = courses.find((c) => c.id === courseId);
-    return c ? `${c.code} — ${c.name}` : '—';
-  }
 
   function getMaxScore() {
     return resultsData?.totalPoints ?? exam?.totalPoints ?? null;
@@ -79,7 +70,7 @@ export function ExamResultsPage() {
       <div className="mb-6">
         <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-primary-600">Résultats</p>
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-navy">{exam?.title ?? 'Examen'}</h1>
-        {exam && <p className="mt-1 text-gray-500">{getCourseName(exam.courseId)}</p>}
+        {exam && <p className="mt-1 text-gray-500">{exam.course ? `${exam.course.code} — ${exam.course.name}` : '—'}</p>}
         {exam && (
           <p className="mt-1 text-sm text-gray-400">
             {formatDateTime(exam.startDate)} → {formatDateTime(exam.endDate)}

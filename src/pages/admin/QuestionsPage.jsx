@@ -9,7 +9,6 @@ import { QuestionForm } from '../../components/admin/QuestionForm';
 import { examService } from '../../api/examService';
 import { questionService } from '../../api/questionService';
 import { resultService } from '../../api/resultService';
-import { courseService } from '../../api/courseService';
 import { ApiError } from '../../api/api';
 import { toast } from 'sonner';
 import { formatDateTime } from '../../utils/formatters';
@@ -34,7 +33,6 @@ export function QuestionsPage() {
   const { examId } = useParams();
   const [exam, setExam] = useState(null);
   const [questions, setQuestions] = useState([]);
-  const [courses, setCourses] = useState([]);
   const [isLocked, setIsLocked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [actionError, setActionError] = useState('');
@@ -49,19 +47,12 @@ export function QuestionsPage() {
       examService.getExamDetail(examId),
       questionService.getQuestions(examId),
       resultService.getExamResults(examId),
-      courseService.getCourses(),
-    ]).then(([examData, questionsData, resultsData, coursesData]) => {
+    ]).then(([examData, questionsData, resultsData]) => {
       setExam(examData);
       if (Array.isArray(questionsData)) setQuestions(questionsData);
       if (resultsData) setIsLocked((resultsData.totalAttempts ?? 0) > 0);
-      if (Array.isArray(coursesData)) setCourses(coursesData);
     }).catch(() => {}).finally(() => setIsLoading(false));
   }, [examId]);
-
-  function getCourseName(courseId) {
-    const c = courses.find((c) => c.id === courseId);
-    return c ? `${c.code} — ${c.name}` : '—';
-  }
 
   async function handleAdd(payload) {
     setActionError('');
@@ -137,7 +128,7 @@ export function QuestionsPage() {
 
       <div className="mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-navy">{exam.title}</h1>
-        <p className="mt-1 text-gray-500">{getCourseName(exam.courseId)}</p>
+        <p className="mt-1 text-gray-500">{exam.course ? `${exam.course.code} — ${exam.course.name}` : '—'}</p>
         <p className="mt-1 text-sm text-gray-400">
           {formatDateTime(exam.startDate)} → {formatDateTime(exam.endDate)}
         </p>
