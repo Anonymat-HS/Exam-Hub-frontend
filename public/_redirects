@@ -1,0 +1,5 @@
+# Netlify — redirections SPA (fallback vers index.html)
+/*    /index.html   200
+
+# Pas de cache pour le service worker éventuel
+/sw.js   200
