@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 import { X } from 'lucide-react';
 
 const TONES = {
@@ -8,12 +9,16 @@ const TONES = {
 
 export function Modal({ open, onClose, title, icon: Icon, tone = 'violet', children }) {
   const contentRef = useRef(null);
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
 
   useEffect(() => {
     if (!open) return undefined;
     const onKeyDown = (e) => {
       if (e.key === 'Escape') {
-        onClose();
+        onCloseRef.current();
         return;
       }
       if (e.key === 'Tab' && contentRef.current) {
@@ -35,24 +40,23 @@ export function Modal({ open, onClose, title, icon: Icon, tone = 'violet', child
     document.addEventListener('keydown', onKeyDown);
     document.body.style.overflow = 'hidden';
     const timer = setTimeout(() => {
-      const first = contentRef.current?.querySelector(
-        'a[href], button:not([disabled]), textarea, input, select, [tabindex]:not([tabindex="-1"])'
-      );
-      if (first) first.focus();
+      const field = contentRef.current?.querySelector('input:not([type="hidden"]), textarea, select');
+      const fallback = contentRef.current?.querySelector('button:not([disabled])');
+      (field ?? fallback)?.focus();
     }, 50);
     return () => {
       document.removeEventListener('keydown', onKeyDown);
       document.body.style.overflow = '';
       clearTimeout(timer);
     };
-  }, [open, onClose]);
+  }, [open]);
 
   if (!open) return null;
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-end justify-center sm:items-center sm:p-4" role="dialog" aria-modal="true">
-      <div className="animate-fade-in absolute inset-0 bg-gray-900/50 backdrop-blur-sm" onClick={onClose} />
-      <div ref={contentRef} className="animate-scale-in relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-t-2xl sm:rounded-2xl bg-white p-5 sm:p-6 shadow-xl">
+  return createPortal(
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4" role="dialog" aria-modal="true">
+      <div className="absolute inset-0 backdrop-blur-sm" onClick={onClose} aria-hidden="true" />
+      <div ref={contentRef} className="animate-scale-in relative w-full max-w-md max-h-[90vh] overflow-y-auto rounded-2xl bg-white p-5 sm:p-6 shadow-xl">
         <button
           onClick={onClose}
           aria-label="Fermer"
@@ -68,6 +72,7 @@ export function Modal({ open, onClose, title, icon: Icon, tone = 'violet', child
         <h2 className="mb-4 pr-8 text-lg font-bold text-navy">{title}</h2>
         {children}
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 }
