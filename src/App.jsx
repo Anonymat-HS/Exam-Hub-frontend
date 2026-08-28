@@ -34,7 +34,6 @@ export default function App() {
               <Route path="/admin/exams" element={<ExamsPage />} />
               <Route path="/admin/exams/:examId/questions" element={<QuestionsPage />} />
               <Route path="/admin/exams/:examId/results" element={<ExamResultsPage />} />
-              <Route path="/admin/results" element={<ExamResultsPage />} />
             </Route>
           </Route>
 

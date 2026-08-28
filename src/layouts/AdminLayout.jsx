@@ -8,7 +8,6 @@ const NAV_ITEMS = [
   { to: '/admin/users', label: 'Utilisateurs', icon: Users },
   { to: '/admin/courses', label: 'Cours', icon: BookOpen },
   { to: '/admin/exams', label: 'Examens', icon: FileText },
-  { to: '/admin/results', label: 'Résultats', icon: BarChart2 },
 ];
 
 function SidebarContent({ user, onLogout, onNavClick }) {
