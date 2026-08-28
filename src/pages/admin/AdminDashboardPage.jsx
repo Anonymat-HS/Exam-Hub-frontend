@@ -29,7 +29,7 @@ export function AdminDashboardPage() {
     ]).then(([students, courses, exams]) => {
       setStats({
         studentsTotal: Array.isArray(students) ? students.length : 0,
-        studentsActive: Array.isArray(students) ? students.filter((s) => s.active).length : 0,
+        studentsActive: Array.isArray(students) ? students.filter((s) => s.isActive).length : 0,
         coursesTotal: Array.isArray(courses) ? courses.length : 0,
         examsTotal: Array.isArray(exams) ? exams.length : 0,
       });
