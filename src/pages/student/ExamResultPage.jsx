@@ -46,7 +46,9 @@ export function ExamResultPage() {
     );
   }
 
-  const isValidated = (result?.score ?? 0) >= (result?.maxScore ?? result?.corrections?.reduce((s, c) => s + c.pointsPossible, 0) ?? 20) / 2;
+  const totalPossible = result?.corrections?.reduce((s, c) => s + c.pointsPossible, 0);
+  const maxScore = result?.maxScore ?? (totalPossible || 20);
+  const isValidated = maxScore > 0 && (result?.score ?? 0) >= maxScore / 2;
 
   return (
     <div className="w-full pb-16">
@@ -87,7 +89,7 @@ export function ExamResultPage() {
             <span className={`text-6xl font-black tracking-tight ${isValidated ? 'text-emerald-500' : 'text-red-500'}`}>
               {result?.score ?? 0}
             </span>
-            <span className={`text-2xl font-bold ${isValidated ? 'text-emerald-400' : 'text-red-400'}`}>/{result?.maxScore ?? 20}</span>
+            <span className={`text-2xl font-bold ${isValidated ? 'text-emerald-400' : 'text-red-400'}`}>/{maxScore}</span>
           </div>
 
           <div className={`flex items-center gap-2 font-bold text-sm ${isValidated ? 'text-emerald-600' : 'text-red-600'}`}>
@@ -112,7 +114,7 @@ export function ExamResultPage() {
             <div className="rounded-2xl bg-gray-50/80 p-5 border border-gray-100/50">
               <p className="text-xs font-semibold text-gray-400">Points obtenus</p>
               <p className="mt-2 text-2xl font-black text-gray-900">
-                {result?.corrections?.reduce((sum, c) => sum + (c.pointsEarned || 0), 0) ?? 0}/{result?.maxScore ?? 0}
+                {result?.corrections?.reduce((sum, c) => sum + (c.pointsEarned || 0), 0) ?? 0}/{maxScore}
               </p>
             </div>
 
