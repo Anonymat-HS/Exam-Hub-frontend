@@ -45,7 +45,7 @@ export function AdminDashboardPage() {
   ];
 
   return (
-    <div>
+    <div className="animate-fade-in-up">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-primary-600">Administration</p>

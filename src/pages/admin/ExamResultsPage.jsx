@@ -68,7 +68,7 @@ export function ExamResultsPage() {
   const totalAttempts = resultsData?.totalAttempts ?? 0;
 
   return (
-    <div>
+    <div className="animate-fade-in-up">
       <Link
         to="/admin/exams"
         className="mb-4 inline-flex items-center gap-1.5 text-sm font-medium text-gray-500 transition-colors hover:text-primary-600"

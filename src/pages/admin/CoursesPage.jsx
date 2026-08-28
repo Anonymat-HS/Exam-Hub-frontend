@@ -169,7 +169,7 @@ export function CoursesPage() {
   }
 
   return (
-    <div>
+    <div className="animate-fade-in-up">
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
           <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-primary-600">Administration</p>
@@ -206,8 +206,8 @@ export function CoursesPage() {
         </EmptyState>
       ) : (
         <div className="mt-6 grid grid-cols-1 gap-4 md:grid-cols-2">
-          {courses.map((course, index) => (
-            <div key={course.id} className="animate-fade-in-up" style={{ animationDelay: `${index * 40}ms` }}>
+          {courses.map((course) => (
+            <div key={course.id}>
               <article
                 className={`flex h-full flex-col rounded-2xl bg-white p-6 shadow-sm ring-1 ring-gray-100/60 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md hover:ring-primary-200 ${
                   course.id === lastAddedId ? 'row-highlight' : ''
