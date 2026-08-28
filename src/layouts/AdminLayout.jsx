@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutGrid, Users, BookOpen, FileText, BarChart2, LogOut, Menu, X } from 'lucide-react';
+import { LayoutGrid, Users, BookOpen, FileText, LogOut, Menu, X } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 const NAV_ITEMS = [
