@@ -15,7 +15,7 @@ export function LoginPage() {
 
   useEffect(() => {
     if (user) {
-      navigate(user.role === 'ADMIN' ? '/admin' : '/student/exams', { replace: true });
+      navigate(user.role === 'admin' ? '/admin' : '/student/exams', { replace: true });
     }
   }, [user, navigate]);
 
@@ -28,7 +28,7 @@ export function LoginPage() {
 
     try {
       const loggedUser = await login(email, password);
-      navigate(loggedUser.role === 'ADMIN' ? '/admin' : '/student/exams', { replace: true });
+      navigate(loggedUser.role === 'admin' ? '/admin' : '/student/exams', { replace: true });
     } catch (err) {
       setError(err instanceof ApiError ? err.message : 'Identifiants incorrects. Veuillez réessayer.');
     } finally {
