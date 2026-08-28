@@ -90,7 +90,7 @@ export function CoursesPage() {
     const next = {};
     const code = form.code.trim().toUpperCase();
     if (!code) next.code = 'Le code est obligatoire.';
-    else if (courses.some((c) => c.code.toUpperCase() === code)) next.code = 'Ce code cours est déjà utilisé.';
+    else if (courses.some((c) => c.id !== editTarget?.id && c.code.toUpperCase() === code)) next.code = 'Ce code cours est déjà utilisé.';
     if (!form.name.trim()) next.name = 'Le nom du cours est obligatoire.';
     if (!form.description.trim()) next.description = 'La description est obligatoire.';
     setErrors(next);
