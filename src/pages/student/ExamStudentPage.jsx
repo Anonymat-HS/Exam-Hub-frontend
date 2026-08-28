@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Loader2 } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 import { ExamCard } from '../../components/common/ExamCard';
+import { ExamCardSkeleton } from '../../components/student/ExamCardSkeleton';
 import { myExamService } from '../../api/myExamService';
 
 const MOCK_EXAMS = [
@@ -75,9 +76,7 @@ export function ExamStudentPage() {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-12 text-primary-600">
-          <Loader2 className="animate-spin" size={32} />
-        </div>
+        <ExamCardSkeleton />
       ) : exams.length === 0 ? (
         <div className="mt-8 rounded-3xl bg-white p-8 text-center text-gray-500 shadow-sm border border-gray-100">
           Aucun examen disponible pour le moment.

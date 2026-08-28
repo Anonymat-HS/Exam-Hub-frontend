@@ -82,9 +82,10 @@ export function StudentLayout() {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={({ isActive }) => `
                     relative flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors
+                    before:absolute before:left-0 before:h-5 before:w-1 before:rounded-full before:bg-primary-600 before:transition-opacity
                     ${isActive
-                      ? 'bg-primary-50 text-primary-600 font-semibold'
-                      : 'text-gray-500 hover:bg-gray-50'
+                      ? 'bg-primary-50 text-primary-600 before:opacity-100'
+                      : 'text-gray-600 hover:bg-gray-50 before:opacity-0'
                     }
                   `}
                 >

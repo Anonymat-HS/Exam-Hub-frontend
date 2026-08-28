@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { ChevronLeft, XCircle, CheckCircle, Loader2 } from 'lucide-react';
+import { ChevronLeft, XCircle, CheckCircle } from 'lucide-react';
+import { ExamResultSkeleton } from '../../components/student/ExamResultSkeleton';
 import { myExamService } from '../../api/myExamService';
 
 const MOCK_RESULT_DATA = {
@@ -58,11 +59,7 @@ export function ExamResultPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex h-64 items-center justify-center text-primary-600">
-        <Loader2 className="animate-spin" size={36} />
-      </div>
-    );
+    return <ExamResultSkeleton />;
   }
 
   const isValidated = (result?.score ?? 0) >= (result?.maxScore ?? result?.corrections?.reduce((s, c) => s + c.pointsPossible, 0) ?? 20) / 2;

@@ -1,7 +1,8 @@
 
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { ArrowRight, FileText, CheckCircle, Trophy, Loader2 } from 'lucide-react';
+import { ArrowRight, FileText, CheckCircle, Trophy } from 'lucide-react';
+import { Loader } from '../../components/common/Loader';
 import { ExamCard } from '../../components/common/ExamCard';
 import { useAuth } from '../../hooks/useAuth';
 import { myExamService } from '../../api/myExamService';
@@ -133,9 +134,7 @@ export function StudentDashboardPage() {
       </div>
 
       {isLoading ? (
-        <div className="flex items-center justify-center py-12 text-primary-600">
-          <Loader2 className="animate-spin" size={32} />
-        </div>
+        <Loader />
       ) : (
         <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
           {exams.slice(0, 2).map((exam) => (

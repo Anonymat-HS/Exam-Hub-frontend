@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
+import { TakeExamSkeleton } from '../../components/student/TakeExamSkeleton';
 import { myExamService } from '../../api/myExamService';
 
 const MOCK_EXAM_DATA = {
@@ -93,11 +94,7 @@ export function TakeExamPage() {
   };
 
   if (isLoading) {
-    return (
-      <div className="flex h-64 items-center justify-center text-primary-600">
-        <Loader2 className="animate-spin" size={36} />
-      </div>
-    );
+    return <TakeExamSkeleton />;
   }
 
   return (

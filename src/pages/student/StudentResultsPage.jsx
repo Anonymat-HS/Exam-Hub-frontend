@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Trophy, ChevronRight, Loader2 } from 'lucide-react';
+import { Trophy, ChevronRight } from 'lucide-react';
+import { StudentResultsSkeleton } from '../../components/student/StudentResultsSkeleton';
 import { myResultService } from '../../api/myResultService';
 import { formatDateTime } from '../../utils/formatters';
 
@@ -68,9 +69,7 @@ export function StudentResultsPage() {
 
       <div className="mt-8 space-y-4">
         {isLoading ? (
-          <div className="flex items-center justify-center py-12 text-primary-600">
-            <Loader2 className="animate-spin" size={32} />
-          </div>
+          <StudentResultsSkeleton />
         ) : results.length === 0 ? (
           <div className="rounded-3xl bg-white p-8 text-center text-gray-500 shadow-sm border border-gray-100">
             Aucun résultat disponible pour le moment.
