@@ -40,7 +40,7 @@ export function ExamResultPage() {
 
   if (error) {
     return (
-      <div className="max-w-5xl mx-auto w-full pt-8">
+      <div className="w-full pt-8">
         <ErrorMessage message={error} onRetry={() => { setError(null); setIsLoading(true); }} />
       </div>
     );
@@ -49,7 +49,7 @@ export function ExamResultPage() {
   const isValidated = (result?.score ?? 0) >= (result?.maxScore ?? result?.corrections?.reduce((s, c) => s + c.pointsPossible, 0) ?? 20) / 2;
 
   return (
-    <div className="max-w-5xl mx-auto w-full pb-16">
+    <div className="w-full pb-16">
       
       <div className="flex items-center justify-between pb-4">
         <div>
