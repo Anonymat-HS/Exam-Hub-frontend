@@ -28,7 +28,7 @@ export function StudentLayout() {
     return name.slice(0, 2).toUpperCase();
   };
 
-  const fullName = user?.name || user?.email || 'Étudiant';
+  const fullName = `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim() || user?.email || 'Étudiant';
   const initials = getInitials(fullName);
 
   return (

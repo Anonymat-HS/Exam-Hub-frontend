@@ -90,7 +90,7 @@ export function StudentsPage() {
     const matchesQuery =
       `${s.firstName} ${s.lastName}`.toLowerCase().includes(query) || s.email.toLowerCase().includes(query);
     const matchesStatus =
-      statusFilter === 'all' || (statusFilter === 'active' ? s.active : !s.active);
+      statusFilter === 'all' || (statusFilter === 'active' ? s.isActive : !s.isActive);
     return matchesQuery && matchesStatus;
   });
 
@@ -335,16 +335,16 @@ export function StudentsPage() {
                       <p className="truncate text-sm font-semibold text-navy">{`${student.firstName} ${student.lastName}`}</p>
                       <p className="truncate text-xs text-gray-400">{student.email}</p>
                     </div>
-                    <span className={`shrink-0 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${student.active ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-gray-500'}`}>
-                      <span className={`h-1.5 w-1.5 rounded-full ${student.active ? 'bg-green-500' : 'bg-gray-400'}`} />
-                      {student.active ? 'Actif' : 'Désactivé'}
+                    <span className={`shrink-0 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium ${student.isActive ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-gray-500'}`}>
+                      <span className={`h-1.5 w-1.5 rounded-full ${student.isActive ? 'bg-green-500' : 'bg-gray-400'}`} />
+                      {student.isActive ? 'Actif' : 'Désactivé'}
                     </span>
                   </div>
                   <div className="mt-3 flex items-center gap-2">
                     <button onClick={() => openEditModal(student)} className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-gray-600 transition-colors hover:border-primary-200 hover:bg-primary-50 hover:text-primary-600">
                       <Pencil size={13} /> Modifier
                     </button>
-                    {student.active ? (
+                    {student.isActive ? (
                       <button onClick={() => setConfirmTarget(student)} className="flex-1 inline-flex items-center justify-center gap-1.5 rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium text-red-500 transition-colors hover:border-red-200 hover:bg-red-50">
                         <UserX size={13} /> Désactiver
                       </button>
@@ -390,11 +390,11 @@ export function StudentsPage() {
                     <td className="px-6 py-4">
                       <span
                         className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium ${
-                          student.active ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-gray-500'
+                          student.isActive ? 'bg-green-50 text-green-600' : 'bg-gray-100 text-gray-500'
                         }`}
                       >
-                        <span className={`h-1.5 w-1.5 rounded-full ${student.active ? 'bg-green-500' : 'bg-gray-400'}`} />
-                        {student.active ? 'Actif' : 'Désactivé'}
+                        <span className={`h-1.5 w-1.5 rounded-full ${student.isActive ? 'bg-green-500' : 'bg-gray-400'}`} />
+                        {student.isActive ? 'Actif' : 'Désactivé'}
                       </span>
                     </td>
                     <td className="px-6 py-4 text-right">
@@ -405,7 +405,7 @@ export function StudentsPage() {
                         >
                           <Pencil size={14} /> Modifier
                         </button>
-                        {student.active ? (
+                        {student.isActive ? (
                           <button
                             onClick={() => setConfirmTarget(student)}
                             className="inline-flex items-center gap-1.5 rounded-full border border-gray-200 px-3 py-1.5 text-xs font-medium text-red-500 transition-colors hover:border-red-200 hover:bg-red-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-200"

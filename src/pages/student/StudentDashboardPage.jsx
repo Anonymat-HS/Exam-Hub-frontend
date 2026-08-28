@@ -12,7 +12,7 @@ import { myResultService } from '../../api/myResultService';
 export function StudentDashboardPage() {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const studentName = user?.email || 'Étudiant';
+  const studentName = user?.firstName || `${user?.firstName ?? ''} ${user?.lastName ?? ''}`.trim() || user?.email || 'Étudiant';
 
   const [exams, setExams] = useState([]);
   const [results, setResults] = useState([]);
