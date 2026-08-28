@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ChevronLeft, XCircle, CheckCircle } from 'lucide-react';
 import { ExamResultSkeleton } from '../../components/student/ExamResultSkeleton';
+import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { myExamService } from '../../api/myExamService';
 
 export function ExamResultPage() {
@@ -10,14 +11,17 @@ export function ExamResultPage() {
 
   const [result, setResult] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchResult = async () => {
       try {
+        setError(null);
+        setIsLoading(true);
         const data = await myExamService.getExamResult(examId);
         setResult(data);
-      } catch {
-        setResult(null);
+      } catch (err) {
+        setError(err.message || 'Une erreur est survenue lors du chargement du résultat.');
       } finally {
         setIsLoading(false);
       }
@@ -32,6 +36,14 @@ export function ExamResultPage() {
 
   if (isLoading) {
     return <ExamResultSkeleton />;
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-5xl mx-auto w-full pt-8">
+        <ErrorMessage message={error} onRetry={() => { setError(null); setIsLoading(true); }} />
+      </div>
+    );
   }
 
   const isValidated = (result?.score ?? 0) >= (result?.maxScore ?? result?.corrections?.reduce((s, c) => s + c.pointsPossible, 0) ?? 20) / 2;

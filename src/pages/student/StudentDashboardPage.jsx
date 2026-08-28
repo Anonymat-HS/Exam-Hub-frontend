@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, FileText, CheckCircle, Trophy } from 'lucide-react';
 import { Loader } from '../../components/common/Loader';
 import { ExamCard } from '../../components/common/ExamCard';
+import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { useAuth } from '../../hooks/useAuth';
 import { myExamService } from '../../api/myExamService';
 import { myResultService } from '../../api/myResultService';
@@ -16,19 +17,21 @@ export function StudentDashboardPage() {
   const [exams, setExams] = useState([]);
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setError(null);
+        setIsLoading(true);
         const [examsData, resultsData] = await Promise.all([
           myExamService.getExams('open'),
           myResultService.getResults(),
         ]);
         setExams(examsData);
         setResults(resultsData);
-      } catch {
-        setExams([]);
-        setResults([]);
+      } catch (err) {
+        setError(err.message || 'Une erreur est survenue lors du chargement des données.');
       } finally {
         setIsLoading(false);
       }
@@ -117,6 +120,8 @@ export function StudentDashboardPage() {
 
       {isLoading ? (
         <Loader />
+      ) : error ? (
+        <ErrorMessage message={error} onRetry={() => { setError(null); setIsLoading(true); }} />
       ) : (
         <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
           {exams.slice(0, 2).map((exam) => (
