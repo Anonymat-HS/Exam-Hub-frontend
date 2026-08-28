@@ -1,4 +1,4 @@
-import { createContext, useState, useCallback } from 'react';
+import { createContext, useState, useCallback, useEffect } from 'react';
 import { authService } from '../api/authService';
 
 export const AuthContext = createContext(null);
@@ -14,6 +14,16 @@ function getInitialUser() {
 
 export function AuthProvider({ children }) {
   const [user, setUser] = useState(getInitialUser);
+
+  useEffect(() => {
+    const handleStorage = (e) => {
+      if (e.key === 'token' || e.key === 'user' || e.key === null) {
+        setUser(getInitialUser());
+      }
+    };
+    window.addEventListener('storage', handleStorage);
+    return () => window.removeEventListener('storage', handleStorage);
+  }, []);
 
   const login = useCallback(async (email, password) => {
     const data = await authService.login(email, password);

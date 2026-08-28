@@ -18,6 +18,10 @@ async function request(path, { method = 'GET', body, headers = {} } = {}) {
   if (res.status === 204) return null;
   const data = await res.json().catch(() => null);
   if (!res.ok) {
+    if (res.status === 401) {
+      localStorage.removeItem('token');
+      localStorage.removeItem('user');
+    }
     throw new ApiError(data?.message || `Erreur ${res.status}`, res.status);
   }
   return data;
