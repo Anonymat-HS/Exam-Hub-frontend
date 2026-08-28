@@ -17,7 +17,14 @@ export function AuthProvider({ children }) {
 
   const login = useCallback(async (email, password) => {
     const data = await authService.login(email, password);
-    const loggedUser = { id: data.id, email: data.email, role: data.role };
+    const profile = data.user;
+    const loggedUser = {
+      id: profile?.id ?? data.id,
+      email: profile?.email ?? data.email,
+      role: profile?.role ?? data.role,
+      firstName: profile?.firstName,
+      lastName: profile?.lastName,
+    };
     localStorage.setItem('token', data.token);
     localStorage.setItem('user', JSON.stringify(loggedUser));
     setUser(loggedUser);
