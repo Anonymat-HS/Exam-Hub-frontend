@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutGrid, Users, BookOpen, FileText, BarChart2, LogOut, Menu, X } from 'lucide-react';
+import { LayoutGrid, Users, BookOpen, FileText, LogOut, Menu, X } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
 const NAV_ITEMS = [
@@ -8,7 +8,6 @@ const NAV_ITEMS = [
   { to: '/admin/students', label: 'Étudiants', icon: Users },
   { to: '/admin/courses', label: 'Cours', icon: BookOpen },
   { to: '/admin/exams', label: 'Examens', icon: FileText },
-  { to: '/admin/results', label: 'Résultats', icon: BarChart2 },
 ];
 
 function SidebarContent({ user, onLogout, onNavClick }) {
