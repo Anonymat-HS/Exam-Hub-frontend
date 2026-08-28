@@ -221,7 +221,7 @@ export function StudentsPage() {
     setActionError('');
     try {
       await studentService.deactivateStudent(confirmTarget.id);
-      setStudents((prev) => prev.map((s) => (s.id === confirmTarget.id ? { ...s, active: false } : s)));
+      setStudents((prev) => prev.map((s) => (s.id === confirmTarget.id ? { ...s, isActive: false } : s)));
       setConfirmTarget(null);
       toast.success('Utilisateur désactivé');
     } catch (err) {
@@ -238,7 +238,7 @@ export function StudentsPage() {
     setActionError('');
     try {
       await studentService.activateStudent(student.id);
-      setStudents((prev) => prev.map((s) => (s.id === student.id ? { ...s, active: true } : s)));
+      setStudents((prev) => prev.map((s) => (s.id === student.id ? { ...s, isActive: true } : s)));
       toast.success('Utilisateur réactivé');
     } catch (err) {
       const msg = err instanceof ApiError ? err.message : 'Erreur lors de la réactivation.';
