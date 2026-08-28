@@ -77,20 +77,20 @@ export function ExamResultPage() {
       <div className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-12 items-stretch">
         
         <div
-          className={`lg:col-span-5 rounded-3xl p-8 text-white shadow-sm flex flex-col justify-between transition-colors duration-300 ${
-            isValidated ? 'bg-emerald-500' : 'bg-red-500'
+          className={`lg:col-span-5 rounded-3xl border-2 p-8 shadow-sm flex flex-col justify-between transition-colors duration-300 ${
+            isValidated ? 'border-emerald-500 bg-emerald-50' : 'border-red-500 bg-red-50'
           }`}
         >
-          <span className="text-sm font-medium text-white/90">Note finale</span>
+          <span className={`text-sm font-semibold ${isValidated ? 'text-emerald-600' : 'text-red-500'}`}>Note finale</span>
           
           <div className="my-6">
-            <span className="text-6xl font-black tracking-tight">
+            <span className={`text-6xl font-black tracking-tight ${isValidated ? 'text-emerald-500' : 'text-red-500'}`}>
               {result?.score ?? 0}
             </span>
-            <span className="text-2xl font-bold text-white/80">/{result?.maxScore ?? 20}</span>
+            <span className={`text-2xl font-bold ${isValidated ? 'text-emerald-400' : 'text-red-400'}`}>/{result?.maxScore ?? 20}</span>
           </div>
 
-          <div className="flex items-center gap-2 font-bold text-sm text-white/95">
+          <div className={`flex items-center gap-2 font-bold text-sm ${isValidated ? 'text-emerald-600' : 'text-red-600'}`}>
             {isValidated ? (
               <>
                 <CheckCircle size={20} />
