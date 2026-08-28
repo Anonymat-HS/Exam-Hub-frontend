@@ -80,14 +80,14 @@ export function TakeExamPage() {
 
   if (error) {
     return (
-      <div className="max-w-4xl mx-auto w-full pt-8">
+      <div className="w-full pt-8">
         <ErrorMessage message={error} onRetry={() => { setError(null); setIsLoading(true); }} />
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl mx-auto w-full pb-16">
+    <div className="w-full pb-16">
       
       <div className="flex items-center justify-between pb-6 border-b border-gray-100 mb-8">
         <div>

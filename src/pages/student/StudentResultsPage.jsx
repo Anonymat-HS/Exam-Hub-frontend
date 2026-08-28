@@ -38,7 +38,7 @@ export function StudentResultsPage() {
   };
 
   return (
-    <div className="max-w-5xl mx-auto w-full animate-fade-in-up">
+    <div className="animate-fade-in-up">
       <span className="text-xs font-bold uppercase tracking-wider text-primary-600">
         Espace Étudiant
       </span>
