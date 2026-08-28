@@ -3,7 +3,7 @@ import { Button } from '../common/Button';
 import { Input } from '../common/Input';
 import { Textarea } from '../common/Textarea';
 import { courseService } from '../../api/courseService';
-import { MOCK_COURSES } from '../../data/mockData';
+
 
 function toDatetimeLocal(isoStr) {
   if (!isoStr) return '';
@@ -30,8 +30,8 @@ export function ExamForm({ initial, onSubmit, onCancel, loading }) {
 
   useEffect(() => {
     courseService.getCourses()
-      .then((data) => { if (Array.isArray(data) && data.length > 0) setCourses(data); else setCourses(MOCK_COURSES); })
-      .catch(() => setCourses(MOCK_COURSES));
+      .then((data) => { if (Array.isArray(data)) setCourses(data); })
+      .catch(() => setCourses([]));
   }, []);
 
   function validate() {

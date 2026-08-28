@@ -7,7 +7,7 @@ import { ErrorMessage } from '../../components/common/ErrorMessage';
 import { EmptyState } from '../../components/common/EmptyState';
 import { studentService } from '../../api/studentService';
 import { ApiError } from '../../api/api';
-import { MOCK_STUDENTS } from '../../data/mockData';
+
 
 const EMPTY_CREATE_FORM = { fullName: '', email: '', password: '' };
 const EMPTY_EDIT_FORM = { firstName: '', lastName: '', email: '', password: '' };
@@ -73,16 +73,14 @@ export function StudentsPage() {
   const [isToggling, setIsToggling] = useState(false);
   const [actionError, setActionError] = useState('');
   const [lastAddedId, setLastAddedId] = useState(null);
-  const [isUsingMockData, setIsUsingMockData] = useState(false);
 
   useEffect(() => {
     studentService
       .getStudents()
       .then((data) => {
-        if (Array.isArray(data) && data.length > 0) setStudents(data);
-        else { setStudents(MOCK_STUDENTS); setIsUsingMockData(true); }
+        if (Array.isArray(data)) setStudents(data);
       })
-      .catch(() => { setStudents(MOCK_STUDENTS); setIsUsingMockData(true); })
+      .catch(() => {})
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -242,12 +240,6 @@ export function StudentsPage() {
           <Plus size={16} /> Ajouter
         </Button>
       </div>
-
-      {isUsingMockData && (
-        <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
-          Données de démonstration affichées — le serveur backend est indisponible.
-        </div>
-      )}
 
       <div className="mt-6 overflow-hidden rounded-2xl bg-white shadow-sm">
         <div className="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center gap-3 border-b border-gray-100 p-4 sm:p-6 pb-4">

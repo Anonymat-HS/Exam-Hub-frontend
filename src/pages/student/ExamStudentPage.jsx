@@ -5,23 +5,6 @@ import { ExamCard } from '../../components/common/ExamCard';
 import { ExamCardSkeleton } from '../../components/student/ExamCardSkeleton';
 import { myExamService } from '../../api/myExamService';
 
-const MOCK_EXAMS = [
-  {
-    id: 1,
-    title: 'React Fundamentals',
-    description: 'Composants, hooks et gestion de l\'état avec React.',
-    questionCount: 2,
-    endDate: '2026-12-31T23:59:00',
-  },
-  {
-    id: 2,
-    title: 'SQL & PostgreSQL',
-    description: 'Évaluation SQL et conception de bases relationnelles.',
-    questionCount: 2,
-    endDate: '2026-12-31T23:59:00',
-  },
-];
-
 export function ExamStudentPage() {
   const navigate = useNavigate();
   const [exams, setExams] = useState([]);
@@ -32,9 +15,8 @@ export function ExamStudentPage() {
       try {
         const data = await myExamService.getExams('open');
         setExams(data);
-      } catch (error) {
-        console.error('Erreur API (fallback données de simulation) :', error.message);
-        setExams(MOCK_EXAMS);
+      } catch {
+        setExams([]);
       } finally {
         setIsLoading(false);
       }

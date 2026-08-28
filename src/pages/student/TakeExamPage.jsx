@@ -5,33 +5,6 @@ import { ArrowRight, AlertCircle, Loader2 } from 'lucide-react';
 import { TakeExamSkeleton } from '../../components/student/TakeExamSkeleton';
 import { myExamService } from '../../api/myExamService';
 
-const MOCK_EXAM_DATA = {
-  id: 1,
-  title: 'React Fundamentals',
-  questions: [
-    {
-      id: 101,
-      text: 'Quel Hook permet de gérer un état local ?',
-      points: 1,
-      choices: [
-        { id: 'a', text: 'useEffect' },
-        { id: 'b', text: 'useState' },
-        { id: 'c', text: 'useMemo' },
-      ],
-    },
-    {
-      id: 102,
-      text: "Quelle syntaxe permet d'afficher une variable dans JSX ?",
-      points: 1,
-      choices: [
-        { id: 'a', text: '{{ variable }}' },
-        { id: 'b', text: '[[ variable ]]' },
-        { id: 'c', text: '{variable}' },
-      ],
-    },
-  ],
-};
-
 const CHOICE_LABELS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
 export function TakeExamPage() {
@@ -49,9 +22,8 @@ export function TakeExamPage() {
       try {
         const data = await myExamService.getExamDetail(examId);
         setExam(data);
-      } catch (error) {
-        console.error('Erreur API (fallback données de simulation) :', error.message);
-        setExam(MOCK_EXAM_DATA);
+      } catch {
+        setExam(null);
       } finally {
         setIsLoading(false);
       }

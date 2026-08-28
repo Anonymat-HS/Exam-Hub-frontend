@@ -6,7 +6,7 @@ import { Loader } from '../../components/common/Loader';
 import { studentService } from '../../api/studentService';
 import { courseService } from '../../api/courseService';
 import { examService } from '../../api/examService';
-import { MOCK_STUDENTS, MOCK_COURSES, MOCK_EXAMS } from '../../data/mockData';
+
 
 const QUICK_ACTIONS = [
   { to: '/admin/students', icon: UserPlus, iconBg: 'bg-primary-50', iconColor: 'text-primary-600', title: 'Ajouter un étudiant', desc: 'Créer un nouveau compte' },
@@ -18,31 +18,22 @@ const QUICK_ACTIONS = [
 export function AdminDashboardPage() {
   const [stats, setStats] = useState({ studentsTotal: 0, studentsActive: 0, coursesTotal: 0, examsTotal: 0 });
   const [isLoading, setIsLoading] = useState(true);
-  const [isUsingMockData, setIsUsingMockData] = useState(false);
+
   const today = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' }).format(new Date());
 
   useEffect(() => {
-    Promise.allSettled([
+    Promise.all([
       studentService.getStudents(),
       courseService.getCourses(),
       examService.getExams(),
-    ]).then(([studentsResult, coursesResult, examsResult]) => {
-      let usingMock = false;
-      const students = studentsResult.status === 'fulfilled' && Array.isArray(studentsResult.value) && studentsResult.value.length > 0
-        ? studentsResult.value : (usingMock = true, MOCK_STUDENTS);
-      const courses = coursesResult.status === 'fulfilled' && Array.isArray(coursesResult.value) && coursesResult.value.length > 0
-        ? coursesResult.value : (usingMock = true, MOCK_COURSES);
-      const exams = examsResult.status === 'fulfilled' && Array.isArray(examsResult.value) && examsResult.value.length > 0
-        ? examsResult.value : (usingMock = true, MOCK_EXAMS);
-
+    ]).then(([students, courses, exams]) => {
       setStats({
-        studentsTotal: students.length,
-        studentsActive: students.filter((s) => s.active).length,
-        coursesTotal: courses.length,
-        examsTotal: exams.length,
+        studentsTotal: Array.isArray(students) ? students.length : 0,
+        studentsActive: Array.isArray(students) ? students.filter((s) => s.active).length : 0,
+        coursesTotal: Array.isArray(courses) ? courses.length : 0,
+        examsTotal: Array.isArray(exams) ? exams.length : 0,
       });
-      setIsUsingMockData(usingMock);
-    }).finally(() => setIsLoading(false));
+    }).catch(() => {}).finally(() => setIsLoading(false));
   }, []);
 
   if (isLoading) return <Loader />;
@@ -66,12 +57,6 @@ export function AdminDashboardPage() {
           <span className="text-sm font-medium capitalize text-gray-600">{today}</span>
         </div>
       </div>
-
-      {isUsingMockData && (
-        <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
-          Données de démonstration affichées — le serveur backend est indisponible.
-        </div>
-      )}
 
       <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {STAT_CARDS.map(({ icon, ...card }) => (

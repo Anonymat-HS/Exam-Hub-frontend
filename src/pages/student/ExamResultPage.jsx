@@ -4,33 +4,6 @@ import { ChevronLeft, XCircle, CheckCircle } from 'lucide-react';
 import { ExamResultSkeleton } from '../../components/student/ExamResultSkeleton';
 import { myExamService } from '../../api/myExamService';
 
-const MOCK_RESULT_DATA = {
-  examTitle: 'React Fundamentals',
-  score: 10,
-  maxScore: 20,
-  submittedAt: '2026-08-22T18:18:00',
-  corrections: [
-    {
-      questionId: 101,
-      questionText: 'Quel Hook permet de gérer un état local ?',
-      isCorrect: false,
-      chosenChoiceId: 'c',
-      correctChoiceId: 'b',
-      pointsEarned: 0,
-      pointsPossible: 1,
-    },
-    {
-      questionId: 102,
-      questionText: "Quelle syntaxe permet d'afficher une variable dans JSX ?",
-      isCorrect: true,
-      chosenChoiceId: 'c',
-      correctChoiceId: 'c',
-      pointsEarned: 1,
-      pointsPossible: 1,
-    },
-  ],
-};
-
 export function ExamResultPage() {
   const { examId } = useParams();
   const navigate = useNavigate();
@@ -43,9 +16,8 @@ export function ExamResultPage() {
       try {
         const data = await myExamService.getExamResult(examId);
         setResult(data);
-      } catch (error) {
-        console.error('Erreur API (données de simulation utilisées) :', error.message);
-        setResult(MOCK_RESULT_DATA);
+      } catch {
+        setResult(null);
       } finally {
         setIsLoading(false);
       }

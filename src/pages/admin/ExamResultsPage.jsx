@@ -7,7 +7,7 @@ import { examService } from '../../api/examService';
 import { resultService } from '../../api/resultService';
 import { courseService } from '../../api/courseService';
 import { formatDateTime } from '../../utils/formatters';
-import { MOCK_COURSES, MOCK_RESULTS } from '../../data/mockData';
+
 
 function SkeletonPage() {
   return (
@@ -28,34 +28,17 @@ export function ExamResultsPage() {
   const [resultsData, setResultsData] = useState(null);
   const [courses, setCourses] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [isUsingMockData, setIsUsingMockData] = useState(false);
+
   useEffect(() => {
-    Promise.allSettled([
+    Promise.all([
       examService.getExamDetail(examId),
       resultService.getExamResults(examId),
       courseService.getCourses(),
-    ]).then(([examRes, resultsRes, coursesRes]) => {
-      let usingMock = false;
-      if (examRes.status === 'fulfilled') {
-        setExam(examRes.value);
-      } else {
-        setExam(null);
-        usingMock = true;
-      }
-      if (resultsRes.status === 'fulfilled') {
-        setResultsData(resultsRes.value);
-      } else {
-        setResultsData(MOCK_RESULTS);
-        usingMock = true;
-      }
-      if (coursesRes.status === 'fulfilled' && Array.isArray(coursesRes.value)) {
-        setCourses(coursesRes.value);
-      } else {
-        setCourses(MOCK_COURSES);
-        usingMock = true;
-      }
-      setIsUsingMockData(usingMock);
-    }).finally(() => setIsLoading(false));
+    ]).then(([examData, resultsData, coursesData]) => {
+      setExam(examData);
+      setResultsData(resultsData);
+      if (Array.isArray(coursesData)) setCourses(coursesData);
+    }).catch(() => {}).finally(() => setIsLoading(false));
   }, [examId]);
 
   function getCourseName(courseId) {
@@ -92,12 +75,6 @@ export function ExamResultsPage() {
       >
         <ArrowLeft size={16} /> Retour aux examens
       </Link>
-
-      {isUsingMockData && (
-        <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
-          Données de démonstration affichées — le serveur backend est indisponible.
-        </div>
-      )}
 
       <div className="mb-6">
         <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-primary-600">Résultats</p>

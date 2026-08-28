@@ -12,7 +12,7 @@ import { resultService } from '../../api/resultService';
 import { courseService } from '../../api/courseService';
 import { ApiError } from '../../api/api';
 import { formatDateTime } from '../../utils/formatters';
-import { MOCK_COURSES, MOCK_EXAM, MOCK_QUESTIONS } from '../../data/mockData';
+
 
 function SkeletonPage() {
   return (
@@ -37,7 +37,6 @@ export function QuestionsPage() {
   const [isLocked, setIsLocked] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [actionError, setActionError] = useState('');
-  const [isUsingMockData, setIsUsingMockData] = useState(false);
 
   const [addTarget, setAddTarget] = useState(null);
   const [editTarget, setEditTarget] = useState(null);
@@ -45,36 +44,17 @@ export function QuestionsPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
-    Promise.allSettled([
+    Promise.all([
       examService.getExamDetail(examId),
       questionService.getQuestions(examId),
       resultService.getExamResults(examId),
       courseService.getCourses(),
-    ]).then(([examRes, questionsRes, resultsRes, coursesRes]) => {
-      let usingMock = false;
-      if (examRes.status === 'fulfilled') {
-        setExam(examRes.value);
-      } else {
-        setExam({ ...MOCK_EXAM, id: examId });
-        usingMock = true;
-      }
-      if (questionsRes.status === 'fulfilled' && Array.isArray(questionsRes.value)) {
-        setQuestions(questionsRes.value);
-      } else {
-        setQuestions(MOCK_QUESTIONS);
-        usingMock = true;
-      }
-      if (resultsRes.status === 'fulfilled' && resultsRes.value) {
-        setIsLocked((resultsRes.value.totalAttempts ?? 0) > 0);
-      }
-      if (coursesRes.status === 'fulfilled' && Array.isArray(coursesRes.value)) {
-        setCourses(coursesRes.value);
-      } else {
-        setCourses(MOCK_COURSES);
-        usingMock = true;
-      }
-      setIsUsingMockData(usingMock);
-    }).finally(() => setIsLoading(false));
+    ]).then(([examData, questionsData, resultsData, coursesData]) => {
+      setExam(examData);
+      if (Array.isArray(questionsData)) setQuestions(questionsData);
+      if (resultsData) setIsLocked((resultsData.totalAttempts ?? 0) > 0);
+      if (Array.isArray(coursesData)) setCourses(coursesData);
+    }).catch(() => {}).finally(() => setIsLoading(false));
   }, [examId]);
 
   function getCourseName(courseId) {
@@ -90,9 +70,7 @@ export function QuestionsPage() {
       setQuestions((prev) => [...prev, created]);
       setAddTarget(null);
     } catch {
-      const mockCreated = { id: `mock-q-${Date.now()}`, ...payload };
-      setQuestions((prev) => [...prev, mockCreated]);
-      setAddTarget(null);
+      setActionError('Erreur lors de la création.');
     }
   }
 
@@ -150,12 +128,6 @@ export function QuestionsPage() {
       >
         <ArrowLeft size={16} /> Retour aux examens
       </Link>
-
-      {isUsingMockData && (
-        <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-700">
-          Données de démonstration affichées — le serveur backend est indisponible.
-        </div>
-      )}
 
       <div className="mb-6">
         <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-navy">{exam.title}</h1>

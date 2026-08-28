@@ -5,25 +5,6 @@ import { StudentResultsSkeleton } from '../../components/student/StudentResultsS
 import { myResultService } from '../../api/myResultService';
 import { formatDateTime } from '../../utils/formatters';
 
-const MOCK_RESULTS = [
-  {
-    id: 1,
-    examId: '1',
-    examTitle: 'React Fundamentals',
-    submittedAt: '2026-08-22T18:18:00',
-    score: 6.7,
-    maxScore: 20,
-  },
-  {
-    id: 2,
-    examId: '2',
-    examTitle: 'JavaScript avancé',
-    submittedAt: '2026-08-15T14:30:00',
-    score: 12.0,
-    maxScore: 20,
-  },
-];
-
 export function StudentResultsPage() {
   const navigate = useNavigate();
   const [results, setResults] = useState([]);
@@ -34,9 +15,8 @@ export function StudentResultsPage() {
       try {
         const data = await myResultService.getResults();
         setResults(data);
-      } catch (error) {
-        console.error('Erreur API (passage aux données locales) :', error.message);
-        setResults(MOCK_RESULTS);
+      } catch {
+        setResults([]);
       } finally {
         setIsLoading(false);
       }
