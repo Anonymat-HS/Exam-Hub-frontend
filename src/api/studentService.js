@@ -10,5 +10,5 @@ export const studentService = {
       ...(password && password.trim() && { password }),
     }),
   deactivateStudent: (id) => api.delete(`/students/${id}`),
-  activateStudent: (id) => api.patch(`/students/${id}/activate`),
+  activateStudent: (id) => api.post(`/students/${id}/activate`),
 };
