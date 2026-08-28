@@ -26,7 +26,7 @@ export default function App() {
         <Route path="/login" element={<LoginPage />} />
 
         <Route element={<ProtectedRoute />}>
-          <Route element={<RoleRoute roles={['ADMIN']} />}>
+          <Route element={<RoleRoute roles={['admin']} />}>
             <Route element={<AdminLayout />}>
               <Route path="/admin" element={<AdminDashboardPage />} />
               <Route path="/admin/students" element={<StudentsPage />} />
@@ -38,7 +38,7 @@ export default function App() {
             </Route>
           </Route>
 
-          <Route element={<RoleRoute roles={['STUDENT']} />}>
+          <Route element={<RoleRoute roles={['student']} />}>
             <Route element={<StudentLayout />}>
               <Route path="/student" element={<StudentDashboardPage />} />
               <Route path="/student/exams" element={<ExamStudentPage />} />
