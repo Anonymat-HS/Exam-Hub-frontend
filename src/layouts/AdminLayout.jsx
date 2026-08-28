@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { LayoutGrid, Users, BookOpen, FileText, BarChart2, LogOut, Menu, X } from 'lucide-react';
 import { useAuth } from '../hooks/useAuth';
 
@@ -11,7 +11,7 @@ const NAV_ITEMS = [
   { to: '/admin/results', label: 'Résultats', icon: BarChart2 },
 ];
 
-function SidebarContent({ user, logout, onNavClick }) {
+function SidebarContent({ user, onLogout, onNavClick }) {
   return (
     <>
       <div>
@@ -38,7 +38,7 @@ function SidebarContent({ user, logout, onNavClick }) {
           ))}
         </nav>
       </div>
-      <button onClick={logout} className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50">
+      <button onClick={onLogout} className="flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-50">
         <LogOut size={18} className="shrink-0" /><span>Déconnexion</span>
       </button>
     </>
@@ -47,7 +47,13 @@ function SidebarContent({ user, logout, onNavClick }) {
 
 export function AdminLayout() {
   const { user, logout } = useAuth();
+  const navigate = useNavigate();
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  function handleLogout() {
+    logout();
+    navigate('/login');
+  }
 
   function toggleDrawer() {
     setDrawerOpen((prev) => !prev);
@@ -87,7 +93,7 @@ export function AdminLayout() {
             ))}
           </nav>
         </div>
-        <button onClick={logout} className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-50">
+        <button onClick={handleLogout} className="flex h-10 w-10 items-center justify-center rounded-lg text-gray-500 hover:bg-gray-50">
           <LogOut size={20} />
         </button>
       </aside>
@@ -98,7 +104,7 @@ export function AdminLayout() {
         lg:translate-x-0 lg:static lg:z-auto
         ${drawerOpen ? 'translate-x-0 pt-20' : '-translate-x-full'}
       `}>
-        <SidebarContent user={user} logout={logout} onNavClick={closeDrawer} />
+        <SidebarContent user={user} onLogout={handleLogout} onNavClick={closeDrawer} />
       </aside>
 
       {/* Backdrop */}

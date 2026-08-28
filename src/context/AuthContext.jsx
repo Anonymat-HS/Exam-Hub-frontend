@@ -1,12 +1,34 @@
-import { createContext, useState } from 'react';
+import { createContext, useState, useCallback } from 'react';
+import { authService } from '../api/authService';
 
 export const AuthContext = createContext(null);
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(null);
+function getInitialUser() {
+  const token = localStorage.getItem('token');
+  const stored = localStorage.getItem('user');
+  if (token && stored) {
+    try { return JSON.parse(stored); } catch { /* ignore */ }
+  }
+  return null;
+}
 
-  async function login() { return user; }
-  function logout() { setUser(null); }
+export function AuthProvider({ children }) {
+  const [user, setUser] = useState(getInitialUser);
+
+  const login = useCallback(async (email, password) => {
+    const data = await authService.login(email, password);
+    const loggedUser = { id: data.id, email: data.email, role: data.role };
+    localStorage.setItem('token', data.token);
+    localStorage.setItem('user', JSON.stringify(loggedUser));
+    setUser(loggedUser);
+    return loggedUser;
+  }, []);
+
+  const logout = useCallback(() => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('user');
+    setUser(null);
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, isLoading: false, login, logout }}>

@@ -114,9 +114,7 @@ export function CoursesPage() {
         setIsSubmitting(false);
         return;
       }
-      const demoId = `${Date.now()}`;
-      setCourses((prev) => [{ id: demoId, ...payload, examCount: 0 }, ...prev]);
-      setLastAddedId(demoId);
+      toast.error('Erreur inattendue.');
     }
     setIsSubmitting(false);
     setIsAddOpen(false);

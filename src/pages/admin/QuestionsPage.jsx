@@ -87,7 +87,6 @@ export function QuestionsPage() {
       setEditTarget(null);
       toast.success('Question modifiée');
     } catch (err) {
-      setQuestions((prev) => prev.map((q) => (q.id === editTarget.id ? { ...q, ...payload } : q)));
       toast.error(err.message);
       setEditTarget(null);
     }

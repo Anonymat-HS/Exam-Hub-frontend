@@ -4,10 +4,15 @@ export class ApiError extends Error {
   constructor(message, status) { super(message); this.status = status; }
 }
 
+function getAuthHeaders() {
+  const token = localStorage.getItem('token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 async function request(path, { method = 'GET', body, headers = {} } = {}) {
   const res = await fetch(`${BASE_URL}${path}`, {
     method,
-    headers: { 'Content-Type': 'application/json', ...headers },
+    headers: { 'Content-Type': 'application/json', ...getAuthHeaders(), ...headers },
     body: body ? JSON.stringify(body) : undefined,
   });
   if (res.status === 204) return null;

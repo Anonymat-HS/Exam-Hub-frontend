@@ -107,7 +107,6 @@ export function ExamsPage() {
       setEditTarget(null);
       toast.success('Examen modifié');
     } catch (err) {
-      setExams((prev) => prev.map((e) => (e.id === editTarget.id ? { ...e, ...payload } : e)));
       toast.error(err.message);
       setEditTarget(null);
     }

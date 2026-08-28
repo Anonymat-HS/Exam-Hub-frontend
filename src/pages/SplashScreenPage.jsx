@@ -6,7 +6,7 @@ export function SplashScreenPage() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      navigate('/admin', { replace: true });
+      navigate('/login', { replace: true });
     }, 3000);
     return () => clearTimeout(timer);
   }, [navigate]);
