@@ -10,6 +10,7 @@ import { CoursesPage } from './pages/admin/CoursesPage';
 import { ExamsPage } from './pages/admin/ExamsPage';
 import { QuestionsPage } from './pages/admin/QuestionsPage';
 import { ExamResultsPage } from './pages/admin/ExamResultsPage';
+import { UnderConstructionPage } from './pages/admin/UnderConstructionPage';
 import { StudentLayout } from './layouts/StudentLayout';
 import { StudentDashboardPage } from './pages/student/StudentDashboardPage';
 import { ExamStudentPage } from './pages/student/ExamStudentPage';
@@ -35,6 +36,7 @@ export default function App() {
               <Route path="/admin/exams/:examId/questions" element={<QuestionsPage />} />
               <Route path="/admin/exams/:examId/results" element={<ExamResultsPage />} />
             </Route>
+            <Route path="/admin/results" element={<UnderConstructionPage />} />
           </Route>
 
           <Route element={<RoleRoute roles={['student']} />}>
