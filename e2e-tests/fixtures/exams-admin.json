@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "title": "Examen Final Génie Logiciel",
+    "description": "QCM de fin de semestre",
+    "courseId": 1,
+    "course": { "id": 1, "code": "GEN2", "name": "Génie Logiciel 2" }
+  },
+  {
+    "id": 2,
+    "title": "Contrôle Web 2 — Sessions",
+    "description": "Questions sur le développement web",
+    "courseId": 2,
+    "course": { "id": 2, "code": "WEB2", "name": "Développement Web 2" }
+  },
+  {
+    "id": 3,
+    "title": "Examen Base de Données 2",
+    "description": "Évaluation écrite",
+    "courseId": 3,
+    "course": { "id": 3, "code": "BDD2", "name": "Bases de Données 2" }
+  }
+]

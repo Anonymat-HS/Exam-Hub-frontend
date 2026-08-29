@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "code": "GEN2",
+    "name": "Génie Logiciel 2",
+    "description": "Concepts avancés de développement logiciel"
+  },
+  {
+    "id": 2,
+    "code": "WEB2",
+    "name": "Développement Web 2",
+    "description": "Applications web modernes avec frameworks"
+  },
+  {
+    "id": 3,
+    "code": "BDD2",
+    "name": "Bases de Données 2",
+    "description": "Optimisation et administration de bases de données"
+  }
+]

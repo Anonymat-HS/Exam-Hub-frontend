@@ -1,0 +1,28 @@
+{
+  "totalPoints": 20,
+  "average": 14.5,
+  "totalAttempts": 3,
+  "results": [
+    {
+      "studentId": 2,
+      "firstName": "Ando",
+      "lastName": "Etudiant",
+      "score": 16,
+      "submittedAt": "2026-08-20T10:15:00.000Z"
+    },
+    {
+      "studentId": 3,
+      "firstName": "Marie",
+      "lastName": "Rakoto",
+      "score": 15,
+      "submittedAt": "2026-08-21T09:30:00.000Z"
+    },
+    {
+      "studentId": 5,
+      "firstName": "Lalao",
+      "lastName": "Randria",
+      "score": 12.5,
+      "submittedAt": "2026-08-22T14:00:00.000Z"
+    }
+  ]
+}

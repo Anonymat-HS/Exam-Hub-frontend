@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "test:e2e": "cypress run --config-file e2e-tests/cypress.config.js",
+    "test:e2e:open": "cypress open --config-file e2e-tests/cypress.config.js"
   },
   "dependencies": {
     "lucide-react": "^1.33.0",
@@ -20,6 +22,7 @@
     "@eslint/js": "^10.0.1",
     "@tailwindcss/vite": "^4.3.3",
     "@vitejs/plugin-react": "^6.1.0",
+    "cypress": "^15.21.1",
     "eslint": "^10.9.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.4",
