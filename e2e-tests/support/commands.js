@@ -67,14 +67,19 @@ Cypress.Commands.add('interceptAuth', () => {
 // Several pages render both a mobile (md:hidden) and a desktop (md:table) version of the same
 // content; this command ignores the hidden copy so assertions target the rendered view.
 Cypress.Commands.add('visibleText', (text) => {
-  const needle = String(text).replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  cy.get('body', { timeout: 10000 })
-    .find('*')
-    .filter(':visible')
-    .filter((_i, el) => {
-      const t = (el.textContent || '').replace(/\s+/g, ' ').trim();
-      return t === needle || t.includes(needle);
-    })
-    .first();
+  const needle = String(text).replace(/\s+/g, ' ').trim();
+  cy.get('body', { timeout: 10000 }).then(($body) => {
+    const matches = $body
+      .find('*')
+      .toArray()
+      .filter((el) => {
+        const style = window.getComputedStyle(el);
+        if (style.display === 'none' || style.visibility === 'hidden') return false;
+        const t = (el.textContent || '').replace(/\s+/g, ' ').trim();
+        return t === needle || t.includes(needle);
+      })
+      .sort((a, b) => (a.textContent || '').length - (b.textContent || '').length);
+    return cy.wrap(matches[0]);
+  });
 });
 
